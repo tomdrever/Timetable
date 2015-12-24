@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
 
-        adapter = new CustomRecyclerViewAdapter(timetables);
+        adapter = new CustomRecyclerViewAdapter(timetables, this);
         rv.setAdapter(adapter);
 
         // Init fab
@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
             timetables.add(new Gson().fromJson(data.getBundleExtra("timetabledetailsbundle").getString("timetabledetailsjson"), TimeTableDetails.class));
 
             // update cards, fade in new card
-
+            adapter.notifyItemInserted(timetables.size()+1);
+            rv.smoothScrollToPosition(timetables.size());
         }
     }
 }

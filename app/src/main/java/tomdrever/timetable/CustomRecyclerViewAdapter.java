@@ -1,10 +1,14 @@
 package tomdrever.timetable;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -13,9 +17,13 @@ import java.util.List;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder>{
 
-    List<TimeTableDetails> timeTableDetailsList;
-    CustomRecyclerViewAdapter(List<TimeTableDetails> timeTableDetailsList){
+    private List<TimeTableDetails> timeTableDetailsList;
+    private int lastPosition = -1;
+    private Context context;
+
+    public CustomRecyclerViewAdapter(List<TimeTableDetails> timeTableDetailsList, Context context){
         this.timeTableDetailsList = timeTableDetailsList;
+        this.context = context;
     }
 
     @Override
@@ -26,11 +34,28 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
 
     @Override
     public void onBindViewHolder(TimetableDetailViewHolder holder, int i) {
+        // Format and add new details
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         holder.timetableDateCreated.setText("Created: " + df.format(timeTableDetailsList.get(i).dateCreated));
         String desc = timeTableDetailsList.get(i).description;
         holder.timetableDescription.setText(desc != "" ? desc : "No description");
         holder.timetableName.setText(timeTableDetailsList.get(i).name);
+
+        // Animate?
+        setAnimation(holder.cv, i);
+    }
+
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            AlphaAnimation animation = new AlphaAnimation(0.2f, 1.0f);
+            animation.setDuration(1000);
+            animation.setFillAfter(true);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override
