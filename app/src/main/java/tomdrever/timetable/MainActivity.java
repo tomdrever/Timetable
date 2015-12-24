@@ -77,9 +77,7 @@ public class MainActivity extends AppCompatActivity {
     @NonNull
     private String readFile(String file) throws IOException {
         FileInputStream inputStream = openFileInput(file);
-
         StringBuilder fileContent = new StringBuilder("");
-
         byte[] buffer = new byte[1024];
 
         int n;
