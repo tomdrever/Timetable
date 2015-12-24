@@ -2,7 +2,6 @@ package tomdrever.timetable;
 
 import java.util.Date;
 
-
 public class TimetableDetails {
     public String name;
     public String description;

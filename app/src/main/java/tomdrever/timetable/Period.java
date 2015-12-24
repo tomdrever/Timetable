@@ -1,6 +1,5 @@
 package tomdrever.timetable;
 
-
 import java.util.Date;
 
 public class Period {

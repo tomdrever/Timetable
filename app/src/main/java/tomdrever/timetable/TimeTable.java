@@ -1,6 +1,5 @@
 package tomdrever.timetable;
 
-
 import java.util.ArrayList;
 
 public class Timetable {
