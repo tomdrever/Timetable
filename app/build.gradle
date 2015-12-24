@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:cardview-v7:23.0.+'
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

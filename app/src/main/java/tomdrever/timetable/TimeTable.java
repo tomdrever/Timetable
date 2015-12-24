@@ -3,7 +3,7 @@ package tomdrever.timetable;
 
 import java.util.ArrayList;
 
-public class TimeTable {
+public class Timetable {
     private ArrayList<Day> days;
 
     public void addDay(Day day){
@@ -13,7 +13,7 @@ public class TimeTable {
         days.remove(day);
     }
 
-    public TimeTable(){
+    public Timetable(){
         days = new ArrayList<>();
     }
 }

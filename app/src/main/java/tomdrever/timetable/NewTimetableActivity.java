@@ -18,7 +18,7 @@ public class NewTimetableActivity extends AppCompatActivity{
     protected static final int SUB_ACTIVITY_REQUEST_CODE = 200;
     protected static final int SUB_ACTIVITY_SUCCESS_CODE = 100;
 
-    public TimeTableDetails timetableDetails;
+    public TimetableDetails timetableDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +65,8 @@ public class NewTimetableActivity extends AppCompatActivity{
             EditText etn = (EditText)findViewById(R.id.edit_timetable_name);
             EditText etd = (EditText)findViewById(R.id.edit_timetable_description);
 
-            TimeTable timetable = new Gson().fromJson(data.getBundleExtra("timetablebundle").getString("timetablejson"), TimeTable.class);
-            timetableDetails = new TimeTableDetails(etn.getText().toString(), etd.getText().toString(), Calendar.getInstance().getTime(), timetable);
+            Timetable timetable = new Gson().fromJson(data.getBundleExtra("timetablebundle").getString("timetablejson"), Timetable.class);
+            timetableDetails = new TimetableDetails(etn.getText().toString(), etd.getText().toString(), Calendar.getInstance().getTime(), timetable);
 
             Intent newData = new Intent();
             Bundle bundle = new Bundle();

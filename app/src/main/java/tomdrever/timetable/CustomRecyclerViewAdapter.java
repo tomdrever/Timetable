@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -17,12 +15,12 @@ import java.util.List;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder>{
 
-    private List<TimeTableDetails> timeTableDetailsList;
+    private List<TimetableDetails> timetableDetailsList;
     private int lastPosition = -1;
     private Context context;
 
-    public CustomRecyclerViewAdapter(List<TimeTableDetails> timeTableDetailsList, Context context){
-        this.timeTableDetailsList = timeTableDetailsList;
+    public CustomRecyclerViewAdapter(List<TimetableDetails> timetableDetailsList, Context context){
+        this.timetableDetailsList = timetableDetailsList;
         this.context = context;
     }
 
@@ -36,10 +34,10 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     public void onBindViewHolder(TimetableDetailViewHolder holder, int i) {
         // Format and add new details
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-        holder.timetableDateCreated.setText("Created: " + df.format(timeTableDetailsList.get(i).dateCreated));
-        String desc = timeTableDetailsList.get(i).description;
+        holder.timetableDateCreated.setText("Created: " + df.format(timetableDetailsList.get(i).dateCreated));
+        String desc = timetableDetailsList.get(i).description;
         holder.timetableDescription.setText(desc != "" ? desc : "No description");
-        holder.timetableName.setText(timeTableDetailsList.get(i).name);
+        holder.timetableName.setText(timetableDetailsList.get(i).name);
 
         // Animate?
         setAnimation(holder.cv, i);
@@ -65,7 +63,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
 
     @Override
     public int getItemCount() {
-        return timeTableDetailsList.size();
+        return timetableDetailsList.size();
     }
 
     public static class TimetableDetailViewHolder extends RecyclerView.ViewHolder {

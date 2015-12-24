@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 public class EditTimetableActivity extends AppCompatActivity{
 
     protected static final int SUB_ACTIVITY_SUCCESS_CODE = 200;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +36,11 @@ public class EditTimetableActivity extends AppCompatActivity{
                 Intent data = new Intent();
                 Bundle bundle = new Bundle();
 
-                TimeTable timeTable = new TimeTable();
-                timeTable.addDay(new Day("Monday"));
-                timeTable.addDay(new Day("Monday"));
+                Timetable timetable = new Timetable();
+                timetable.addDay(new Day("Monday"));
+                timetable.addDay(new Day("Monday"));
 
-                String timetablejson = new Gson().toJson(timeTable);
+                String timetablejson = new Gson().toJson(timetable);
                 bundle.putString("timetablejson", timetablejson);
                 data.putExtra("timetablebundle", bundle);
 
