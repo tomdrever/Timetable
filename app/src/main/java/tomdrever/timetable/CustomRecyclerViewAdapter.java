@@ -7,13 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder>{
+public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder> {
 
     private List<TimetableDetails> timetableDetailsList;
     private int lastPosition = -1;
@@ -25,9 +29,24 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     }
 
     @Override
-    public TimetableDetailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TimetableDetailViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.timetable_card, parent, false);
-        return new TimetableDetailViewHolder(v);
+
+        return new TimetableDetailViewHolder(v, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // edit
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // delete
+                int position = (Integer)v.getTag();
+
+                timetableDetailsList.remove(position);
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -36,19 +55,20 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         holder.timetableDateCreated.setText("Created: " + df.format(timetableDetailsList.get(i).dateCreated));
         String desc = timetableDetailsList.get(i).description;
-        holder.timetableDescription.setText(desc != "" ? desc : "No description");
+        holder.timetableDescription.setText(desc != "" ? desc : "No description"); // android api stuffs. leave as !=
         holder.timetableName.setText(timetableDetailsList.get(i).name);
 
-        // Animate?
-        setAnimation(holder.cv, i);
+        // Animate
+        setFadeAnimation(holder.cardView, i, 0.2f, 1.0f);
+
+        holder.deleteTimetableButton.setTag(i);
     }
 
-    private void setAnimation(View viewToAnimate, int position)
-    {
+    private void setFadeAnimation(View viewToAnimate, int position, float startAlpha, float endAlpha) {
         // If the bound view wasn't previously displayed on screen, it's animated
         if (position > lastPosition)
         {
-            AlphaAnimation animation = new AlphaAnimation(0.2f, 1.0f);
+            Animation animation = new AlphaAnimation(0.2f, 1.0f);
             animation.setDuration(1000);
             animation.setFillAfter(true);
             viewToAnimate.startAnimation(animation);
@@ -66,19 +86,37 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         return timetableDetailsList.size();
     }
 
-    public static class TimetableDetailViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView timetableName;
-        TextView timetableDateCreated;
-        TextView timetableDescription;
+    public static class TimetableDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CardView cardView;
 
-        TimetableDetailViewHolder(View itemView) {
+        private TextView timetableName;
+        private TextView timetableDateCreated;
+        private TextView timetableDescription;
+
+        private ImageButton editTimetableButton;
+        private ImageButton deleteTimetableButton;
+
+        public TimetableDetailViewHolder(final View itemView, View.OnClickListener editTimetableButtonListener, View.OnClickListener deleteTimetableButtonListener) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
+
+            itemView.setOnClickListener(this);
+
+            cardView = (CardView)itemView.findViewById(R.id.cv);
+
             timetableName = (TextView)itemView.findViewById(R.id.timetable_name);
             timetableDateCreated = (TextView)itemView.findViewById(R.id.timetable_date_created);
             timetableDescription = (TextView)itemView.findViewById(R.id.timetable_description);
+
+            editTimetableButton = (ImageButton)itemView.findViewById(R.id.edit_timetable_button);
+            editTimetableButton.setOnClickListener(editTimetableButtonListener);
+
+            deleteTimetableButton = (ImageButton)itemView.findViewById(R.id.delete_timetable_button);
+            deleteTimetableButton.setOnClickListener(deleteTimetableButtonListener);
+        }
+
+        @Override
+        public void onClick(View v) {
+            // Open timetable
         }
     }
-
 }
