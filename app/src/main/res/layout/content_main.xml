@@ -17,4 +17,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/rv"
     />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/no_timetables"
+        android:text="@string/no_timetables"
+        android:textColor="@color/colorPrimaryLight"
+        android:textAlignment="center"/>
 </RelativeLayout>

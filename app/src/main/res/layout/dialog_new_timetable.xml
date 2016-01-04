@@ -22,6 +22,8 @@
         android:hint="@string/edit_timetable_name"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:textColorHint="@color/colorPrimaryLight"/>
 
     <EditText android:id="@+id/edit_timetable_description"
@@ -30,5 +32,7 @@
         android:hint="@string/edit_timetable_description"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:textColorHint="@color/colorPrimaryLight"/>
 </LinearLayout>

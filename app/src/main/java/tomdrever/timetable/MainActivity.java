@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected static final int SUB_ACTIVITY_REQUEST_CODE = 100;
 
-    private ArrayList<TimetableDetails> timetables;
+    private ArrayList<TimetableDetails> timetableDetailsList;
     private CustomRecyclerViewAdapter adapter;
     private RecyclerView rv;
     private LinearLayoutManager llm;
@@ -38,14 +40,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Init base timetable details and handler
-        timetables = new ArrayList<>();
+        timetableDetailsList = new ArrayList<>();
 
-        // Load timetables from filedir
+        // Load timetableDetailsList from filedir
         String[] files = getFilesDir().list();
 
         for (String file : files) {
             try {
-                timetables.add(new Gson().fromJson(readFile(file), TimetableDetails.class));
+                timetableDetailsList.add(new Gson().fromJson(readFile(file), TimetableDetails.class));
             }
             catch (IOException e){
                 alert("Error", "Could not read file: " + file);
@@ -60,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
         llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
 
-        adapter = new CustomRecyclerViewAdapter(timetables, this);
+        adapter = new CustomRecyclerViewAdapter(timetableDetailsList, this);
         rv.setAdapter(adapter);
+        rv.setItemAnimator(new DefaultItemAnimator());
 
         // Init fab
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -146,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Add new card and update
-        timetables.add(timetableDetails);
-        adapter.notifyItemInserted(timetables.size() + 1);
-        rv.smoothScrollToPosition(timetables.size());
+        adapter.add(timetableDetails);
+        rv.scrollToPosition(this.timetableDetailsList.size() + 1);
     }
 }

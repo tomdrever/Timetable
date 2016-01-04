@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -20,7 +21,6 @@ import java.util.List;
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder> {
 
     private List<TimetableDetails> timetableDetailsList;
-    private int lastPosition = -1;
     private Context context;
 
     public CustomRecyclerViewAdapter(List<TimetableDetails> timetableDetailsList, Context context){
@@ -42,9 +42,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
             public void onClick(View v) {
                 // delete
                 int position = (Integer)v.getTag();
-
-                timetableDetailsList.remove(position);
-                notifyDataSetChanged();
+                remove(position);
             }
         });
     }
@@ -58,22 +56,26 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         holder.timetableDescription.setText(desc != "" ? desc : "No description"); // android api stuffs. leave as !=
         holder.timetableName.setText(timetableDetailsList.get(i).name);
 
-        // Animate
-        setFadeAnimation(holder.cardView, i, 0.2f, 1.0f);
+        
 
         holder.deleteTimetableButton.setTag(i);
     }
 
-    private void setFadeAnimation(View viewToAnimate, int position, float startAlpha, float endAlpha) {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
-            Animation animation = new AlphaAnimation(startAlpha, endAlpha);
-            animation.setDuration(1000);
-            animation.setFillAfter(true);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
+    public void add(TimetableDetails timetableDetails){
+        timetableDetailsList.add(timetableDetails);
+        notifyItemInserted(timetableDetailsList.size() + 1);
+    }
+
+    public void remove(int position) {
+        // delete from filesysytem
+        File fileToDelete = new File(context.getFilesDir() + "/" + timetableDetailsList.get(position).name);
+        fileToDelete.delete();
+
+
+        // delete from recyclerview
+        timetableDetailsList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, timetableDetailsList.size());
     }
 
     @Override
