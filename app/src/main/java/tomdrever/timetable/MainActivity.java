@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, NewTimetableActivity.class);
-                startActivityForResult(i, SUB_ACTIVITY_REQUEST_CODE);
+                NewTimetableDialogFragment newTimetableDialogFragment = new NewTimetableDialogFragment();
+                newTimetableDialogFragment.show(getFragmentManager(), "NewTimetableTag");
             }
         });
     }

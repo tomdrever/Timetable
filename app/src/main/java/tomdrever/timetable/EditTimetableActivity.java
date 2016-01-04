@@ -9,9 +9,11 @@ import android.view.MenuItem;
 
 import com.google.gson.Gson;
 
+import java.util.Calendar;
+
 public class EditTimetableActivity extends AppCompatActivity{
 
-    protected static final int SUB_ACTIVITY_SUCCESS_CODE = 200;
+    protected static final int SUB_ACTIVITY_SUCCESS_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +35,21 @@ public class EditTimetableActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit_timetable:
-                Intent data = new Intent();
-                Bundle bundle = new Bundle();
+                Intent intent = getIntent();
+                String name = intent.getStringExtra("timetablename");
+                String description = intent.getStringExtra("timetabledetails");
 
                 Timetable timetable = new Timetable();
                 timetable.addDay(new Day("Monday"));
-                timetable.addDay(new Day("Monday"));
+                timetable.addDay(new Day("Tuesday"));
 
-                String timetablejson = new Gson().toJson(timetable);
-                bundle.putString("timetablejson", timetablejson);
-                data.putExtra("timetablebundle", bundle);
+                TimetableDetails timetableDetails = new TimetableDetails(name, description, Calendar.getInstance().getTime(), timetable);
+
+                Intent data = new Intent();
+                Bundle bundle = new Bundle();
+                String timetableDetailsJson = new Gson().toJson(timetableDetails);
+                bundle.putString("timetabledetailsjson", timetableDetailsJson);
+                data.putExtra("timetabledetailsbundle", bundle);
 
                 setResult(SUB_ACTIVITY_SUCCESS_CODE, data);
                 finish();

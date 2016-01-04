@@ -9,5 +9,9 @@
     <string name="action_edit_timetable">Edit TimeTable</string>
 
     <string name="edit_timetable_name">Name</string>
-    <string name="edit_timetable_description">Description</string>
+    <string name="edit_timetable_description">Short description</string>
+
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog.new_timetable_create">Create</string>
+    <string name="dialog.new_timetable_create_title">New Timetable</string>
 </resources>

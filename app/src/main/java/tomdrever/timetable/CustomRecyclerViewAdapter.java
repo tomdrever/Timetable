@@ -68,7 +68,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         // If the bound view wasn't previously displayed on screen, it's animated
         if (position > lastPosition)
         {
-            Animation animation = new AlphaAnimation(0.2f, 1.0f);
+            Animation animation = new AlphaAnimation(startAlpha, endAlpha);
             animation.setDuration(1000);
             animation.setFillAfter(true);
             viewToAnimate.startAnimation(animation);

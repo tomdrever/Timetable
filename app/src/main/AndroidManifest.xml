@@ -9,6 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:configChanges="orientation|screenSize"
             android:name=".MainActivity"
             android:label="@string/app_main_activity_name"
             android:theme="@style/AppTheme.NoActionBar">
@@ -18,21 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".NewTimetableActivity"
-            android:label="@string/app_new_timetable_activity_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
         <activity
             android:name=".EditTimetableActivity"
             android:label="@string/app_edit_timetable_activity_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
     </application>
 </manifest>
