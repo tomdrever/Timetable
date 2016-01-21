@@ -11,6 +11,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class NewTimetableDialogFragment extends DialogFragment{
 
     @Override
@@ -30,6 +34,9 @@ public class NewTimetableDialogFragment extends DialogFragment{
 
                         if (editTextName.getText().toString().equals("")) {
                             Toast.makeText(getActivity(), "Name field required", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (Arrays.asList(getActivity().getFilesDir().list()).contains(editTextName.getText().toString())) {
+                            Toast.makeText(getActivity(), "Timetable with that name already exists", Toast.LENGTH_SHORT).show();
                         } else {
                             // create new timetable - launch edit timetable
                             Intent intent = new Intent(getActivity(), EditTimetableActivity.class);

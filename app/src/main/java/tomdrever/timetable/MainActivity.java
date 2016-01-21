@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -25,7 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import tomdrever.timetable.databinding.ContentMainBinding;
+import tomdrever.timetable.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         timetableDetailsListViewModel = new TimetableDetailsListViewModel(new ArrayList<TimetableDetails>());
         adapter = new CustomRecyclerViewAdapter(timetableDetailsListViewModel, this);
-        ContentMainBinding binding = DataBindingUtil.setContentView(this, R.layout.content_main);
-        binding.setTimetablesadapter(adapter);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding.setSize(timetableDetailsListViewModel.sizeString);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -93,13 +94,12 @@ public class MainActivity extends AppCompatActivity {
         {
             fileContent.append(new String(buffer, 0, n));
         }
-
+        inputStream.close();
         return fileContent.toString();
     }
 
     private void saveFile(String fileName, String fileContents) throws IOException {
-        FileOutputStream outputStream;
-        outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
+        FileOutputStream outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
         outputStream.write(fileContents.getBytes());
         outputStream.close();
     }
