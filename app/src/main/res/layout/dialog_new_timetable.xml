@@ -24,6 +24,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:inputType="textCapSentences"
         android:textColorHint="@color/colorPrimaryLight"/>
 
     <EditText android:id="@+id/edit_timetable_description"

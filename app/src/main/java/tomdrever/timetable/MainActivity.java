@@ -1,8 +1,10 @@
 package tomdrever.timetable;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -22,32 +23,37 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import tomdrever.timetable.databinding.ContentMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     protected static final int SUB_ACTIVITY_REQUEST_CODE = 100;
-
-    private ArrayList<TimetableDetails> timetableDetailsList;
     private CustomRecyclerViewAdapter adapter;
     private RecyclerView rv;
     private LinearLayoutManager llm;
 
+    private TimetableDetailsListViewModel timetableDetailsListViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        timetableDetailsListViewModel = new TimetableDetailsListViewModel(new ArrayList<TimetableDetails>());
+        adapter = new CustomRecyclerViewAdapter(timetableDetailsListViewModel, this);
+        ContentMainBinding binding = DataBindingUtil.setContentView(this, R.layout.content_main);
+        binding.setTimetablesadapter(adapter);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // Init base timetable details and handler
-        timetableDetailsList = new ArrayList<>();
 
         // Load timetableDetailsList from filedir
         String[] files = getFilesDir().list();
 
         for (String file : files) {
             try {
-                timetableDetailsList.add(new Gson().fromJson(readFile(file), TimetableDetails.class));
+                timetableDetailsListViewModel.addTimetableDetails(new Gson().fromJson(readFile(file), TimetableDetails.class));
             }
             catch (IOException e){
                 alert("Error", "Could not read file: " + file);
@@ -58,11 +64,10 @@ public class MainActivity extends AppCompatActivity {
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setHasFixedSize(true);
 
-
         llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
 
-        adapter = new CustomRecyclerViewAdapter(timetableDetailsList, this);
+
         rv.setAdapter(adapter);
         rv.setItemAnimator(new DefaultItemAnimator());
 
@@ -150,6 +155,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Add new card and update
         adapter.add(timetableDetails);
-        rv.scrollToPosition(this.timetableDetailsList.size() + 1);
+        rv.scrollToPosition(timetableDetailsListViewModel.getTimetables().size() + 1);
     }
 }

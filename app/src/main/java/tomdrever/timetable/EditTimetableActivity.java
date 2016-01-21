@@ -37,7 +37,7 @@ public class EditTimetableActivity extends AppCompatActivity{
             case R.id.action_edit_timetable:
                 Intent intent = getIntent();
                 String name = intent.getStringExtra("timetablename");
-                String description = intent.getStringExtra("timetabledetails");
+                String description = intent.getStringExtra("timetabledescription");
 
                 Timetable timetable = new Timetable();
                 timetable.addDay(new Day("Monday"));

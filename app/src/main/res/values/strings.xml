@@ -15,5 +15,5 @@
     <string name="dialog.new_timetable_create">Create</string>
     <string name="dialog.new_timetable_create_title">New Timetable</string>
 
-    <string name="no_timetables">You have no timetables?</string>
+    <string name="no_timetables">You have no timetables</string>
 </resources>
