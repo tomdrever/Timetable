@@ -13,7 +13,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder> {
@@ -48,7 +47,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     @Override
     public void onBindViewHolder(TimetableDetailViewHolder holder, int i) {
         // Format and add new details
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         holder.timetableDateCreated.setText("Created: " + df.format(timetableDetails.get(i).dateCreated));
         String desc = timetableDetails.get(i).description;
         holder.timetableDescription.setText(desc != "" ? desc : "No description"); // android api stuffs. leave as !=

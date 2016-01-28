@@ -1,6 +1,5 @@
 package tomdrever.timetable;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,16 +16,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import tomdrever.timetable.databinding.ActivityMainBinding;
 
@@ -156,6 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Add new card and update
         adapter.add(timetableDetails);
-        rv.scrollToPosition(timetables.size() + 1);
+        rv.scrollToPosition(timetables.size() + 2);
     }
 }

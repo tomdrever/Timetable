@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class NewTimetableDialogFragment extends DialogFragment{
