@@ -11,7 +11,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class NewTimetableDialogFragment extends DialogFragment{
 
@@ -38,8 +43,12 @@ public class NewTimetableDialogFragment extends DialogFragment{
                         } else {
                             // create new timetable - launch edit timetable
                             Intent intent = new Intent(getActivity(), EditTimetableActivity.class);
-                            intent.putExtra("timetablename", editTextName.getText().toString());
-                            intent.putExtra("timetabledescription", editTextDescription.getText().toString());
+                            intent.putExtra("isnewtimetable", true);
+                            intent.putExtra("timetabledetailsjson", new Gson().toJson(new TimetableDetails(
+                                    editTextName.getText().toString(),
+                                    editTextDescription.getText().toString(),
+                                    Calendar.getInstance().getTime(),
+                                    new Timetable())));
                             getActivity().startActivityForResult(intent, 100);
                         }
                     }

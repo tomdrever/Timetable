@@ -1,6 +1,8 @@
 package tomdrever.timetable;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -32,7 +36,11 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         return new TimetableDetailViewHolder(v, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // edit
+                // launch edittimetable
+                Intent intent = new Intent(context, EditTimetableActivity.class);
+                intent.putExtra("isnewtimetable", false);
+                intent.putExtra("timetabledetailsjson", new Gson().toJson(timetableDetails.get((Integer)v.getTag())));
+                ((Activity) context).startActivityForResult(intent, 200);
             }
         }, new View.OnClickListener() {
             @Override
@@ -54,8 +62,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         holder.timetableName.setText(timetableDetails.get(i).name);
 
         holder.deleteTimetableButton.setTag(i);
-
-        //
+        holder.editTimetableButton.setTag(i);
     }
 
     public void add(TimetableDetails newTimetableDetails){
@@ -86,8 +93,6 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     }
 
     public static class TimetableDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private CardView cardView;
-
         private TextView timetableName;
         private TextView timetableDateCreated;
         private TextView timetableDescription;
@@ -99,8 +104,6 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
             super(itemView);
 
             itemView.setOnClickListener(this);
-
-            cardView = (CardView) itemView.findViewById(R.id.cv);
 
             timetableName = (TextView) itemView.findViewById(R.id.timetable_name);
             timetableDateCreated = (TextView) itemView.findViewById(R.id.timetable_date_created);

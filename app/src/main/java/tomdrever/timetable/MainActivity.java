@@ -22,6 +22,8 @@ import com.google.gson.Gson;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import tomdrever.timetable.databinding.ActivityMainBinding;
 
@@ -131,14 +133,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED && requestCode == SUB_ACTIVITY_REQUEST_CODE) {
-            updateTimetables(data.getExtras().getBundle("timetabledetailsbundle").getString("timetabledetailsjson"));
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode != RESULT_CANCELED) {
+            if (requestCode == 100){ // new
+                newTimetablesEntry(intent.getStringExtra("timetabledetailsjson"));
+            }
+            else if (requestCode == 200){ // edit
+                updateTimetablesEntry(intent.getStringExtra("timetabledetailsjson"));
+            }
         }
     }
 
-    private void updateTimetables(String timetablejson){
+    private void newTimetablesEntry(String timetablejson){
         // Add new timetable json to filedir
         TimetableDetails timetableDetails = new Gson().fromJson(timetablejson, TimetableDetails.class);
 
@@ -151,6 +158,23 @@ public class MainActivity extends AppCompatActivity {
 
         // Add new card and update
         adapter.add(timetableDetails);
-        rv.scrollToPosition(timetables.size() + 2);
+        rv.smoothScrollToPosition(timetables.size() + 1);
+    }
+
+    private void updateTimetablesEntry(String timetablejson){
+        // Add new timetable json to filedir
+        TimetableDetails newTimetableDetails = new Gson().fromJson(timetablejson, TimetableDetails.class);
+        for(TimetableDetails timetableDetails : timetables){ // UURGGH
+            if (timetableDetails.name.equals(newTimetableDetails.name)) {
+                timetables.set(timetables.indexOf(timetableDetails), newTimetableDetails);
+            }
+        }
+
+        try{
+            saveFile(newTimetableDetails.name, timetablejson);
+        }
+        catch (IOException e){
+            alert("Error", "Error saving file: " + newTimetableDetails.name);
+        }
     }
 }

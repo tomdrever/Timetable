@@ -9,11 +9,9 @@ import android.view.MenuItem;
 
 import com.google.gson.Gson;
 
-import java.util.Calendar;
+public class EditTimetableActivity extends AppCompatActivity {
 
-public class EditTimetableActivity extends AppCompatActivity{
-
-    protected static final int SUB_ACTIVITY_SUCCESS_CODE = 100;
+    private TimetableDetails timetableDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +19,10 @@ public class EditTimetableActivity extends AppCompatActivity{
         setContentView(R.layout.activity_edit_timetable);
         Toolbar toolbar = (Toolbar)findViewById(R.id.edit_timetable_toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+        timetableDetails = new Gson().fromJson(intent.getStringExtra("timetabledetailsjson"), TimetableDetails.class);
+        setTitle("Edit " + timetableDetails.name);
     }
 
     @Override
@@ -35,23 +37,15 @@ public class EditTimetableActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit_timetable:
-                Intent intent = getIntent();
-                String name = intent.getStringExtra("timetablename");
-                String description = intent.getStringExtra("timetabledescription");
+                Intent intent = new Intent();
+                intent.putExtra("timetabledetailsjson", new Gson().toJson(timetableDetails));
 
-                Timetable timetable = new Timetable();
-                timetable.addDay(new Day("Monday"));
-                timetable.addDay(new Day("Tuesday"));
-
-                TimetableDetails timetableDetails = new TimetableDetails(name, description, Calendar.getInstance().getTime(), timetable);
-
-                Intent data = new Intent();
-                Bundle bundle = new Bundle();
-                String timetableDetailsJson = new Gson().toJson(timetableDetails);
-                bundle.putString("timetabledetailsjson", timetableDetailsJson);
-                data.putExtra("timetabledetailsbundle", bundle);
-
-                setResult(SUB_ACTIVITY_SUCCESS_CODE, data);
+                if (getIntent().getBooleanExtra("isnewtimetable", false)){ // is a new timetable
+                    setResult(100, intent);
+                }
+                else { // not new
+                    setResult(200, intent);
+                }
                 finish();
                 return true;
             default:
