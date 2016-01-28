@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -35,17 +37,16 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rv;
     private LinearLayoutManager llm;
 
-    private TimetableDetailsListViewModel timetableDetailsListViewModel;
+    private ObservableArrayList<TimetableDetails> timetables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        timetableDetailsListViewModel = new TimetableDetailsListViewModel(new ArrayList<TimetableDetails>());
-        adapter = new CustomRecyclerViewAdapter(timetableDetailsListViewModel, this);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        binding.setSize(timetableDetailsListViewModel.sizeString);
+        timetables = new ObservableArrayList<>();
+        adapter = new CustomRecyclerViewAdapter(timetables, this);
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setTimetables(timetables);
 
-        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (String file : files) {
             try {
-                timetableDetailsListViewModel.addTimetableDetails(new Gson().fromJson(readFile(file), TimetableDetails.class));
+                timetables.add(new Gson().fromJson(readFile(file), TimetableDetails.class));
             }
             catch (IOException e){
                 alert("Error", "Could not read file: " + file);
@@ -155,6 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Add new card and update
         adapter.add(timetableDetails);
-        rv.scrollToPosition(timetableDetailsListViewModel.getTimetables().size() + 1);
+        rv.scrollToPosition(timetables.size() + 1);
     }
 }

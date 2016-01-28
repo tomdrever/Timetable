@@ -12,15 +12,17 @@ import android.widget.TextView;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder> {
 
-    public TimetableDetailsListViewModel timetableDetailsListViewModel;
+    public ArrayList<TimetableDetails> timetableDetails;
     private Context context;
 
-    public CustomRecyclerViewAdapter(TimetableDetailsListViewModel timetableDetailsListViewModel, Context context){
-        this.timetableDetailsListViewModel = timetableDetailsListViewModel;
+    public CustomRecyclerViewAdapter(ArrayList<TimetableDetails> timetableDetails, Context context){
+        this.timetableDetails = timetableDetails;
         this.context = context;
     }
 
@@ -46,32 +48,32 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     @Override
     public void onBindViewHolder(TimetableDetailViewHolder holder, int i) {
         // Format and add new details
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-        holder.timetableDateCreated.setText("Created: " + df.format(timetableDetailsListViewModel.getTimetables().get(i).dateCreated));
-        String desc = timetableDetailsListViewModel.getTimetables().get(i).description;
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        holder.timetableDateCreated.setText("Created: " + df.format(timetableDetails.get(i).dateCreated));
+        String desc = timetableDetails.get(i).description;
         holder.timetableDescription.setText(desc != "" ? desc : "No description"); // android api stuffs. leave as !=
-        holder.timetableName.setText(timetableDetailsListViewModel.getTimetables().get(i).name);
+        holder.timetableName.setText(timetableDetails.get(i).name);
 
         holder.deleteTimetableButton.setTag(i);
 
         //
     }
 
-    public void add(TimetableDetails timetableDetails){
-        timetableDetailsListViewModel.addTimetableDetails(timetableDetails);
-        notifyItemInserted(timetableDetailsListViewModel.getTimetables().size() + 1);
+    public void add(TimetableDetails newTimetableDetails){
+        timetableDetails.add(newTimetableDetails);
+        notifyItemInserted(timetableDetails.size() + 1);
     }
 
     public void remove(int position) {
         // delete from filesysytem
-        File fileToDelete = new File(context.getFilesDir() + "/" + timetableDetailsListViewModel.getTimetables().get(position).name);
+        File fileToDelete = new File(context.getFilesDir() + "/" + timetableDetails.get(position).name);
         fileToDelete.delete();
 
 
         // delete from recyclerview
-        timetableDetailsListViewModel.removeTimetableDetails(timetableDetailsListViewModel.getTimetables().get(position));
+        timetableDetails.remove(timetableDetails.get(position));
         notifyItemRemoved(position);
-        notifyItemRangeChanged(position, timetableDetailsListViewModel.getTimetables().size());
+        notifyItemRangeChanged(position, timetableDetails.size());
     }
 
     @Override
@@ -81,7 +83,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
 
     @Override
     public int getItemCount() {
-        return timetableDetailsListViewModel.getTimetables().size();
+        return timetableDetails.size();
     }
 
     public static class TimetableDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

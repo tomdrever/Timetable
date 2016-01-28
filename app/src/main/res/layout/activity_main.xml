@@ -6,7 +6,8 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="size" type="java.lang.String"/>
+        <import type="android.databinding.ObservableList"/>
+        <variable name="timetables" type="ObservableList&lt;tomdrever.timetable.TimetableDetails&gt;"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -34,7 +35,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/rv"
                     />
 
@@ -42,8 +43,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/no_timetables"
-                    android:text="@{size}"
-                    android:textColor="@color/cardview_dark_background"
+                    android:text='@string/no_timetables'
+                    android:visibility="@{timetables.size() > 0 ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/colorPrimaryLight"
                     android:textSize="24sp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
