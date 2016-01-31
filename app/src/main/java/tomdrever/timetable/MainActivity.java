@@ -22,8 +22,6 @@ import com.google.gson.Gson;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import tomdrever.timetable.databinding.ActivityMainBinding;
 
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rv;
     private LinearLayoutManager llm;
 
-    private ObservableArrayList<TimetableDetails> timetables;
+    private ObservableArrayList<TimetableContainer> timetables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (String file : files) {
             try {
-                timetables.add(new Gson().fromJson(readFile(file), TimetableDetails.class));
+                timetables.add(new Gson().fromJson(readFile(file), TimetableContainer.class));
             }
             catch (IOException e){
                 alert("Error", "Could not read file: " + file);
@@ -147,34 +145,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void newTimetablesEntry(String timetablejson){
         // Add new timetable json to filedir
-        TimetableDetails timetableDetails = new Gson().fromJson(timetablejson, TimetableDetails.class);
+        TimetableContainer timetableContainer = new Gson().fromJson(timetablejson, TimetableContainer.class);
 
         try{
-            saveFile(timetableDetails.name, timetablejson);
+            saveFile(timetableContainer.name, timetablejson);
         }
         catch (IOException e){
-            alert("Error", "Error saving file: " + timetableDetails.name);
+            alert("Error", "Error saving file: " + timetableContainer.name);
         }
 
         // Add new card and update
-        adapter.add(timetableDetails);
+        adapter.add(timetableContainer);
         rv.smoothScrollToPosition(timetables.size() + 1);
     }
 
     private void updateTimetablesEntry(String timetablejson){
         // Add new timetable json to filedir
-        TimetableDetails newTimetableDetails = new Gson().fromJson(timetablejson, TimetableDetails.class);
-        for(TimetableDetails timetableDetails : timetables){ // UURGGH
-            if (timetableDetails.name.equals(newTimetableDetails.name)) {
-                timetables.set(timetables.indexOf(timetableDetails), newTimetableDetails);
+        TimetableContainer newTimetableContainer = new Gson().fromJson(timetablejson, TimetableContainer.class);
+        for(TimetableContainer timetableContainer : timetables){ // UURGGH
+            if (timetableContainer.name.equals(newTimetableContainer.name)) {
+                timetables.set(timetables.indexOf(timetableContainer), newTimetableContainer);
             }
         }
 
         try{
-            saveFile(newTimetableDetails.name, timetablejson);
+            saveFile(newTimetableContainer.name, timetablejson);
         }
         catch (IOException e){
-            alert("Error", "Error saving file: " + newTimetableDetails.name);
+            alert("Error", "Error saving file: " + newTimetableContainer.name);
         }
     }
 }

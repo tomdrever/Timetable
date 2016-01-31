@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -44,7 +42,7 @@ public class NewTimetableDialogFragment extends DialogFragment{
                             // create new timetable - launch edit timetable
                             Intent intent = new Intent(getActivity(), EditTimetableActivity.class);
                             intent.putExtra("isnewtimetable", true);
-                            intent.putExtra("timetabledetailsjson", new Gson().toJson(new TimetableDetails(
+                            intent.putExtra("timetabledetailsjson", new Gson().toJson(new TimetableContainer(
                                     editTextName.getText().toString(),
                                     editTextDescription.getText().toString(),
                                     Calendar.getInstance().getTime(),

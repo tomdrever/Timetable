@@ -1,5 +1,7 @@
 package tomdrever.timetable;
 
+import org.joda.time.LocalTime;
+
 import java.util.ArrayList;
 
 public class Day {
@@ -17,5 +19,14 @@ public class Day {
 
     public Day(String name) {
         setName(name);
+    }
+
+    // TODO -  reorganise periods on addition or removal to order chronologically
+    public LocalTime getStartTime(){
+        return periods.get(0).getStartTime();
+    }
+
+    public LocalTime getEndTime(){
+        return  periods.get(periods.size() - 1).getEndTime();
     }
 }

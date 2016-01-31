@@ -3,7 +3,6 @@ package tomdrever.timetable;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +20,10 @@ import java.util.Locale;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder> {
 
-    public ArrayList<TimetableDetails> timetableDetails;
+    public ArrayList<TimetableContainer> timetableDetails;
     private Context context;
 
-    public CustomRecyclerViewAdapter(ArrayList<TimetableDetails> timetableDetails, Context context){
+    public CustomRecyclerViewAdapter(ArrayList<TimetableContainer> timetableDetails, Context context){
         this.timetableDetails = timetableDetails;
         this.context = context;
     }
@@ -65,8 +64,8 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         holder.editTimetableButton.setTag(i);
     }
 
-    public void add(TimetableDetails newTimetableDetails){
-        timetableDetails.add(newTimetableDetails);
+    public void add(TimetableContainer newTimetableContainer){
+        timetableDetails.add(newTimetableContainer);
         notifyItemInserted(timetableDetails.size() + 1);
     }
 

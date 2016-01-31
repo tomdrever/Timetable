@@ -1,29 +1,37 @@
 package tomdrever.timetable;
 
-import java.util.Date;
+import org.joda.time.Duration;
+import org.joda.time.LocalTime;
 
 public class Period {
-    private PeriodData periodData;
-    public void setPeriodData(PeriodData periodData){
-        this.periodData = periodData;
+    public Period(String name){
+        periodMetaData = new PeriodMetaData(name);
     }
-    public PeriodData getPeriodData(){
-        return periodData;
+    private PeriodMetaData periodMetaData;
+    public void setPeriodMetaData(PeriodMetaData periodMetaData){
+        this.periodMetaData = periodMetaData;
+    }
+    public PeriodMetaData getPeriodMetaData(){
+        return periodMetaData;
     }
 
-    private Date startTime;
-    public void setStartTime(Date startTime){
+    private LocalTime startTime;
+    public void setStartTime(LocalTime startTime){
         this.startTime = startTime;
     }
-    public Date getStartTime(){
+    public LocalTime getStartTime(){
         return startTime;
     }
 
-    private Date duration;
-    public void setDuration(Date duration){
-        this.duration = duration;
+    private LocalTime endTime;
+    public void setEndTime(LocalTime endTime){
+        this.endTime = endTime;
     }
-    public Date getDuration(){
-        return duration;
+    public LocalTime getEndTime(){
+        return endTime;
+    }
+
+    public Duration getDuration() {
+        return new Duration(startTime.toDateTimeToday(), endTime.toDateTimeToday());
     }
 }

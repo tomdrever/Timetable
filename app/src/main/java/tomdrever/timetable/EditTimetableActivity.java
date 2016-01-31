@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 
 public class EditTimetableActivity extends AppCompatActivity {
 
-    private TimetableDetails timetableDetails;
+    private TimetableContainer timetableContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +21,8 @@ public class EditTimetableActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        timetableDetails = new Gson().fromJson(intent.getStringExtra("timetabledetailsjson"), TimetableDetails.class);
-        setTitle("Edit " + timetableDetails.name);
+        timetableContainer = new Gson().fromJson(intent.getStringExtra("timetabledetailsjson"), TimetableContainer.class);
+        setTitle("Edit " + timetableContainer.name);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class EditTimetableActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_edit_timetable:
                 Intent intent = new Intent();
-                intent.putExtra("timetabledetailsjson", new Gson().toJson(timetableDetails));
+                intent.putExtra("timetabledetailsjson", new Gson().toJson(timetableContainer));
 
                 if (getIntent().getBooleanExtra("isnewtimetable", false)){ // is a new timetable
                     setResult(100, intent);
