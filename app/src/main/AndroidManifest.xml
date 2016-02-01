@@ -9,21 +9,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:configChanges="orientation|screenSize"
             android:name=".MainActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_main_activity_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
         </activity>
         <activity
             android:name=".EditTimetableActivity"
             android:label="@string/app_edit_timetable_activity_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ViewTimetableActivity"
+            android:label="@string/title_activity_view_timetable"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ViewPeriodActivity" />
+        <activity
+            android:name=".DaysOverviewActivity"
+            android:label="@string/title_activity_days_overview"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+
 </manifest>

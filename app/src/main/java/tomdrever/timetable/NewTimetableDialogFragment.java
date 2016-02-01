@@ -59,5 +59,4 @@ public class NewTimetableDialogFragment extends DialogFragment{
 
         return builder.create();
     }
-
 }
