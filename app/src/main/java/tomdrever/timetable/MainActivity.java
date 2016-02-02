@@ -26,8 +26,6 @@ import java.io.IOException;
 import tomdrever.timetable.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-
-    protected static final int SUB_ACTIVITY_REQUEST_CODE = 100;
     private CustomRecyclerViewAdapter adapter;
     private RecyclerView rv;
     private LinearLayoutManager llm;
