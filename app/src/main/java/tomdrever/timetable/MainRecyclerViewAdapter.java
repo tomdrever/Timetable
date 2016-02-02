@@ -18,12 +18,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.TimetableDetailViewHolder> {
+public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.TimetableDetailViewHolder> {
 
     public ArrayList<TimetableContainer> timetableDetails;
     private Context context;
 
-    public CustomRecyclerViewAdapter(ArrayList<TimetableContainer> timetableDetails, Context context){
+    public MainRecyclerViewAdapter(ArrayList<TimetableContainer> timetableDetails, Context context){
         this.timetableDetails = timetableDetails;
         this.context = context;
     }

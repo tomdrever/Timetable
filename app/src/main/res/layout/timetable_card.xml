@@ -12,8 +12,7 @@
         android:id="@+id/cv"
         android:layout_margin="6dp"
         android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:background="@drawable/timetable_card_rect">
+        android:paddingRight="4dp">
 
         <LinearLayout
             android:layout_width="wrap_content"

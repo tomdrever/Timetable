@@ -26,7 +26,7 @@ import java.io.IOException;
 import tomdrever.timetable.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    private CustomRecyclerViewAdapter adapter;
+    private MainRecyclerViewAdapter adapter;
     private RecyclerView rv;
     private LinearLayoutManager llm;
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         timetables = new ObservableArrayList<>();
-        adapter = new CustomRecyclerViewAdapter(timetables, this);
+        adapter = new MainRecyclerViewAdapter(timetables, this);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setTimetables(timetables);
 
