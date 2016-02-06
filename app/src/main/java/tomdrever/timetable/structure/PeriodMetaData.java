@@ -1,4 +1,4 @@
-package tomdrever.timetable;
+package tomdrever.timetable.structure;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

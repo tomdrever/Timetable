@@ -1,6 +1,8 @@
-package tomdrever.timetable;
+package tomdrever.timetable.structure;
 
 import java.util.Date;
+
+import tomdrever.timetable.structure.Timetable;
 
 public class TimetableContainer {
     public TimetableContainer(String name, String description, Date dateCreated, Timetable timetable) {

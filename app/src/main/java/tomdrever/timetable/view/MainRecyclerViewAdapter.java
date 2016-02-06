@@ -1,4 +1,4 @@
-package tomdrever.timetable;
+package tomdrever.timetable.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,6 +17,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import tomdrever.timetable.edit.EditTimetableActivity;
+import tomdrever.timetable.R;
+import tomdrever.timetable.structure.TimetableContainer;
 
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.TimetableDetailViewHolder> {
 

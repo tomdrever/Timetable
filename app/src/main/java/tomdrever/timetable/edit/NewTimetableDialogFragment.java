@@ -1,4 +1,4 @@
-package tomdrever.timetable;
+package tomdrever.timetable.edit;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,6 +15,10 @@ import com.google.gson.Gson;
 
 import java.util.Arrays;
 import java.util.Calendar;
+
+import tomdrever.timetable.R;
+import tomdrever.timetable.structure.Timetable;
+import tomdrever.timetable.structure.TimetableContainer;
 
 public class NewTimetableDialogFragment extends DialogFragment{
 

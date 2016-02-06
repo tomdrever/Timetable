@@ -1,4 +1,4 @@
-package tomdrever.timetable;
+package tomdrever.timetable.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,7 +23,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import tomdrever.timetable.edit.NewTimetableDialogFragment;
+import tomdrever.timetable.R;
 import tomdrever.timetable.databinding.ActivityMainBinding;
+import tomdrever.timetable.structure.TimetableContainer;
 
 public class MainActivity extends AppCompatActivity {
     private MainRecyclerViewAdapter adapter;

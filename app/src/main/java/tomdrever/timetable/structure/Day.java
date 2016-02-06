@@ -1,4 +1,4 @@
-package tomdrever.timetable;
+package tomdrever.timetable.structure;
 
 import org.joda.time.LocalTime;
 

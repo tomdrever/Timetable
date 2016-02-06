@@ -1,4 +1,4 @@
-package tomdrever.timetable;
+package tomdrever.timetable.edit;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,8 +10,9 @@ import android.view.MenuItem;
 
 import com.google.gson.Gson;
 
+import tomdrever.timetable.R;
 import tomdrever.timetable.databinding.ActivityEditTimetableBinding;
-import tomdrever.timetable.databinding.ActivityMainBinding;
+import tomdrever.timetable.structure.TimetableContainer;
 
 public class EditTimetableActivity extends AppCompatActivity {
 

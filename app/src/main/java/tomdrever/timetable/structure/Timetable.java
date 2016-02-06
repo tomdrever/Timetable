@@ -1,6 +1,8 @@
-package tomdrever.timetable;
+package tomdrever.timetable.structure;
 
 import java.util.ArrayList;
+
+import tomdrever.timetable.structure.Day;
 
 public class Timetable {
     public Timetable(){

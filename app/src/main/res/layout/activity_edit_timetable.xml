@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="tomdrever.timetable.EditTimetableActivity">
+    tools:context=".edit.EditTimetableActivity">
 
     <data>
-        <variable name="timetable" type="tomdrever.timetable.TimetableContainer"/>
+        <variable name="timetable" type="tomdrever.timetable.structure.TimetableContainer"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
