@@ -1,4 +1,4 @@
-**Timetable - android app**
+#Timetable
 
 _Recreation of an old project on android._
 
