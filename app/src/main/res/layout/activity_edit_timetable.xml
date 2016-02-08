@@ -25,7 +25,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
+                android:elevation="4dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <!-- TODO - Sub-toolbar with back, forth and add buttons, and displays an edittext for the days title -->
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Static, fool!"/>
+
+            <android.support.v4.view.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/edit_timetable_pager"/>
 
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>

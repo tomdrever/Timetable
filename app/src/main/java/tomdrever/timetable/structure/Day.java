@@ -12,6 +12,9 @@ public class Day {
     public void removePeriod(Period period){
         periods.remove(period);
     }
+    public int getPeriodCount(){
+        return periods.size();
+    }
 
     private String name;
     public String getName(){ return name; }

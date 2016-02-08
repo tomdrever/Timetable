@@ -16,4 +16,7 @@ public class Timetable {
     public void removeDay(Day day){
         days.remove(day);
     }
+    public int getDayCount(){
+        return days.size();
+    }
 }
