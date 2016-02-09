@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import tomdrever.timetable.R;
+import tomdrever.timetable.structure.Day;
 import tomdrever.timetable.structure.Timetable;
 import tomdrever.timetable.structure.TimetableContainer;
 
@@ -46,11 +47,15 @@ public class NewTimetableDialogFragment extends DialogFragment{
                             // create new timetable - launch edit timetable
                             Intent intent = new Intent(getActivity(), EditTimetableActivity.class);
                             intent.putExtra("isnewtimetable", true);
+
+                            Timetable timetable = new Timetable();
+                            timetable.addDay(new Day("Monday"));
+                            timetable.addDay(new Day("Octday"));
+
                             intent.putExtra("timetabledetailsjson", new Gson().toJson(new TimetableContainer(
                                     editTextName.getText().toString(),
                                     editTextDescription.getText().toString(),
-                                    Calendar.getInstance().getTime(),
-                                    new Timetable())));
+                                    Calendar.getInstance().getTime(), timetable)));
                             getActivity().startActivityForResult(intent, 100);
                         }
                     }

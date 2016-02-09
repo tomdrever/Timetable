@@ -36,7 +36,6 @@ public class EditTimetableActivity extends AppCompatActivity {
         // Get timetable
         Intent intent = getIntent();
         timetableContainer = new Gson().fromJson(intent.getStringExtra("timetabledetailsjson"), TimetableContainer.class);
-        setTitle("Edit " + timetableContainer.name);
 
         // Bind timetable to layout
         ActivityEditTimetableBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_timetable);

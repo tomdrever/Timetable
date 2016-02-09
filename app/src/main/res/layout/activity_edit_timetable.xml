@@ -26,6 +26,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 android:elevation="4dp"
+                android:title='@{"Edit " + timetable.name}'
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <!-- TODO - Sub-toolbar with back, forth and add buttons, and displays an edittext for the days title -->
