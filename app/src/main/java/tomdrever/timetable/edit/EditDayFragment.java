@@ -8,33 +8,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import tomdrever.timetable.R;
+import tomdrever.timetable.structure.Day;
 
 public class EditDayFragment extends Fragment {
 
-    public static final String ARG_PAGE = "page";
-
-    private int mPageNumber;
+    private Day day;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPageNumber = getArguments().getInt(ARG_PAGE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_edit_day, container, false);
 
-        ((TextView) rootView.findViewById(R.id.testtext)).setText("page" + String.format("%d", mPageNumber));
+        ((TextView) rootView.findViewById(R.id.testtext)).setText("Day: " + day.getName());
 
         return rootView;
     }
 
-    public static EditDayFragment create(int dayNumber) {
+    public static EditDayFragment newInstance(Day day) {
         EditDayFragment fragment = new EditDayFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, dayNumber);
-        fragment.setArguments(args);
+        fragment.day = day;
         return fragment;
     }
 }

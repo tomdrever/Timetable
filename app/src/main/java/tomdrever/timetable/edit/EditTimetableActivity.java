@@ -49,8 +49,8 @@ public class EditTimetableActivity extends AppCompatActivity {
         viewPager = (ViewPager)findViewById(R.id.edit_timetable_pager);
 
         ArrayList<Fragment> frags = new ArrayList<>();
-        frags.add(EditDayFragment.create(1));
-        frags.add(EditDayFragment.create(2));
+        frags.add(EditDayFragment.newInstance(timetableContainer.timetable.getDay(0)));
+        frags.add(EditDayFragment.newInstance(timetableContainer.timetable.getDay(1)));
 
         pagerAdapter = new EditTimetablePagerAdapter(getSupportFragmentManager(), frags);
         viewPager.setAdapter(pagerAdapter);
