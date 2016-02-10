@@ -17,7 +17,8 @@
     <string name="dialog.new_timetable_create_title">New Timetable</string>
 
     <string name="no_timetables">You have no timetables</string>
+    <string name="empty_timetable">This timetable is empty</string>
 
-    <string name="title_activity_view_timetable">ViewTimetableActivity</string>
-    <string name="title_activity_days_overview">DaysOverviewActivity</string>
+    <string name="title_activity_view_timetable">View Timetable Activity</string>
+    <string name="title_activity_days_overview">Days Overview Activity</string>
 </resources>

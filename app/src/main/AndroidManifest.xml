@@ -31,7 +31,7 @@
         <activity
             android:name=".view.DaysOverviewActivity"
             android:label="@string/title_activity_days_overview"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

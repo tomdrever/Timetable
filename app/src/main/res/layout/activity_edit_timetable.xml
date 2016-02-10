@@ -5,6 +5,7 @@
     tools:context=".edit.EditTimetableActivity">
 
     <data>
+        <import type="android.view.View"/>
         <variable name="timetable" type="tomdrever.timetable.structure.TimetableContainer"/>
     </data>
 
@@ -29,18 +30,26 @@
                 android:title='@{"Edit " + timetable.name}'
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <!-- TODO - Sub-toolbar with back, forth and add buttons, and displays an edittext for the days title -->
-            <TextView
-                android:layout_height="wrap_content"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:text="Static, fool!"
-                android:textColor="@color/colorAccent"
-                android:background="@color/cardview_dark_background"/>
+                android:layout_height="fill_parent">
+                <android.support.v4.view.ViewPager
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/edit_timetable_pager"/>
 
-            <android.support.v4.view.ViewPager
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/edit_timetable_pager"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/no_timetables"
+                    android:text='@string/empty_timetable'
+                    android:visibility="@{timetable.timetable.getDays().size() > 0 ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/colorPrimaryLight"
+                    android:textSize="24sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif-thin"/>
+            </RelativeLayout>
 
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>

@@ -16,10 +16,7 @@ public class Timetable {
     public void removeDay(Day day){
         days.remove(day);
     }
-    public Day getDay(int index){
-        return days.get(index);
-    }
-    public int getDayCount(){
-        return days.size();
+    public ArrayList<Day> getDays(){
+        return days;
     }
 }

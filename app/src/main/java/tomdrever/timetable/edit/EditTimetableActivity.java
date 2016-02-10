@@ -20,6 +20,7 @@ import java.util.List;
 
 import tomdrever.timetable.R;
 import tomdrever.timetable.databinding.ActivityEditTimetableBinding;
+import tomdrever.timetable.structure.Day;
 import tomdrever.timetable.structure.TimetableContainer;
 
 public class EditTimetableActivity extends AppCompatActivity {
@@ -48,8 +49,9 @@ public class EditTimetableActivity extends AppCompatActivity {
         viewPager = (ViewPager)findViewById(R.id.edit_timetable_pager);
 
         ArrayList<Fragment> frags = new ArrayList<>();
-        frags.add(EditDayFragment.newInstance(timetableContainer.timetable.getDay(0)));
-        frags.add(EditDayFragment.newInstance(timetableContainer.timetable.getDay(1)));
+        for (Day day:timetableContainer.timetable.getDays()) {
+            frags.add(EditDayFragment.newInstance(day));
+        }
 
         pagerAdapter = new EditTimetablePagerAdapter(getSupportFragmentManager(), frags);
         viewPager.setAdapter(pagerAdapter);

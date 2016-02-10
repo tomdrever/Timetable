@@ -48,14 +48,10 @@ public class NewTimetableDialogFragment extends DialogFragment{
                             Intent intent = new Intent(getActivity(), EditTimetableActivity.class);
                             intent.putExtra("isnewtimetable", true);
 
-                            Timetable timetable = new Timetable();
-                            timetable.addDay(new Day("Monday"));
-                            timetable.addDay(new Day("Octday"));
-
                             intent.putExtra("timetabledetailsjson", new Gson().toJson(new TimetableContainer(
                                     editTextName.getText().toString(),
                                     editTextDescription.getText().toString(),
-                                    Calendar.getInstance().getTime(), timetable)));
+                                    Calendar.getInstance().getTime(), new Timetable())));
                             getActivity().startActivityForResult(intent, 100);
                         }
                     }
