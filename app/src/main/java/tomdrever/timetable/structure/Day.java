@@ -22,6 +22,7 @@ public class Day {
 
     public Day(String name) {
         setName(name);
+        periods = new ArrayList<>();
     }
 
     // TODO -  reorganise periods on addition or removal to order chronologically

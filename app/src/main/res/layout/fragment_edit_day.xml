@@ -7,10 +7,27 @@
         android:layout_width="match_parent"
         android:background="@android:color/white"
         xmlns:android="http://schemas.android.com/apk/res/android">
-        <TextView
+
+        <!-- Stopping autofocus-->
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px"/>
+
+        <AutoCompleteTextView android:id="@+id/autotext"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:nextFocusUp="@id/autotext"
+            android:nextFocusLeft="@id/autotext"/>
+
+        <EditText
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:text="@{day.getName()}"
+            android:text='@{day.getName() != "" ? day.getName() : ""}'
+            android:hint="Day"
+            android:textColorHint="@color/colorPrimaryLight"
+            android:inputType="text"
             android:textSize="18sp"
             android:textStyle="bold"
             android:padding="16dp"

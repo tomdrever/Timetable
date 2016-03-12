@@ -1,12 +1,12 @@
 package tomdrever.timetable.structure;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PeriodMetaData {
     public PeriodMetaData(String periodName){
         this.periodName = periodName;
-        this.periodDescription = HashBiMap.create();
+        this.periodDescription = new HashMap<>();
     }
 
     private String periodName;
@@ -17,7 +17,7 @@ public class PeriodMetaData {
         return periodName;
     }
 
-    private BiMap<String, Boolean> periodDescription;
+    private Map<String, Boolean> periodDescription;
     public void addDescriptionEntry(String description, Boolean isDisplayedDescription){
         periodDescription.put(description, isDisplayedDescription);
     }

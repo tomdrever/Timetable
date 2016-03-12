@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         rv.setItemAnimator(new DefaultItemAnimator());
 
         // Init fab
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_timetable_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
