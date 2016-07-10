@@ -2,15 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_edit_timetable"
+        android:id="@+id/action_finish_editing_timetable"
         android:orderInCategory="2"
         android:icon="@mipmap/ic_done_white_24dp"
-        android:title="@string/action_edit_timetable"
+        android:title="@string/action_finsih_editing_timetable"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_preview_timetable"
-        android:orderInCategory="1"
-        android:icon="@mipmap/ic_format_paint_white_24dp"
-        android:title="@string/action_preview_timetable"
-        app:showAsAction="ifRoom"/>
 </menu>

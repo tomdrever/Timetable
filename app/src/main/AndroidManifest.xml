@@ -5,11 +5,11 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label=""
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.MainActivity"
+            android:name=".android.ui.view.TimetablesOverviewActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_main_activity_name"
             android:theme="@style/AppTheme.NoActionBar">
@@ -20,18 +20,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".edit.EditTimetableActivity"
+            android:name=".android.ui.edit.EditTimetableActivity"
             android:label="@string/app_edit_timetable_activity_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.ViewTimetableActivity"
-            android:label="@string/title_activity_view_timetable"
+            android:name=".android.ui.view.ViewTimetableActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.ViewPeriodActivity" />
-        <activity
-            android:name=".view.DaysOverviewActivity"
-            android:label="@string/title_activity_days_overview"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".android.ui.edit.EditDayActivity"></activity>
     </application>
 
 </manifest>
