@@ -2,7 +2,6 @@ package tomdrever.timetable.android.ui.view;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,22 +16,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import tomdrever.timetable.R;
-import tomdrever.timetable.databinding.ActivityTimetablesOverviewBinding;
-import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.android.ui.edit.NewTimetableDialogFragment;
+import tomdrever.timetable.data.TimetableContainer;
+import tomdrever.timetable.databinding.ActivityTimetablesOverviewBinding;
 
 public class TimetablesOverviewActivity extends AppCompatActivity {
-    private TimetablesRecyclerViewAdapter recyclerViewAdapter;
-
-    private ObservableArrayList<TimetableContainer> timetables;
+    private TimetablesOverviewRecyclerViewAdapter recyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        timetables = new ObservableArrayList<>();
-        recyclerViewAdapter = new TimetablesRecyclerViewAdapter(timetables, this);
+        recyclerViewAdapter = new TimetablesOverviewRecyclerViewAdapter(this);
         ActivityTimetablesOverviewBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_timetables_overview);
-        binding.setTimetables(timetables);
+        binding.setTimetables(recyclerViewAdapter.timetables);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.timetables_overview_toolbar);
         setSupportActionBar(toolbar);
@@ -46,13 +42,11 @@ public class TimetablesOverviewActivity extends AppCompatActivity {
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerViewAdapter.loadTimetables();
-
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Store timetable temporarily, so it can be restored
-                final TimetableContainer tempTimetableDetails = recyclerViewAdapter.timetableDetails.get(viewHolder.getAdapterPosition());
+                final TimetableContainer tempTimetableDetails = recyclerViewAdapter.timetables.get(viewHolder.getAdapterPosition());
                 final int tempPosition = viewHolder.getAdapterPosition();
                 recyclerViewAdapter.remove(tempPosition);
                 Snackbar.make(viewHolder.itemView, "Timetable deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {

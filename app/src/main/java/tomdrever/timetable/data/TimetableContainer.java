@@ -1,8 +1,9 @@
 package tomdrever.timetable.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TimetableContainer {
+public class TimetableContainer implements Serializable{
     public TimetableContainer(String name, String description, Date dateCreated, Timetable timetable) {
         this.name = name;
         this.description = description;

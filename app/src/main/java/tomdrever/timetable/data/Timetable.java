@@ -1,8 +1,9 @@
 package tomdrever.timetable.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Timetable {
+public class Timetable implements Serializable {
     public Timetable(){
         days = new ArrayList<>();
     }

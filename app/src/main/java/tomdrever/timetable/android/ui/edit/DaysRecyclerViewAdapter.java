@@ -9,12 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.ui.view.ViewTimetableActivity;
 import tomdrever.timetable.data.Day;
 
 public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerViewAdapter.DayViewHolder> {
@@ -35,7 +32,7 @@ public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerVi
             public void onClick(View v) {
                 // Editing an existing day
                 Intent intent = new Intent(context, EditDayActivity.class);
-                intent.putExtra("dayjson", new Gson().toJson(days.get((int)v.getTag())));
+                intent.putExtra("day", days.get((int)v.getTag()));
                 ((Activity)context).startActivityForResult(intent, 100);
             }
         });

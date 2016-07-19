@@ -9,15 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.google.gson.Gson;
-
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.ui.edit.EditTimetableActivity;
-import tomdrever.timetable.databinding.ActivityViewTimetableBinding;
 import tomdrever.timetable.data.TimetableContainer;
+import tomdrever.timetable.databinding.ActivityViewTimetableBinding;
 
 public class ViewTimetableActivity extends AppCompatActivity {
     public static final int EDIT_NEW_TIMETABLE_CODE = 200;
+
+    private FloatingActionButton editTimetableFAB;
 
     private TimetableContainer timetableContainer; // TODO - make observable
 
@@ -27,7 +27,7 @@ public class ViewTimetableActivity extends AppCompatActivity {
 
         // Get timetable
         Intent intent = getIntent();
-        timetableContainer = new Gson().fromJson(intent.getStringExtra("timetabledetailsjson"), TimetableContainer.class);
+        timetableContainer = (TimetableContainer) intent.getSerializableExtra("timetabledetails");
 
         // Bind timetable to layout
         ActivityViewTimetableBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_view_timetable);
@@ -49,18 +49,19 @@ public class ViewTimetableActivity extends AppCompatActivity {
         // If we know it is a new timetable, immediately launch edit timetable, for creation.
         if (intent.getBooleanExtra("isnewtimetable", false)){
             Intent launchEditIntent = new Intent(this, EditTimetableActivity.class);
-            launchEditIntent.putExtra("timetabledetailsjson", new Gson().toJson(timetableContainer));
+            launchEditIntent.putExtra("timetabledetails", timetableContainer);
             startActivityForResult(launchEditIntent, EDIT_NEW_TIMETABLE_CODE);
         }
 
-        FloatingActionButton editTimetableFAB = (FloatingActionButton)findViewById(R.id.edit_timetable_fab);
+        editTimetableFAB = (FloatingActionButton)findViewById(R.id.edit_timetable_fab);
 
         if (editTimetableFAB != null) {
             editTimetableFAB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent launchEditIntent = new Intent(getBaseContext(), EditTimetableActivity.class);
-                    launchEditIntent.putExtra("timetabledetailsjson", new Gson().toJson(timetableContainer));
+                    launchEditIntent.putExtra("timetabledetails", timetableContainer);
+
                     startActivityForResult(launchEditIntent, EDIT_NEW_TIMETABLE_CODE);
                 }
             });
@@ -68,18 +69,13 @@ public class ViewTimetableActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        supportFinishAfterTransition();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode != RESULT_CANCELED) {
-            if (resultCode == EDIT_NEW_TIMETABLE_CODE) { // Editing has finished
+            if (resultCode == EDIT_NEW_TIMETABLE_CODE) {
+                // Editing has finished
                 // Unpack data and set to timetable object
-                String timetablejson = data.getStringExtra("timetabledetailsjson");
-                timetableContainer = new Gson().fromJson(timetablejson, TimetableContainer.class);
+                timetableContainer = (TimetableContainer) intent.getSerializableExtra("timetabledetails");
 
                 Snackbar.make(findViewById(android.R.id.content), String.format("Saved %s", timetableContainer.name), Snackbar.LENGTH_SHORT).show();
             }

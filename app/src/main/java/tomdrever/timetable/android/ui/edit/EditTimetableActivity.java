@@ -14,17 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.gson.Gson;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.TimetableFileManager;
 import tomdrever.timetable.android.ui.view.ViewTimetableActivity;
 import tomdrever.timetable.data.Day;
-import tomdrever.timetable.databinding.ActivityEditTimetableBinding;
 import tomdrever.timetable.data.TimetableContainer;
+import tomdrever.timetable.databinding.ActivityEditTimetableBinding;
 
 public class EditTimetableActivity extends AppCompatActivity {
     private TimetableContainer timetableContainer; // TODO - make observable
@@ -35,15 +30,25 @@ public class EditTimetableActivity extends AppCompatActivity {
 
         // Get timetable
         Intent intent = getIntent();
-        timetableContainer = new Gson().fromJson(intent.getStringExtra("timetabledetailsjson"), TimetableContainer.class);
+        timetableContainer = (TimetableContainer) intent.getSerializableExtra("timetabledetails");
 
         // Bind timetable to layout
         ActivityEditTimetableBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_timetable);
         binding.setTimetable(timetableContainer);
 
         // Setup layout
-        Toolbar toolbar = (Toolbar)findViewById(R.id.edit_timetable_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_timetable_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (toolbar != null) {
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setResult(100);
+                    supportFinishAfterTransition();
+                }
+            });
+        }
 
         // Set up drag-sort-listview
         final RecyclerView daysListRecyclerView = (RecyclerView) findViewById(R.id.edit_timetable_days_list_recyclerview);
@@ -90,6 +95,11 @@ public class EditTimetableActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        supportFinishAfterTransition();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit_timetable, menu);
@@ -101,21 +111,10 @@ public class EditTimetableActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_finish_editing_timetable: // On "done" pressed
                 // save over timetable
-                String fileName = timetableContainer.name;
-                String fileContents = new Gson().toJson(timetableContainer);
+                new TimetableFileManager(this).save(timetableContainer);
 
-                // (try to) save
-                try {
-                    File fileToSave = new File(getFilesDir(), "timetables/" + fileName);
-                    FileOutputStream outputStream = new FileOutputStream(fileToSave);
-                    outputStream.write(fileContents.getBytes());
-                    outputStream.close();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
                 Intent intent = new Intent();
-                intent.putExtra("timetabledetailsjson", fileContents); // fileContents is, in this case, the data to be passed to viewtimetable as wel
+                intent.putExtra("timetabledetails", timetableContainer); // fileContents is, in this case, the data to be passed to viewtimetable as wel
                 setResult(ViewTimetableActivity.EDIT_NEW_TIMETABLE_CODE, intent);
                 finish();
                 return true;

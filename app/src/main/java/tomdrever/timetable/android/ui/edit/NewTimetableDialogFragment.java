@@ -10,13 +10,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
 
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.TimetableFileManager;
 import tomdrever.timetable.android.ui.view.ViewTimetableActivity;
 import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.data.TimetableContainer;
@@ -39,7 +38,7 @@ public class NewTimetableDialogFragment extends DialogFragment{
                     if (editTextName.getText().toString().equals("")) {
                         Toast.makeText(getActivity(), "Name field required", Toast.LENGTH_SHORT).show();
                     }
-                    else if (Arrays.asList(new File(getActivity().getFilesDir(), "timetables/").list()).contains(editTextName.getText().toString())) {
+                    else if (Arrays.asList(new File(new TimetableFileManager(getContext()).directory).list()).contains(editTextName.getText().toString())) {
                         Toast.makeText(getActivity(), "Timetable with that name already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // create new timetable - launch view timetable, telling it to immediately run edit timetable
@@ -47,10 +46,10 @@ public class NewTimetableDialogFragment extends DialogFragment{
                         intent.putExtra("isnewtimetable", true);
 
                         // Send new empty timetable with name and description
-                        intent.putExtra("timetabledetailsjson", new Gson().toJson(new TimetableContainer(
+                        intent.putExtra("timetabledetails", new TimetableContainer(
                                 editTextName.getText().toString(),
                                 editTextDescription.getText().toString(),
-                                Calendar.getInstance().getTime(), new Timetable())));
+                                Calendar.getInstance().getTime(), new Timetable()));
                         getActivity().startActivityForResult(intent, 100);
                     }
                 }

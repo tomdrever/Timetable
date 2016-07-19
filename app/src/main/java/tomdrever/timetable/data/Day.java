@@ -2,9 +2,10 @@ package tomdrever.timetable.data;
 
 import org.joda.time.LocalTime;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Day {
+public class Day implements Serializable {
     private ArrayList<Period> periods;
     public void addPeriod(Period period){
         periods.add(period);
