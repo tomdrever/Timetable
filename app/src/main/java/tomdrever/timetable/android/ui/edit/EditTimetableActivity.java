@@ -13,16 +13,23 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.common.base.Strings;
+
+import java.util.Collections;
 
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.TimetableFileManager;
-import tomdrever.timetable.android.ui.view.ViewTimetableActivity;
+import tomdrever.timetable.android.ui.TimetableActivityCodes;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.ActivityEditTimetableBinding;
 
 public class EditTimetableActivity extends AppCompatActivity {
     private TimetableContainer timetableContainer; // TODO - make observable
+    private boolean isNewTimetable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +37,15 @@ public class EditTimetableActivity extends AppCompatActivity {
 
         // Get timetable
         Intent intent = getIntent();
+        isNewTimetable = intent.getBooleanExtra("isnewtimetable", false);
         timetableContainer = (TimetableContainer) intent.getSerializableExtra("timetabledetails");
 
         // Bind timetable to layout
         ActivityEditTimetableBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_timetable);
         binding.setTimetable(timetableContainer);
+        binding.setIsnewtimetable(isNewTimetable);
 
-        // Setup layout
+        // Setup layout w/ back button
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_timetable_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -44,8 +53,7 @@ public class EditTimetableActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setResult(100);
-                    supportFinishAfterTransition();
+                    onBackPressed();
                 }
             });
         }
@@ -53,9 +61,8 @@ public class EditTimetableActivity extends AppCompatActivity {
         // Set up drag-sort-listview
         final RecyclerView daysListRecyclerView = (RecyclerView) findViewById(R.id.edit_timetable_days_list_recyclerview);
 
-        final DaysRecyclerViewAdapter recyclerViewAdapter = new DaysRecyclerViewAdapter(timetableContainer.timetable.getDays(), this);
+        final DaysRecyclerViewAdapter recyclerViewAdapter = new DaysRecyclerViewAdapter(timetableContainer.getTimetable().getDays(), this);
 
-        assert daysListRecyclerView != null;
         daysListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         daysListRecyclerView.setAdapter(recyclerViewAdapter);
 
@@ -66,11 +73,17 @@ public class EditTimetableActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Add new day
-                recyclerViewAdapter.add(new Day(String.format("Today %s", timetableContainer.timetable.getDays().size() + 1)));
+                recyclerViewAdapter.add(new Day(String.format("Today %s", timetableContainer.getTimetable().getDays().size() + 1)));
             }
         });
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return super.isLongPressDragEnabled();
+            }
+
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 final Day tempDay = recyclerViewAdapter.days.get(viewHolder.getAdapterPosition());
@@ -84,19 +97,33 @@ public class EditTimetableActivity extends AppCompatActivity {
                     }
                 }).show();
             }
+
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
+                Collections.swap(recyclerViewAdapter.days, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
+                return true;
             }
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(daysListRecyclerView);
+
+        // Set name and description to text boxes
+        if (!isNewTimetable) {
+            ((EditText)findViewById(R.id.edit_timetable_name)).setText(timetableContainer.getName());
+            ((EditText)findViewById(R.id.edit_timetable_description))
+                    .setText(timetableContainer.getDescription());
+        }
     }
 
     @Override
     public void onBackPressed() {
-        supportFinishAfterTransition();
+        // TODO - "Discard saved changes and quit?"
+        setResult(isNewTimetable ?
+                TimetableActivityCodes.CREATE_NEW_TIMETABLE_FAILED_CODE
+                : TimetableActivityCodes.EDIT_NEW_TIMETABLE_FAILED_CODE);
+        finish();
     }
 
     @Override
@@ -110,13 +137,43 @@ public class EditTimetableActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_finish_editing_timetable: // On "done" pressed
-                // save over timetable
-                new TimetableFileManager(this).save(timetableContainer);
+                EditText editTimetableName = (EditText) findViewById(R.id.edit_timetable_name);
+                // Check the timetable has been given a name
+                if (Strings.isNullOrEmpty(editTimetableName.getText().toString().trim())) {
+                    // If not, tell the user
+                    Toast.makeText(this, "The timetable needs a name!", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent();
-                intent.putExtra("timetabledetails", timetableContainer); // fileContents is, in this case, the data to be passed to viewtimetable as wel
-                setResult(ViewTimetableActivity.EDIT_NEW_TIMETABLE_CODE, intent);
-                finish();
+                    // TODO - highlight name field to the user in some way
+                } else {
+                    // TODO - if (isnewtimetable) - check if the name is already used.
+                    // If so, ask the user if they want to overwrite the tt or go back
+
+                    TimetableFileManager fileManager = new TimetableFileManager(this);
+
+                    // If it's not a new timetable, delete the old file (jic)
+                    if (!isNewTimetable) {
+                        fileManager.delete(timetableContainer.getName());
+                    }
+
+                    // Set name and description from text
+                    timetableContainer.setName(editTimetableName.getText().toString());
+
+                    EditText editTimetableDescription = (EditText)findViewById(R.id.edit_timetable_description);
+                    if (Strings.isNullOrEmpty(editTimetableDescription.getText().toString().trim())) {
+                        timetableContainer.setDescription("No description");
+                    } else {
+                        timetableContainer.setDescription(editTimetableDescription.getText().toString());
+                    }
+
+                    // Save over timetable
+                    fileManager.save(timetableContainer);
+
+                    Intent intent = new Intent();
+                    intent.putExtra("timetabledetails", timetableContainer);
+                    setResult(TimetableActivityCodes.EDIT_NEW_TIMETABLE_SUCCESSFUL_CODE, intent);
+                    finish();
+                }
+
                 return true;
 
             default:

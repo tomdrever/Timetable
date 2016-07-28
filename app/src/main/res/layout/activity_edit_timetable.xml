@@ -7,6 +7,7 @@
     <data>
         <import type="android.view.View"/>
         <variable name="timetable" type="tomdrever.timetable.data.TimetableContainer"/>
+        <variable name="isnewtimetable" type="boolean"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -23,37 +24,74 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/edit_timetable_toolbar"
-                android:transitionName="edit_transition_base"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:title='@{"Edit " + timetable.name}'
+                android:title='@{isnewtimetable ? "New Timetable" : "Edit " + timetable.name}'
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.AppBarLayout>
 
-        <RelativeLayout
+        <LinearLayout
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/edit_timetable_days_list_recyclerview"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/no_timetables"
-                android:text='@string/empty_timetable'
-                android:visibility="@{timetable.timetable.getDays().size() > 0 ? View.GONE : View.VISIBLE}"
-                android:textColor="@color/colorPrimaryLight"
-                android:textSize="24sp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:fontFamily="sans-serif-thin"/>
-        </RelativeLayout>
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp" >
+
+                <EditText android:id="@+id/edit_timetable_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/edit_timetable_name"
+                    android:inputType="textCapSentences"
+                    android:background="@android:color/transparent"
+                    android:textColorHint="@color/colorPrimaryLight" />
+
+                <EditText android:id="@+id/edit_timetable_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/edit_timetable_description"
+                    android:background="@android:color/transparent"
+                    android:textColorHint="@color/colorPrimaryLight"
+                    android:layout_above="@id/edit_timetable_name" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/edit_timetable_days_list_recyclerview_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/edit_timetable_days_list_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center|start" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/no_timetables"
+                    android:text='@string/empty_timetable'
+                    android:visibility="@{timetable.timetable.getDays().size() > 0 ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/colorPrimaryLight"
+                    android:textSize="24sp"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginEnd="35dp"
+                    android:layout_marginTop="140dp" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/new_day_fab"

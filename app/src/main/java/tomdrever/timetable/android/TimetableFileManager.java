@@ -38,14 +38,14 @@ public class TimetableFileManager {
         String fileContents = new Gson().toJson(timetableContainer);
 
         try {
-            File fileToSave = new File(directory, timetableContainer.name);
+            File fileToSave = new File(directory, timetableContainer.getName());
             FileOutputStream outputStream = new FileOutputStream(fileToSave);
             outputStream.write(fileContents.getBytes());
             outputStream.close();
         }
         catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, "Error: Could not save file: " + timetableContainer.name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Error: Could not save file: " + timetableContainer.getName(), Toast.LENGTH_SHORT).show();
         }
     }
 

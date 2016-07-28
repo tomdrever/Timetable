@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:theme="@style/AppTheme.AppBarOverlay" >
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/view_timetable_toolbar"
@@ -31,7 +31,7 @@
 
             <!-- TODO - Display basic timetable details here -->
             <TextView
-                android:transitionName="timetable_card"
+                android:id="@+id/view_timetable_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="24dp"
@@ -39,6 +39,7 @@
                 android:textColor="#ffffff"
                 android:layout_gravity="center_horizontal"
                 android:text='@{timetable.name}' />
+
         </android.support.design.widget.AppBarLayout>
 
         <RelativeLayout
@@ -56,12 +57,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:text='@{"" + timetable.name}'/>
+                android:text='@{timetable.name}'/>
         </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/edit_timetable_fab"
-            android:transitionName="edit_transition_base"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"

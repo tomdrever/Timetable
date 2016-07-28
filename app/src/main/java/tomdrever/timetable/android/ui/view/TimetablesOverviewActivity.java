@@ -15,8 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Calendar;
+
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.ui.edit.NewTimetableDialogFragment;
+import tomdrever.timetable.android.ui.TimetableActivityCodes;
+import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.ActivityTimetablesOverviewBinding;
 
@@ -72,8 +75,16 @@ public class TimetablesOverviewActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewTimetableDialogFragment newTimetableDialogFragment = new NewTimetableDialogFragment();
-                newTimetableDialogFragment.show(getFragmentManager(), "NewTimetableTag");
+
+                Intent intent = new Intent(v.getContext(), ViewTimetableActivity.class);
+                intent.putExtra("isnewtimetable", true);
+
+                // Send new empty timetable with name and description
+                intent.putExtra("timetabledetails", new TimetableContainer(
+                        "",
+                        "",
+                        Calendar.getInstance().getTime(), new Timetable()));
+                startActivityForResult(intent, 100);
             }
         });
     }
@@ -103,7 +114,7 @@ public class TimetablesOverviewActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 100) { // view timetable successful closed
+        if (resultCode == TimetableActivityCodes.VIEW_FINISHED_TIMETABLE_CHANGED) { // view timetable successful closed
             recyclerViewAdapter.loadTimetables();
         }
     }

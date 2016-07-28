@@ -51,10 +51,10 @@ public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<
     public void onBindViewHolder(TimetableDetailViewHolder holder, int i) {
         // Format and add new details
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-        holder.timetableDateCreatedView.setText("Created: " + df.format(timetables.get(i).dateCreated));
-        String desc = timetables.get(i).description;
+        holder.timetableDateCreatedView.setText("Created: " + df.format(timetables.get(i).getDateCreated()));
+        String desc = timetables.get(i).getDescription();
         holder.timetableDescriptionView.setText(desc != "" ? desc : "No description"); // android api stuffs. leave as !=
-        holder.timetableNameView.setText(timetables.get(i).name);
+        holder.timetableNameView.setText(timetables.get(i).getName());
 
         holder.itemView.setTag(i);
     }
@@ -72,7 +72,7 @@ public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<
 
     public void remove(int position) {
         // delete from filesysytem
-        fileManager.delete(timetables.get(position).name);
+        fileManager.delete(timetables.get(position).getName());
 
         // delete from recyclerview
         timetables.remove(timetables.get(position));
