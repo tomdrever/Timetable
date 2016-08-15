@@ -9,23 +9,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".android.ui.view.TimetablesOverviewActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_main_activity_name"
+            android:name=".android.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".android.ui.edit.EditTimetableActivity"
-            android:label="@string/app_edit_timetable_activity_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".android.ui.view.ViewTimetableActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".android.ui.edit.EditDayActivity"></activity>
     </application>
+
 </manifest>

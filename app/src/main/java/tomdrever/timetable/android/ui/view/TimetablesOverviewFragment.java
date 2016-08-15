@@ -1,6 +1,6 @@
 package tomdrever.timetable.android.ui.view;
 
-import android.content.Intent;
+import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,36 +11,43 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
-
-import java.util.Calendar;
+import android.view.ViewGroup;
 
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.ui.TimetableActivityCodes;
-import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.ActivityTimetablesOverviewBinding;
 
-public class TimetablesOverviewActivity extends AppCompatActivity {
+public class TimetablesOverviewFragment extends Fragment {
     private TimetablesOverviewRecyclerViewAdapter recyclerViewAdapter;
 
+    private View rootView;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        recyclerViewAdapter = new TimetablesOverviewRecyclerViewAdapter(this);
-        ActivityTimetablesOverviewBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_timetables_overview);
+        recyclerViewAdapter = new TimetablesOverviewRecyclerViewAdapter(getContext());
+        ActivityTimetablesOverviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.activity_timetables_overview, container, false);
         binding.setTimetables(recyclerViewAdapter.timetables);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.timetables_overview_toolbar);
-        setSupportActionBar(toolbar);
+        if (rootView == null) {
+            rootView = binding.getRoot();
+        } else {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+        }
+
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.timetables_overview_toolbar);
+        setHasOptionsMenu(true);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         // Set up recyclerview (the main timetable display list)
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.timetables_list_recyclerview);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.timetables_list_recyclerview);
 
         assert recyclerView != null;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -60,6 +67,7 @@ public class TimetablesOverviewActivity extends AppCompatActivity {
                     }
                 }).show();
             }
+
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
@@ -70,12 +78,15 @@ public class TimetablesOverviewActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         // Init fab
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_timetable_fab);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.new_timetable_fab);
         assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // TODO - switch fragment to ViewTimetable
+            }
+        });
+                /*
                 Intent intent = new Intent(v.getContext(), ViewTimetableActivity.class);
                 intent.putExtra("isnewtimetable", true);
 
@@ -85,37 +96,14 @@ public class TimetablesOverviewActivity extends AppCompatActivity {
                         "",
                         Calendar.getInstance().getTime(), new Timetable()));
                 startActivityForResult(intent, 100);
-            }
-        });
+            }*/
+
+        return rootView;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == TimetableActivityCodes.VIEW_FINISHED_TIMETABLE_CHANGED) { // view timetable successful closed
-            recyclerViewAdapter.loadTimetables();
-        }
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

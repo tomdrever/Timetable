@@ -1,8 +1,6 @@
 package tomdrever.timetable.android.ui.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,11 +36,12 @@ public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<
         return new TimetableDetailViewHolder(view, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ViewTimetableActivity.class);
+                /*Intent intent = new Intent(context, ViewTimetableActivity.class);
                 intent.putExtra("timetabledetails", timetables.get((int)v.getTag()));
 
-                ((Activity)context).startActivityForResult(intent, 100);
+                ((Activity)context).startActivityForResult(intent, 100);*/
 
+                // TODO - start ViewTimetable
             }
         });
     }
