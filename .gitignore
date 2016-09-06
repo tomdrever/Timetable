@@ -1,17 +1,6 @@
 
 # Created by https://www.gitignore.io/api/osx,linux,windows,intellij,gradle,android
 
-### TOM ###
-
-gradle
-build.gradle
-gradle.properties
-settings.gradle
-gradlew*
-app/build
-app/proguard-rules.pro
-
-
 ### OSX ###
 .DS_Store
 .AppleDouble
@@ -31,7 +20,7 @@ Icon
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
-
+git
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
@@ -172,5 +161,9 @@ captures/
 
 ### Android Patch ###
 gen-external-apklibs
-
-
+/build.gradle
+/gradle.properties
+/gradlew
+/gradlew.bat
+/settings.gradle
+/gradle/
