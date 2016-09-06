@@ -167,3 +167,6 @@ gen-external-apklibs
 /gradlew.bat
 /settings.gradle
 /gradle/
+/app/build.gradle
+/app/proguard-rules.pro
+/app/build/
