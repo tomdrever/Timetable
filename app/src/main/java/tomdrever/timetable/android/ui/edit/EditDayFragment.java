@@ -9,9 +9,9 @@ import android.view.View;
 
 import tomdrever.timetable.R;
 import tomdrever.timetable.data.Day;
-import tomdrever.timetable.databinding.ActivityEditDayBinding;
+import tomdrever.timetable.databinding.FragmentEditDayBinding;
 
-public class EditDayActivity extends AppCompatActivity {
+public class EditDayFragment extends AppCompatActivity {
 
     private Day day;
 
@@ -24,7 +24,7 @@ public class EditDayActivity extends AppCompatActivity {
         day = (Day)intent.getSerializableExtra("day");
 
         // Bind day to layout
-        ActivityEditDayBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_day);
+        FragmentEditDayBinding binding = DataBindingUtil.setContentView(this, R.layout.fragment_edit_day);
         binding.setDay(day);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_day_toolbar);

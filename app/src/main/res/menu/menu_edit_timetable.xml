@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_finish_editing_timetable"
         android:orderInCategory="2"
-        android:icon="@mipmap/ic_done_white_24dp"
-        android:title="@string/action_finsih_editing_timetable"
+        android:icon="@mipmap/ic_done_white"
+        android:title="@string/action_finish_editing_timetable"
         app:showAsAction="always" />
 </menu>

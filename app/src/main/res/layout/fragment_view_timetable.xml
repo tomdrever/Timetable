@@ -2,7 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".android.ui.view.ViewTimetableActivity">
+    tools:context=".android.ui.view.ViewTimetableFragment"
+    >
 
     <data>
         <import type="android.view.View"/>
@@ -12,52 +13,58 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:fitsSystemWindows="true" >
+        style="@style/CoordinatorLayout"
+        >
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/view_timetable_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:theme="@style/AppTheme.AppBarOverlay" >
+            >
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/view_timetable_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                />
 
-            <!-- TODO - Display basic timetable details here -->
+            <!-- TODO - Display basic timetable details here alongside -->
             <TextView
-                android:id="@+id/view_timetable_title"
+                android:id="@+id/view_timetable_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="24dp"
-                android:textSize="28sp"
-                android:textColor="#ffffff"
                 android:layout_gravity="center_horizontal"
-                android:text='@{timetable.name}' />
+                android:text='@{timetable.name}'
+                android:transitionName="view_timetable_name"
+                style="@style/WhiteTitleTextView"
+                />
 
         </android.support.design.widget.AppBarLayout>
 
         <RelativeLayout
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
 
             <!--VIEWTIMETABLE CONTENT WIP-->
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/view_timetable_days_list_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text='@{timetable.name}'/>
+                android:text='@{timetable.name}'
+                style="@style/BasicTextView"
+                />
+
         </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -65,10 +72,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@mipmap/ic_edit_white_24dp"
-            app:fabSize="mini"
+            android:src="@mipmap/ic_edit_white"
             app:layout_anchor="@id/view_timetable_header"
-            app:layout_anchorGravity="bottom|right|end" />
+            app:layout_anchorGravity="bottom|right|end"
+            app:fabSize="mini"
+            />
+
     </android.support.design.widget.CoordinatorLayout>
+
 </layout>
 

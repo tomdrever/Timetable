@@ -7,58 +7,59 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.TimetableFileManager;
 import tomdrever.timetable.data.TimetableContainer;
 
-public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder> {
-    public ObservableArrayList<TimetableContainer> timetables;
-    private final Context context;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Objects;
+
+class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder> {
+    ObservableArrayList<TimetableContainer> timetables;
+    private Context context;
+
     private final TimetableFileManager fileManager;
 
-    public TimetablesOverviewRecyclerViewAdapter(Context context){
-        this.timetables = new ObservableArrayList<>();
+    private final TimetableCardClickListener listener;
+
+    TimetablesOverviewRecyclerViewAdapter(ObservableArrayList<TimetableContainer> timetables, Context context, TimetableCardClickListener listener){
+        this.timetables = timetables;
         this.context = context;
         this.fileManager = new TimetableFileManager(context);
-
-        loadTimetables();
+        this.listener = listener;
     }
 
     @Override
     public TimetableDetailViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timetable_card, parent, false);
 
-        return new TimetableDetailViewHolder(view, new View.OnClickListener() {
+        return new TimetableDetailViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final TimetableDetailViewHolder holder, final int i) {
+        // Format and add new details
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+        holder.timetableDateCreatedView.setText(context.getResources().getString(R.string.timetable_card_date,
+                df.format(timetables.get(i).getDateCreated())));
+        String desc = timetables.get(i).getDescription();
+        holder.timetableDescriptionView.setText(!Objects.equals(desc, "") ? desc : "No description"); // android api stuffs. leave as !=
+        holder.timetableNameView.setText(timetables.get(i).getName());
+
+        holder.itemView.setTag(i);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                /*Intent intent = new Intent(context, ViewTimetableActivity.class);
-                intent.putExtra("timetabledetails", timetables.get((int)v.getTag()));
-
-                ((Activity)context).startActivityForResult(intent, 100);*/
-
-                // TODO - start ViewTimetable
+            public void onClick(View view) {
+                listener.onCardClicked(holder, i);
             }
         });
     }
 
-    @Override
-    public void onBindViewHolder(TimetableDetailViewHolder holder, int i) {
-        // Format and add new details
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-        holder.timetableDateCreatedView.setText("Created: " + df.format(timetables.get(i).getDateCreated()));
-        String desc = timetables.get(i).getDescription();
-        holder.timetableDescriptionView.setText(desc != "" ? desc : "No description"); // android api stuffs. leave as !=
-        holder.timetableNameView.setText(timetables.get(i).getName());
-
-        holder.itemView.setTag(i);
-    }
-
     public void add(TimetableContainer timetableContainer, int position){
+        // TODO - ANIMATE!
         // add to filesystem
         fileManager.save(timetableContainer);
 
@@ -69,7 +70,7 @@ public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<
         notifyDataSetChanged();
     }
 
-    public void remove(int position) {
+    void remove(int position) {
         // delete from filesysytem
         fileManager.delete(timetables.get(position).getName());
 
@@ -77,13 +78,6 @@ public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<
         timetables.remove(timetables.get(position));
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, timetables.size());
-        notifyDataSetChanged();
-    }
-
-    public void loadTimetables() {
-        timetables.clear();
-        timetables.addAll(fileManager.loadAll());
-
         notifyDataSetChanged();
     }
 
@@ -97,21 +91,23 @@ public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<
         return timetables.size();
     }
 
-    public static class TimetableDetailViewHolder extends RecyclerView.ViewHolder {
+    static class TimetableDetailViewHolder extends RecyclerView.ViewHolder {
         private TextView timetableNameView;
         private TextView timetableDateCreatedView;
         private TextView timetableDescriptionView;
         private View itemView;
 
-        public TimetableDetailViewHolder(final View itemView, View.OnClickListener onClickListener) {
+        TimetableDetailViewHolder(final View itemView) {
             super(itemView);
             this.itemView = itemView;
 
-            itemView.setOnClickListener(onClickListener);
-
-            timetableNameView = (TextView) itemView.findViewById(R.id.timetable_name);
+            timetableNameView = (TextView) itemView.findViewById(R.id.timetable_card_name);
             timetableDateCreatedView = (TextView) itemView.findViewById(R.id.timetable_date_created);
             timetableDescriptionView = (TextView) itemView.findViewById(R.id.timetable_description);
         }
+    }
+
+    interface TimetableCardClickListener {
+        void onCardClicked(TimetableDetailViewHolder holder, int position);
     }
 }

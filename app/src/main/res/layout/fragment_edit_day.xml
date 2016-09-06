@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".android.ui.edit.EditDayActivity" >
+    tools:context=".android.ui.edit.EditDayFragment"
+    >
 
     <data>
         <variable name="day" type="tomdrever.timetable.data.Day"/>
@@ -12,14 +13,16 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true" >
+        android:fitsSystemWindows="true"
+        >
 
         <!--TOOLBAR-->
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            >
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/edit_day_toolbar"
@@ -27,18 +30,26 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 android:title='@{"Edit " + day.name}'
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                />
+
         </android.support.design.widget.AppBarLayout>
 
         <!--CONTENT-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
+
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="So, I heard you like editing days?" />
+                android:text="So, I heard you like editing days?"
+                />
+
         </RelativeLayout>
+
     </android.support.design.widget.CoordinatorLayout>
+
 </layout>

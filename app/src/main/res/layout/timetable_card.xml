@@ -8,39 +8,54 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    >
 
     <!--TITLE-->
     <TextView
+        android:id="@+id/timetable_card_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/timetable_name"
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
-        android:fontFamily="sans-serif-condensed"
-        android:textStyle="bold" />
+        android:transitionName="card_timetable_name"
+        style="@style/TimetableCardTitleTextView"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="4dp"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        >
 
         <!--DESCRIPTION-->
         <TextView
-            style="@style/TimetableCardViewDetailsTextView"
-            android:id="@+id/timetable_description" />
+            android:id="@+id/timetable_description"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="2dp"
+            style="@style/TimetableCardDetailsTextView"
+            />
 
         <!--SEPARATOR-->
         <TextView
-            style="@style/TimetableCardViewDetailsTextView"
-            android:text="@string/divider_bullet"/>
+            android:text="@string/divider_bullet"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="2dp"
+            style="@style/TimetableCardDetailsTextView"
+            />
 
         <!--DATE CREATED-->
         <TextView
-            style="@style/TimetableCardViewDetailsTextView"
-            android:id="@+id/timetable_date_created" />
+            android:id="@+id/timetable_date_created"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="2dp"
+            style="@style/TimetableCardDetailsTextView"
+            />
+
     </LinearLayout>
+
 </LinearLayout>

@@ -2,7 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".android.ui.edit.EditTimetableActivity" >
+    tools:context=".android.ui.edit.EditTimetableFragment"
+    >
 
     <data>
         <import type="android.view.View"/>
@@ -13,14 +14,15 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:fitsSystemWindows="true" >
+        style="@style/CoordinatorLayout"
+        >
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:theme="@style/AppTheme.AppBarOverlay" >
+            >
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/edit_timetable_toolbar"
@@ -28,69 +30,76 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 android:title='@{isnewtimetable ? "New Timetable" : "Edit " + timetable.name}'
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                />
 
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp" >
+                >
 
-                <EditText android:id="@+id/edit_timetable_name"
+                <EditText
+                    android:id="@+id/edit_timetable_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/edit_timetable_name"
-                    android:inputType="textCapSentences"
-                    android:background="@android:color/transparent"
-                    android:textColorHint="@color/colorPrimaryLight" />
+                    style="@style/CapsEditText"
+                    />
 
-                <EditText android:id="@+id/edit_timetable_description"
+                <EditText
+                    android:id="@+id/edit_timetable_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_above="@id/edit_timetable_name"
                     android:hint="@string/edit_timetable_description"
-                    android:background="@android:color/transparent"
-                    android:textColorHint="@color/colorPrimaryLight"
-                    android:layout_above="@id/edit_timetable_name" />
+                    style="@style/BasicEditText"
+                    />
 
             </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/edit_timetable_days_list_recyclerview_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/edit_timetable_days_list_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center|start" />
+                    android:layout_gravity="center|start"
+                    />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/no_timetables"
-                    android:text='@string/empty_timetable'
-                    android:visibility="@{timetable.timetable.getDays().size() > 0 ? View.GONE : View.VISIBLE}"
-                    android:textColor="@color/colorPrimaryLight"
-                    android:textSize="24sp"
-                    android:fontFamily="sans-serif-thin"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="35dp"
-                    android:layout_marginEnd="35dp"
-                    android:layout_marginTop="140dp" />
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/no_timetables"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="140dp"
+                android:text='@string/empty_timetable'
+                android:visibility="@{timetable.timetable.getDays().size() > 0 ? View.GONE : View.VISIBLE}"
+                style="@style/EmptyListTextView"
+                />
+
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -99,6 +108,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@mipmap/ic_add_white_24dp" />
+            android:src="@mipmap/ic_add_white"
+            />
+
     </android.support.design.widget.CoordinatorLayout>
+
 </layout>
