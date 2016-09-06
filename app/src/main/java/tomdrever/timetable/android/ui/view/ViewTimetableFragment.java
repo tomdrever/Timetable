@@ -36,9 +36,9 @@ public class ViewTimetableFragment extends Fragment {
 
         //region Toolbar
         Toolbar toolbar = (Toolbar) getView().findViewById(R.id.view_timetable_toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {

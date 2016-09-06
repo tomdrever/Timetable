@@ -47,6 +47,11 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
     }
 
     @Override
+    public void onBackPressed() {
+        onEditBackPressed();
+    }
+
+    @Override
     public void OnNewTimetableFinished() {
         Intent intent = new Intent(this, ViewActivity.class);
         intent.putExtra("timetable", timetableContainer);

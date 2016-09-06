@@ -46,8 +46,8 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
         //region Toolbar
         Toolbar toolbar = (Toolbar) getView().findViewById(R.id.edit_timetable_toolbar);
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -120,9 +120,8 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
         // Set name and description to text boxes
         if (!isNewTimetable) {
-            ((EditText)getView().findViewById(R.id.edit_timetable_name)).setText(timetableContainer.getName());
-            ((EditText)getView().findViewById(R.id.edit_timetable_description))
-                    .setText(timetableContainer.getDescription());
+            ((EditText) getView().findViewById(R.id.edit_timetable_name)).setText(timetableContainer.getName());
+            ((EditText) getView().findViewById(R.id.edit_timetable_description)).setText(timetableContainer.getDescription());
         }
     }
 

@@ -36,6 +36,11 @@ public class ViewActivity extends AppCompatActivity implements ViewTimetableFrag
     }
 
     @Override
+    public void onBackPressed() {
+        onViewBackPressed();
+    }
+
+    @Override
     public void onViewBackPressed() {
         Intent intent = new Intent(this, OverviewActivity.class);
         startActivity(intent);
