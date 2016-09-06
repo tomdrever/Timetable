@@ -26,6 +26,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
     private boolean isNewTimetable;
 
     private NewTimetableFinishedListener newTimetableFinishedListener;
+    private EditBackPressedListener editBackPressedListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
                 @Override
                 public void onClick(View v) {
                     // Todo - onbackpressed, discard changes, etc
-                    newTimetableFinishedListener.OnNewTimetableFinished();
+                    editBackPressedListener.onEditBackPressed();
                 }
             });
         }
@@ -126,10 +127,12 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
     }
 
     public static EditTimetableFragment newInstance(TimetableContainer timetableContainer, boolean isNewTimetable,
-                                                    NewTimetableFinishedListener newTimetableFinishedListener) {
+                                                    NewTimetableFinishedListener newTimetableFinishedListener,
+                                                    EditBackPressedListener editBackPressedListener) {
         EditTimetableFragment newFragment = new EditTimetableFragment();
         newFragment.timetableContainer = timetableContainer;
         newFragment.newTimetableFinishedListener = newTimetableFinishedListener;
+        newFragment.editBackPressedListener = editBackPressedListener;
         newFragment.isNewTimetable = isNewTimetable;
         return newFragment;
     }

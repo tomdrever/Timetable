@@ -37,7 +37,7 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
         }
 
 
-        transitionTo(EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this));
+        transitionTo(EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this));
     }
 
     private void transitionTo(Fragment fragment) {
@@ -61,7 +61,15 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
 
     @Override
     public void onEditBackPressed() {
-        Intent intent = new Intent(this, OverviewActivity.class);
+        Intent intent;
+
+        if (isNewTimetable) {
+            intent = new Intent(this, OverviewActivity.class);
+        } else {
+            intent = new Intent(this, ViewActivity.class);
+            intent.putExtra("timetable", getIntent().getSerializableExtra("timetable"));
+        }
+
         startActivity(intent);
         finish();
     }
