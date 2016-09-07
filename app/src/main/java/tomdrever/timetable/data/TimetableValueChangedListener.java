@@ -1,5 +1,6 @@
 package tomdrever.timetable.data;
 
 public interface TimetableValueChangedListener {
-    void onValueChanged(int position);
+    void onValueAdded(int position);
+    void onValueRemoved(int position);
 }

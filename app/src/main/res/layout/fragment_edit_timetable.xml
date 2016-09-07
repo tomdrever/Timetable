@@ -7,7 +7,7 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="timetable" type="tomdrever.timetable.data.TimetableContainer"/>
+        <variable name="timetableContainer" type="tomdrever.timetable.data.TimetableContainer"/>
         <variable name="isnewtimetable" type="boolean"/>
     </data>
 
@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:title='@{isnewtimetable ? "New Timetable" : "Edit " + timetable.name}'
+                android:title='@{isnewtimetable ? "New Timetable" : "Edit " + timetableContainer.name}'
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 />
 
@@ -57,6 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/edit_timetable_name"
+                    android:windowSoftInputMode="stateHidden"
                     style="@style/CapsEditText"
                     />
 
@@ -64,7 +65,6 @@
                     android:id="@+id/edit_timetable_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/edit_timetable_name"
                     android:hint="@string/edit_timetable_description"
                     style="@style/BasicEditText"
                     />
@@ -84,21 +84,18 @@
                     android:layout_gravity="center|start"
                     />
 
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/no_timetables"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginEnd="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="140dp"
-                android:text='@string/empty_timetable'
-                android:visibility="@{timetable.timetable.getDays().size() > 0 ? View.GONE : View.VISIBLE}"
-                style="@style/EmptyListTextView"
+                <TextView
+                        android:id="@+id/no_timetables"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/empty_timetable"
+                        android:visibility="@{timetableContainer.getTimetable().getDays().size() > 0 ? View.GONE : View.VISIBLE}"
+                        style="@style/EmptyListTextView"
                 />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

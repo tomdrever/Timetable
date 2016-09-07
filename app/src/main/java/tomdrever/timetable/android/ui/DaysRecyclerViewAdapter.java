@@ -45,12 +45,12 @@ public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerVi
         });
     }
 
-    public void updateDay(int position) {
-        if (position == 0 && days.size() >= 1) {
-            notifyDataSetChanged();
-        } else {
-            notifyItemRangeChanged(position, days.size());
-        }
+    public void insertDayView(int position) {
+        notifyItemInserted(position);
+    }
+
+    public void removeDayView(int position) {
+        notifyItemRemoved(position);
     }
 
     @Override

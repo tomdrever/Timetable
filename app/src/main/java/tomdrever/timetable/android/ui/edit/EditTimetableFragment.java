@@ -24,7 +24,8 @@ import tomdrever.timetable.databinding.FragmentEditTimetableBinding;
 
 import java.util.Collections;
 
-public class EditTimetableFragment extends Fragment implements DaysRecyclerViewAdapter.DayCardClickListener, TimetableValueChangedListener {
+public class EditTimetableFragment extends Fragment implements DaysRecyclerViewAdapter.DayCardClickListener,
+        TimetableValueChangedListener {
     private TimetableContainer timetableContainer;
     private boolean isNewTimetable;
 
@@ -41,7 +42,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
         // Bind timetable to layout
         FragmentEditTimetableBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_timetable, container, false);
-        binding.setTimetable(timetableContainer);
+        binding.setTimetableContainer(timetableContainer);
         binding.setIsnewtimetable(isNewTimetable);
 
         return binding.getRoot();
@@ -129,7 +130,10 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
         // Set name and description to text boxes
         if (!isNewTimetable) {
             ((EditText) getView().findViewById(R.id.edit_timetable_name)).setText(timetableContainer.getName());
-            ((EditText) getView().findViewById(R.id.edit_timetable_description)).setText(timetableContainer.getDescription());
+            EditText descriptionText = ((EditText) getView().findViewById(R.id.edit_timetable_description));
+            if (!descriptionText.getText().toString().equals("No description")) {
+                descriptionText.setText(timetableContainer.getDescription());
+            }
         }
     }
 
@@ -207,8 +211,13 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
     }
 
     @Override
-    public void onValueChanged(int position) {
-        recyclerViewAdapter.updateDay(position);
+    public void onValueAdded(int position) {
+        recyclerViewAdapter.insertDayView(position);
+    }
+
+    @Override
+    public void onValueRemoved(int position) {
+        recyclerViewAdapter.removeDayView(position);
     }
 
     public interface NewTimetableFinishedListener {

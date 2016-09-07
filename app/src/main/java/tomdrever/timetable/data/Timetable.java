@@ -1,7 +1,8 @@
 package tomdrever.timetable.data;
 
+import android.databinding.ObservableArrayList;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Timetable implements Serializable {
     private transient TimetableValueChangedListener valueChangedListener;
@@ -15,38 +16,39 @@ public class Timetable implements Serializable {
     }
 
     public Timetable() {
-        days = new ArrayList<>();
+        days = new ObservableArrayList<>();
         valueChangedListener = null;
     }
 
     public Timetable(TimetableValueChangedListener valueChangedListener) {
-        days = new ArrayList<>();
+        days = new ObservableArrayList<>();
         this.valueChangedListener = valueChangedListener;
     }
 
     public Timetable(Timetable timetable) {
-        days = new ArrayList<>(timetable.getDays());
+        days = new ObservableArrayList<>();
+        days.addAll(timetable.getDays());
         valueChangedListener = timetable.getValueChangedListener();
     }
 
-    private ArrayList<Day> days;
+    private ObservableArrayList<Day> days;
 
     public void addDay(Day day){
         days.add(day);
-        valueChangedListener.onValueChanged(days.size() - 1);
+        valueChangedListener.onValueAdded(days.size() - 1);
     }
 
     public void addDay(Day day, int position) {
         days.add(position, day);
-        valueChangedListener.onValueChanged(position);
+        valueChangedListener.onValueAdded(position);
     }
 
     public void removeDay(int position) {
         days.remove(position);
-        valueChangedListener.onValueChanged(position);
+        valueChangedListener.onValueRemoved(position);
     }
 
-    public ArrayList<Day> getDays(){
+    public ObservableArrayList<Day> getDays(){
         return days;
     }
 }
