@@ -16,18 +16,14 @@ import java.util.Locale;
 import java.util.Objects;
 
 class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder> {
-    private ObservableArrayList<TimetableContainer> timetables;
-
-    ObservableArrayList<TimetableContainer> getTimetables() {
-        return timetables;
-    }
+    private ObservableArrayList<TimetableContainer> timetableContainers;
 
     private Context context;
 
     private final TimetableCardClickListener listener;
 
-    TimetablesOverviewRecyclerViewAdapter(ObservableArrayList<TimetableContainer> timetables, Context context, TimetableCardClickListener listener){
-        this.timetables = timetables;
+    TimetablesOverviewRecyclerViewAdapter(ObservableArrayList<TimetableContainer> timetableContainers, Context context, TimetableCardClickListener listener){
+        this.timetableContainers = timetableContainers;
         this.context = context;
         this.listener = listener;
     }
@@ -44,10 +40,10 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
         // Format and add new details
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         holder.timetableDateCreatedView.setText(context.getResources().getString(R.string.timetable_card_date,
-                df.format(timetables.get(i).getDateCreated())));
-        String desc = timetables.get(i).getDescription();
+                df.format(timetableContainers.get(i).getDateCreated())));
+        String desc = timetableContainers.get(i).getDescription();
         holder.timetableDescriptionView.setText(!Objects.equals(desc, "") ? desc : "No description"); // android api stuffs. leave as !=
-        holder.timetableNameView.setText(timetables.get(i).getName());
+        holder.timetableNameView.setText(timetableContainers.get(i).getName());
 
         holder.itemView.setTag(i);
 
@@ -66,7 +62,7 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
 
     @Override
     public int getItemCount() {
-        return timetables.size();
+        return timetableContainers.size();
     }
 
     static class TimetableDetailViewHolder extends RecyclerView.ViewHolder {

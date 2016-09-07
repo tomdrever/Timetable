@@ -101,11 +101,10 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-
-                final Day tempDay = recyclerViewAdapter.getDays().get(viewHolder.getAdapterPosition());
+                final Day tempDay = timetableContainer.getTimetable().getDays().get(viewHolder.getAdapterPosition());
                 final int tempPosition = viewHolder.getAdapterPosition();
                 timetableContainer.getTimetable().removeDay(tempPosition);
-                Snackbar.make(viewHolder.itemView, "Day deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
+                Snackbar.make(viewHolder.itemView, tempDay.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Re-add

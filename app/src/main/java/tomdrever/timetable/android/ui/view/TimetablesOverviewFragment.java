@@ -65,10 +65,10 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Store timetable data temporarily, so it can be restored
-                final TimetableContainer tempTimetableContainer = recyclerViewAdapter.getTimetables().get(viewHolder.getAdapterPosition());
+                final TimetableContainer tempTimetableContainer = timetableContainers.get(viewHolder.getAdapterPosition());
                 final int tempPosition = viewHolder.getAdapterPosition();
                 remove(tempPosition);
-                Snackbar.make(viewHolder.itemView, "Timetable deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
+                Snackbar.make(viewHolder.itemView, tempTimetableContainer.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Restore
