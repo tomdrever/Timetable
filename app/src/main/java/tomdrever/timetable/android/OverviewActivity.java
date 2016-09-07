@@ -8,7 +8,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.ui.view.TimetablesOverviewFragment;
+import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.data.TimetableContainer;
+
+import java.util.Calendar;
 
 public class OverviewActivity extends AppCompatActivity implements TimetablesOverviewFragment.CardClickedListener, TimetablesOverviewFragment.NewTimetableClickListener {
     // Fragments - overview fragment
@@ -22,7 +25,7 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_template);
 
         fileManager = new TimetableFileManager(this);
 
@@ -60,6 +63,7 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
     public void onNewTimetableClicked() {
         Intent intent = new Intent(this, EditActivity.class);
         intent.putExtra("isnewtimetable", true);
+        intent.putExtra("timetable", new TimetableContainer("", "", Calendar.getInstance().getTime(), new Timetable()));
         startActivity(intent);
         finish();
     }

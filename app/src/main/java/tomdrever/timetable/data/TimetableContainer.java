@@ -2,11 +2,10 @@ package tomdrever.timetable.data;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import tomdrever.timetable.BR;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import tomdrever.timetable.BR;
 
 public class TimetableContainer extends BaseObservable implements Serializable {
 
@@ -20,6 +19,13 @@ public class TimetableContainer extends BaseObservable implements Serializable {
         this.description = description;
         this.dateCreated = dateCreated;
         this.timetable = timetable;
+    }
+
+    public TimetableContainer(TimetableContainer timetableContainer) {
+        this.name = timetableContainer.getName();
+        this.description = timetableContainer.getDescription();
+        this.dateCreated = timetableContainer.getDateCreated();
+        this.timetable = new Timetable(timetableContainer.getTimetable());
     }
 
     @Bindable
@@ -45,11 +51,6 @@ public class TimetableContainer extends BaseObservable implements Serializable {
     public void setTimetable(Timetable timetable) {
         this.timetable = timetable;
         notifyPropertyChanged(BR.timetable);
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-        notifyPropertyChanged(BR.dateCreated);
     }
 
     public void setDescription(String description) {

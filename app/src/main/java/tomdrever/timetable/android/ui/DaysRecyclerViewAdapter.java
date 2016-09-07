@@ -1,6 +1,5 @@
-package tomdrever.timetable.android.ui.edit;
+package tomdrever.timetable.android.ui;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,16 @@ import tomdrever.timetable.data.Day;
 
 import java.util.ArrayList;
 
-class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerViewAdapter.DayViewHolder> {
-    final ArrayList<Day> days;
+public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerViewAdapter.DayViewHolder> {
+    private ArrayList<Day> days;
+
+    public ArrayList<Day> getDays() {
+        return days;
+    }
 
     private final DayCardClickListener listener;
 
-    DaysRecyclerViewAdapter( ArrayList<Day> days, Context context, DayCardClickListener listener) {
+    public DaysRecyclerViewAdapter(ArrayList<Day> days, DayCardClickListener listener) {
         this.days = days;
         this.listener = listener;
     }
@@ -25,7 +28,7 @@ class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerViewAdapt
     public DayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.day_card, parent, false);
 
-        return new DayViewHolder(view, listener);
+        return new DayViewHolder(view);
     }
 
     @Override
@@ -42,20 +45,12 @@ class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerViewAdapt
         });
     }
 
-    public void add(Day day) {
-        add(day, days.size());
-    }
-
-    public void add(Day day, int position) {
-        days.add(position, day);
-        notifyItemChanged(position);
-        notifyItemRangeChanged(position, days.size());
-    }
-
-    void remove(int position) {
-        days.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, days.size());
+    public void updateDay(int position) {
+        if (position == 0 && days.size() >= 1) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemRangeChanged(position, days.size());
+        }
     }
 
     @Override
@@ -63,11 +58,11 @@ class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerViewAdapt
         return days.size();
     }
 
-    static class DayViewHolder extends RecyclerView.ViewHolder{
+    public static class DayViewHolder extends RecyclerView.ViewHolder{
         private TextView dayNameView;
         private View itemView;
 
-        DayViewHolder(final View itemView, final DayCardClickListener listener) {
+        DayViewHolder(final View itemView) {
             super(itemView);
             this.itemView = itemView;
 
@@ -75,7 +70,7 @@ class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerViewAdapt
         }
     }
 
-    interface DayCardClickListener {
+    public interface DayCardClickListener {
         void onCardClicked(DayViewHolder dayViewHolder, int position);
     }
 }

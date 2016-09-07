@@ -6,19 +6,23 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.ui.FragmentBackPressedListener;
+import tomdrever.timetable.android.ui.DaysRecyclerViewAdapter;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.FragmentViewTimetableBinding;
 
-public class ViewTimetableFragment extends Fragment {
+public class ViewTimetableFragment extends Fragment implements DaysRecyclerViewAdapter.DayCardClickListener {
 
-    private TimetableContainer timetableContainer; // TODO - make observable
+    private TimetableContainer timetableContainer;
 
-    private ViewBackPressedListener viewBackPressedListener;
+    private FragmentBackPressedListener fragmentBackPressedListener;
     private ViewEditPressedListener viewEditPressedListener;
 
     @Override
@@ -45,11 +49,21 @@ public class ViewTimetableFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //TODO - back w/ backstack? Set whether timetable was changed?
-                    viewBackPressedListener.onViewBackPressed();
+                    fragmentBackPressedListener.onFragmentBackPressed();
                 }
             });
         }
 
+        //endregion
+
+        //region RecyclerView
+        final RecyclerView daysListRecyclerView = (RecyclerView) getView().findViewById(R.id.view_timetable_days_list_recyclerview);
+
+        final DaysRecyclerViewAdapter recyclerViewAdapter = new DaysRecyclerViewAdapter(
+                timetableContainer.getTimetable().getDays(), this);
+
+        daysListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        daysListRecyclerView.setAdapter(recyclerViewAdapter);
         //endregion
 
         // region FAB
@@ -67,11 +81,11 @@ public class ViewTimetableFragment extends Fragment {
     }
 
     public static ViewTimetableFragment newInstance(TimetableContainer timetableContainer,
-                                                    ViewBackPressedListener viewBackPressedListener,
+                                                    FragmentBackPressedListener fragmentBackPressedListener,
                                                     ViewEditPressedListener viewEditPressedListener) {
         ViewTimetableFragment newFragment = new ViewTimetableFragment();
         newFragment.timetableContainer = timetableContainer;
-        newFragment.viewBackPressedListener = viewBackPressedListener;
+        newFragment.fragmentBackPressedListener = fragmentBackPressedListener;
         newFragment.viewEditPressedListener = viewEditPressedListener;
         return newFragment;
     }
@@ -86,12 +100,13 @@ public class ViewTimetableFragment extends Fragment {
         super.onResume();
     }
 
-    public interface ViewEditPressedListener {
-        void onViewEditPressed();
+    @Override
+    public void onCardClicked(DaysRecyclerViewAdapter.DayViewHolder dayViewHolder, int position) {
+        // TODO - switch to ViewDayFragment
     }
 
-    public interface ViewBackPressedListener {
-        void onViewBackPressed();
+    public interface ViewEditPressedListener {
+        void onViewEditPressed();
     }
 
     /*

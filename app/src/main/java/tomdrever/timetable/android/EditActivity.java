@@ -7,14 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.ui.FragmentBackPressedListener;
 import tomdrever.timetable.android.ui.edit.EditTimetableFragment;
-import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.data.TimetableContainer;
 
-import java.util.Calendar;
-
 public class EditActivity extends AppCompatActivity implements EditTimetableFragment.NewTimetableFinishedListener,
-        EditTimetableFragment.EditBackPressedListener {
+        FragmentBackPressedListener {
     // Fragments - edittimetable, edit day (?)
     // Launches - viewactivity on back (is not new) or overviewactivity (is new)
 
@@ -25,17 +23,13 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_template);
 
         Intent intent = getIntent();
 
         isNewTimetable = intent.getBooleanExtra("isnewtimetable", false);
 
-        if (!isNewTimetable) timetableContainer = (TimetableContainer) intent.getSerializableExtra("timetable");
-        else {
-            timetableContainer = new TimetableContainer("", "", Calendar.getInstance().getTime(), new Timetable());
-        }
-
+        timetableContainer = new TimetableContainer((TimetableContainer) intent.getSerializableExtra("timetable"));
 
         transitionTo(EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this));
     }
@@ -48,7 +42,7 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
 
     @Override
     public void onBackPressed() {
-        onEditBackPressed();
+        onFragmentBackPressed();
     }
 
     @Override
@@ -60,7 +54,7 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
     }
 
     @Override
-    public void onEditBackPressed() {
+    public void onFragmentBackPressed() {
         Intent intent;
 
         if (isNewTimetable) {

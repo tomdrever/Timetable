@@ -15,22 +15,29 @@ import android.widget.EditText;
 import android.widget.Toast;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.TimetableFileManager;
+import tomdrever.timetable.android.ui.DaysRecyclerViewAdapter;
+import tomdrever.timetable.android.ui.FragmentBackPressedListener;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.TimetableContainer;
+import tomdrever.timetable.data.TimetableValueChangedListener;
 import tomdrever.timetable.databinding.FragmentEditTimetableBinding;
 
 import java.util.Collections;
 
-public class EditTimetableFragment extends Fragment implements DaysRecyclerViewAdapter.DayCardClickListener {
+public class EditTimetableFragment extends Fragment implements DaysRecyclerViewAdapter.DayCardClickListener, TimetableValueChangedListener {
     private TimetableContainer timetableContainer;
     private boolean isNewTimetable;
 
     private NewTimetableFinishedListener newTimetableFinishedListener;
-    private EditBackPressedListener editBackPressedListener;
+    private FragmentBackPressedListener fragmentBackPressedListener;
+
+    private DaysRecyclerViewAdapter recyclerViewAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        timetableContainer.getTimetable().setValueChangedListener(this);
 
         // Bind timetable to layout
         FragmentEditTimetableBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_timetable, container, false);
@@ -54,7 +61,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
                 @Override
                 public void onClick(View v) {
                     // Todo - onbackpressed, discard changes, etc
-                    editBackPressedListener.onEditBackPressed();
+                    fragmentBackPressedListener.onFragmentBackPressed();
                 }
             });
         }
@@ -63,8 +70,8 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
         //region RecyclerView
         final RecyclerView daysListRecyclerView = (RecyclerView) getView().findViewById(R.id.edit_timetable_days_list_recyclerview);
 
-        final DaysRecyclerViewAdapter recyclerViewAdapter = new DaysRecyclerViewAdapter(
-                timetableContainer.getTimetable().getDays(), getContext(), this);
+        recyclerViewAdapter = new DaysRecyclerViewAdapter(
+                timetableContainer.getTimetable().getDays(), this);
 
         daysListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         daysListRecyclerView.setAdapter(recyclerViewAdapter);
@@ -76,7 +83,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerViewAdapter.add(new Day(String.format("Today %s", timetableContainer.getTimetable().getDays().size() + 1)));
+                timetableContainer.getTimetable().addDay(new Day(String.format("Today %s", timetableContainer.getTimetable().getDays().size() + 1)));
 
             }
         });
@@ -93,14 +100,14 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
 
-                final Day tempDay = recyclerViewAdapter.days.get(viewHolder.getAdapterPosition());
+                final Day tempDay = recyclerViewAdapter.getDays().get(viewHolder.getAdapterPosition());
                 final int tempPosition = viewHolder.getAdapterPosition();
-                recyclerViewAdapter.remove(tempPosition);
+                timetableContainer.getTimetable().removeDay(tempPosition);
                 Snackbar.make(viewHolder.itemView, "Day deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Re-add
-                        recyclerViewAdapter.add(tempDay, tempPosition);
+                        timetableContainer.getTimetable().addDay(tempDay, tempPosition);
                     }
                 }).show();
 
@@ -109,7 +116,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
 
-                Collections.swap(recyclerViewAdapter.days, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                Collections.swap(recyclerViewAdapter.getDays(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
 
                 return true;
             }
@@ -128,12 +135,16 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
     public static EditTimetableFragment newInstance(TimetableContainer timetableContainer, boolean isNewTimetable,
                                                     NewTimetableFinishedListener newTimetableFinishedListener,
-                                                    EditBackPressedListener editBackPressedListener) {
+                                                    FragmentBackPressedListener fragmentBackPressedListener) {
         EditTimetableFragment newFragment = new EditTimetableFragment();
-        newFragment.timetableContainer = timetableContainer;
-        newFragment.newTimetableFinishedListener = newTimetableFinishedListener;
-        newFragment.editBackPressedListener = editBackPressedListener;
+
         newFragment.isNewTimetable = isNewTimetable;
+
+        newFragment.timetableContainer = timetableContainer;
+
+        newFragment.newTimetableFinishedListener = newTimetableFinishedListener;
+        newFragment.fragmentBackPressedListener = fragmentBackPressedListener;
+
         return newFragment;
     }
 
@@ -195,11 +206,12 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
         }
     }
 
-    public interface NewTimetableFinishedListener {
-        void OnNewTimetableFinished();
+    @Override
+    public void onValueChanged(int position) {
+        recyclerViewAdapter.updateDay(position);
     }
 
-    public interface EditBackPressedListener {
-        void onEditBackPressed();
+    public interface NewTimetableFinishedListener {
+        void OnNewTimetableFinished();
     }
 }

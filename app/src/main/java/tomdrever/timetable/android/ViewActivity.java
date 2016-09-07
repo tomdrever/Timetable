@@ -7,10 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.ui.FragmentBackPressedListener;
 import tomdrever.timetable.android.ui.view.ViewTimetableFragment;
 import tomdrever.timetable.data.TimetableContainer;
 
-public class ViewActivity extends AppCompatActivity implements ViewTimetableFragment.ViewBackPressedListener, ViewTimetableFragment.ViewEditPressedListener {
+public class ViewActivity extends AppCompatActivity implements FragmentBackPressedListener, ViewTimetableFragment.ViewEditPressedListener {
     // Fragments - viewtimetable, view day (?)
     // Launches - editactivity on "edit" fab
     // "Launches" - overviewactivity, on back
@@ -20,7 +21,7 @@ public class ViewActivity extends AppCompatActivity implements ViewTimetableFrag
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_template);
 
         Intent intent = getIntent();
 
@@ -37,11 +38,11 @@ public class ViewActivity extends AppCompatActivity implements ViewTimetableFrag
 
     @Override
     public void onBackPressed() {
-        onViewBackPressed();
+        onFragmentBackPressed();
     }
 
     @Override
-    public void onViewBackPressed() {
+    public void onFragmentBackPressed() {
         Intent intent = new Intent(this, OverviewActivity.class);
         startActivity(intent);
         finish();

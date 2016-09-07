@@ -17,7 +17,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder> {
-    ObservableArrayList<TimetableContainer> timetables;
+    private ObservableArrayList<TimetableContainer> timetables;
+
+    public ObservableArrayList<TimetableContainer> getTimetables() {
+        return timetables;
+    }
+
     private Context context;
 
     private final TimetableFileManager fileManager;
