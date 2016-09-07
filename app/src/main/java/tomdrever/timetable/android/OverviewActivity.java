@@ -20,24 +20,23 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
 
     private ObservableArrayList<TimetableContainer> timetables;
 
-    private TimetableFileManager fileManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_template);
 
-        fileManager = new TimetableFileManager(this);
+        TimetableFileManager fileManager = new TimetableFileManager(this);
 
         timetables = new ObservableArrayList<>();
         timetables.addAll(fileManager.loadAll());
 
-        transitionTo(TimetablesOverviewFragment.newInstance(timetables, this, this));
+        transitionTo(TimetablesOverviewFragment.newInstance(timetables, this, this), false);
     }
 
-    private void transitionTo(Fragment fragment) {
+    private void transitionTo(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_placeholder, fragment);
+        if (addToBackStack) fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

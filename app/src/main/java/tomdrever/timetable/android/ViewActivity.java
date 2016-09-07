@@ -27,12 +27,13 @@ public class ViewActivity extends AppCompatActivity implements FragmentBackPress
 
         timetableContainer = (TimetableContainer) intent.getSerializableExtra("timetable");
 
-        transitionTo(ViewTimetableFragment.newInstance(timetableContainer, this, this));
+        transitionTo(ViewTimetableFragment.newInstance(timetableContainer, this, this), false);
     }
 
-    private void transitionTo(Fragment fragment) {
+    private void transitionTo(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_placeholder, fragment);
+        if (addToBackStack) fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -43,9 +44,13 @@ public class ViewActivity extends AppCompatActivity implements FragmentBackPress
 
     @Override
     public void onFragmentBackPressed() {
-        Intent intent = new Intent(this, OverviewActivity.class);
-        startActivity(intent);
-        finish();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            Intent intent = new Intent(this, OverviewActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

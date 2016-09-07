@@ -8,11 +8,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.ui.FragmentBackPressedListener;
+import tomdrever.timetable.android.ui.edit.EditDayFragment;
 import tomdrever.timetable.android.ui.edit.EditTimetableFragment;
 import tomdrever.timetable.data.TimetableContainer;
 
 public class EditActivity extends AppCompatActivity implements EditTimetableFragment.NewTimetableFinishedListener,
-        FragmentBackPressedListener {
+        FragmentBackPressedListener, EditTimetableFragment.DayClickedListener {
     // Fragments - edittimetable, edit day (?)
     // Launches - viewactivity on back (is not new) or overviewactivity (is new)
 
@@ -31,12 +32,13 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
 
         timetableContainer = new TimetableContainer((TimetableContainer) intent.getSerializableExtra("timetable"));
 
-        transitionTo(EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this));
+        transitionTo(EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this, this), false);
     }
 
-    private void transitionTo(Fragment fragment) {
+    private void transitionTo(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_placeholder, fragment);
+        if (addToBackStack) fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -55,16 +57,25 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
 
     @Override
     public void onFragmentBackPressed() {
-        Intent intent;
-
-        if (isNewTimetable) {
-            intent = new Intent(this, OverviewActivity.class);
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
         } else {
-            intent = new Intent(this, ViewActivity.class);
-            intent.putExtra("timetable", getIntent().getSerializableExtra("timetable"));
-        }
+            Intent intent;
 
-        startActivity(intent);
-        finish();
+            if (isNewTimetable) {
+                intent = new Intent(this, OverviewActivity.class);
+            } else {
+                intent = new Intent(this, ViewActivity.class);
+                intent.putExtra("timetable", getIntent().getSerializableExtra("timetable"));
+            }
+
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
+    public void onDayClicked(int position) {
+        transitionTo(EditDayFragment.newInstance(timetableContainer.getTimetable().getDays().get(position), this), true);
     }
 }

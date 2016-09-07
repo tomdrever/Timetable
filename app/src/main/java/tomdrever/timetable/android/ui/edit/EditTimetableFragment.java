@@ -31,6 +31,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
     private NewTimetableFinishedListener newTimetableFinishedListener;
     private FragmentBackPressedListener fragmentBackPressedListener;
+    private DayClickedListener dayClickedListener;
 
     private DaysRecyclerViewAdapter recyclerViewAdapter;
 
@@ -139,15 +140,16 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
     public static EditTimetableFragment newInstance(TimetableContainer timetableContainer, boolean isNewTimetable,
                                                     NewTimetableFinishedListener newTimetableFinishedListener,
-                                                    FragmentBackPressedListener fragmentBackPressedListener) {
+                                                    FragmentBackPressedListener fragmentBackPressedListener,
+                                                    DayClickedListener dayClickedListener) {
         EditTimetableFragment newFragment = new EditTimetableFragment();
 
         newFragment.isNewTimetable = isNewTimetable;
-
         newFragment.timetableContainer = timetableContainer;
 
         newFragment.newTimetableFinishedListener = newTimetableFinishedListener;
         newFragment.fragmentBackPressedListener = fragmentBackPressedListener;
+        newFragment.dayClickedListener = dayClickedListener;
 
         return newFragment;
     }
@@ -155,6 +157,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
     @Override
     public void onCardClicked(DaysRecyclerViewAdapter.DayViewHolder dayViewHolder, int position) {
         // TODO - launch edit day fragment
+        dayClickedListener.onDayClicked(position);
     }
 
     @Override
@@ -222,5 +225,9 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
     public interface NewTimetableFinishedListener {
         void OnNewTimetableFinished();
+    }
+
+    public interface DayClickedListener {
+        void onDayClicked(int position);
     }
 }
