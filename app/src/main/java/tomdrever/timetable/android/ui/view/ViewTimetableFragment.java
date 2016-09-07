@@ -1,6 +1,5 @@
 package tomdrever.timetable.android.ui.view;
 
-
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +28,7 @@ public class ViewTimetableFragment extends Fragment implements DaysRecyclerViewA
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Bind timetable to layout
         FragmentViewTimetableBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_timetable, container, false);
-        binding.setTimetable(timetableContainer);
+        binding.setTimetableContainer(timetableContainer);
 
         return binding.getRoot();
     }

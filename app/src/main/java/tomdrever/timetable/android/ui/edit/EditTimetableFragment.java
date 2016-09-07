@@ -29,7 +29,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
     private TimetableContainer timetableContainer;
     private boolean isNewTimetable;
 
-    private NewTimetableFinishedListener newTimetableFinishedListener;
+    private TimetableFinishedListener newTimetableFinishedListener;
     private FragmentBackPressedListener fragmentBackPressedListener;
     private DayClickedListener dayClickedListener;
 
@@ -139,7 +139,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
     }
 
     public static EditTimetableFragment newInstance(TimetableContainer timetableContainer, boolean isNewTimetable,
-                                                    NewTimetableFinishedListener newTimetableFinishedListener,
+                                                    TimetableFinishedListener newTimetableFinishedListener,
                                                     FragmentBackPressedListener fragmentBackPressedListener,
                                                     DayClickedListener dayClickedListener) {
         EditTimetableFragment newFragment = new EditTimetableFragment();
@@ -203,7 +203,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
                     // Save over timetable
                     fileManager.save(timetableContainer);
 
-                    newTimetableFinishedListener.OnNewTimetableFinished();
+                    newTimetableFinishedListener.OnTimetableFinished();
                 }
 
                 return true;
@@ -215,16 +215,16 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
     @Override
     public void onValueAdded(int position) {
-        recyclerViewAdapter.insertDayView(position);
+        recyclerViewAdapter.notifyItemInserted(position);
     }
 
     @Override
     public void onValueRemoved(int position) {
-        recyclerViewAdapter.removeDayView(position);
+        recyclerViewAdapter.notifyItemRemoved(position);
     }
 
-    public interface NewTimetableFinishedListener {
-        void OnNewTimetableFinished();
+    public interface TimetableFinishedListener {
+        void OnTimetableFinished();
     }
 
     public interface DayClickedListener {

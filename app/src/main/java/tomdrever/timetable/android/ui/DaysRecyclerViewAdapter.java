@@ -45,14 +45,6 @@ public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerVi
         });
     }
 
-    public void insertDayView(int position) {
-        notifyItemInserted(position);
-    }
-
-    public void removeDayView(int position) {
-        notifyItemRemoved(position);
-    }
-
     @Override
     public int getItemCount() {
         return days.size();

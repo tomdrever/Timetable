@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.TimetableFileManager;
 import tomdrever.timetable.data.TimetableContainer;
 
 import java.text.DateFormat;
@@ -19,20 +18,17 @@ import java.util.Objects;
 class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder> {
     private ObservableArrayList<TimetableContainer> timetables;
 
-    public ObservableArrayList<TimetableContainer> getTimetables() {
+    ObservableArrayList<TimetableContainer> getTimetables() {
         return timetables;
     }
 
     private Context context;
-
-    private final TimetableFileManager fileManager;
 
     private final TimetableCardClickListener listener;
 
     TimetablesOverviewRecyclerViewAdapter(ObservableArrayList<TimetableContainer> timetables, Context context, TimetableCardClickListener listener){
         this.timetables = timetables;
         this.context = context;
-        this.fileManager = new TimetableFileManager(context);
         this.listener = listener;
     }
 
@@ -61,29 +57,6 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
                 listener.onCardClicked(holder, i);
             }
         });
-    }
-
-    public void add(TimetableContainer timetableContainer, int position){
-        // TODO - ANIMATE!
-        // add to filesystem
-        fileManager.save(timetableContainer);
-
-        // add to recyclerview
-        timetables.add(position, timetableContainer);
-        notifyItemInserted(position);
-        notifyItemRangeChanged(position, timetables.size());
-        notifyDataSetChanged();
-    }
-
-    void remove(int position) {
-        // delete from filesysytem
-        fileManager.delete(timetables.get(position).getName());
-
-        // delete from recyclerview
-        timetables.remove(timetables.get(position));
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, timetables.size());
-        notifyDataSetChanged();
     }
 
     @Override

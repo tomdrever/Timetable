@@ -12,10 +12,8 @@ import tomdrever.timetable.android.ui.edit.EditDayFragment;
 import tomdrever.timetable.android.ui.edit.EditTimetableFragment;
 import tomdrever.timetable.data.TimetableContainer;
 
-public class EditActivity extends AppCompatActivity implements EditTimetableFragment.NewTimetableFinishedListener,
+public class EditActivity extends AppCompatActivity implements EditTimetableFragment.TimetableFinishedListener,
         FragmentBackPressedListener, EditTimetableFragment.DayClickedListener {
-    // Fragments - edittimetable, edit day (?)
-    // Launches - viewactivity on back (is not new) or overviewactivity (is new)
 
     private TimetableContainer timetableContainer;
 
@@ -48,7 +46,7 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
     }
 
     @Override
-    public void OnNewTimetableFinished() {
+    public void OnTimetableFinished() {
         Intent intent = new Intent(this, ViewActivity.class);
         intent.putExtra("timetable", timetableContainer);
         startActivity(intent);

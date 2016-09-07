@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:title='@{isnewtimetable ? "New Timetable" : "Edit " + timetableContainer.name}'
+                android:title='@{isnewtimetable ? "Create Timetable" : "Edit " + timetableContainer.name}'
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 />
 
@@ -45,11 +45,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:padding="8dp"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
                 >
 
                 <EditText
@@ -93,7 +92,7 @@
                         android:text="@string/empty_timetable"
                         android:visibility="@{timetableContainer.getTimetable().getDays().size() > 0 ? View.GONE : View.VISIBLE}"
                         style="@style/EmptyListTextView"
-                />
+                        />
 
             </RelativeLayout>
 

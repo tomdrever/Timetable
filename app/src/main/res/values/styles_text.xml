@@ -18,9 +18,6 @@
     </style>
 
     <style name="EmptyListTextView">
-        <!--android:textColor="@color/primaryLight"
-                android:textSize="24sp"
-                android:fontFamily="sans-serif-thin"-->
         <item name="android:textColor">@color/primaryLight</item>
         <item name="android:textSize">24sp</item>
         <item name="android:fontFamily">sans-serif-thin</item>
@@ -35,9 +32,11 @@
     <style name="BasicEditText">
         <item name="android:background">@color/transparent</item>
         <item name="android:textColorHint">@color/primaryLight</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">8dp</item>
     </style>
 
-    <style name="CapsEditText">
+    <style name="CapsEditText" parent="BasicEditText">
         <item name="android:inputType">textCapSentences</item>
     </style>
 

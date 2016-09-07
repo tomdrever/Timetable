@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.*;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.TimetableFileManager;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.FragmentTimetablesOverviewBinding;
 
@@ -23,15 +24,18 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
     private CardClickedListener cardClickedListener;
     private NewTimetableClickListener newTimetableClickListener;
 
-    private ObservableArrayList<TimetableContainer> timetables;
+    private ObservableArrayList<TimetableContainer> timetableContainers;
+    private TimetableFileManager fileManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentTimetablesOverviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timetables_overview, container, false);
 
-        recyclerViewAdapter = new TimetablesOverviewRecyclerViewAdapter(timetables, getContext(), this);
-        binding.setTimetables(timetables);
+        recyclerViewAdapter = new TimetablesOverviewRecyclerViewAdapter(timetableContainers, getContext(), this);
+        binding.setTimetables(timetableContainers);
+
+        fileManager = new TimetableFileManager(getContext());
 
         return binding.getRoot();
     }
@@ -63,12 +67,12 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
                 // Store timetable data temporarily, so it can be restored
                 final TimetableContainer tempTimetableContainer = recyclerViewAdapter.getTimetables().get(viewHolder.getAdapterPosition());
                 final int tempPosition = viewHolder.getAdapterPosition();
-                recyclerViewAdapter.remove(tempPosition);
+                remove(tempPosition);
                 Snackbar.make(viewHolder.itemView, "Timetable deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Restore
-                        recyclerViewAdapter.add(tempTimetableContainer, tempPosition);
+                        add(tempTimetableContainer, tempPosition);
                     }
                 }).show();
             }
@@ -97,6 +101,18 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
         //endregion
     }
 
+    private void add(TimetableContainer timetableContainer, int position) {
+        fileManager.save(timetableContainer);
+        timetableContainers.add(position, timetableContainer);
+        recyclerViewAdapter.notifyItemInserted(position);
+    }
+
+    private void remove(int position) {
+        fileManager.delete(timetableContainers.get(position).getName());
+        timetableContainers.remove(position);
+        recyclerViewAdapter.notifyItemRemoved(position);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
@@ -107,7 +123,7 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
                                                          CardClickedListener cardClickedListener,
                                                          NewTimetableClickListener newTimetableClickListener) {
         TimetablesOverviewFragment newFragment = new TimetablesOverviewFragment();
-        newFragment.timetables = timetables;
+        newFragment.timetableContainers = timetables;
         newFragment.cardClickedListener = cardClickedListener;
         newFragment.newTimetableClickListener = newTimetableClickListener;
         return newFragment;

@@ -7,7 +7,7 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="timetable" type="tomdrever.timetable.data.TimetableContainer"/>
+        <variable name="timetableContainer" type="tomdrever.timetable.data.TimetableContainer"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text='@{timetable.name}'
+                android:text='@{timetableContainer.getName()}'
                 android:transitionName="view_timetable_name"
                 style="@style/WhiteTitleTextView"
                 />
@@ -59,11 +59,15 @@
                 />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text='@{timetable.name}'
-                style="@style/BasicTextView"
-                />
+                    android:id="@+id/no_timetables"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/empty_timetable"
+                    android:visibility="@{timetableContainer.getTimetable().getDays().size() > 0 ? View.GONE : View.VISIBLE}"
+                    style="@style/EmptyListTextView"
+                    />
 
         </RelativeLayout>
 

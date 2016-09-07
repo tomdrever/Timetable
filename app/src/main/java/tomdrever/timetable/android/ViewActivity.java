@@ -11,10 +11,8 @@ import tomdrever.timetable.android.ui.FragmentBackPressedListener;
 import tomdrever.timetable.android.ui.view.ViewTimetableFragment;
 import tomdrever.timetable.data.TimetableContainer;
 
-public class ViewActivity extends AppCompatActivity implements FragmentBackPressedListener, ViewTimetableFragment.ViewEditPressedListener {
-    // Fragments - viewtimetable, view day (?)
-    // Launches - editactivity on "edit" fab
-    // "Launches" - overviewactivity, on back
+public class ViewActivity extends AppCompatActivity implements FragmentBackPressedListener,
+        ViewTimetableFragment.ViewEditPressedListener {
 
     private TimetableContainer timetableContainer;
 

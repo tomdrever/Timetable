@@ -13,12 +13,10 @@ import tomdrever.timetable.data.TimetableContainer;
 
 import java.util.Calendar;
 
-public class OverviewActivity extends AppCompatActivity implements TimetablesOverviewFragment.CardClickedListener, TimetablesOverviewFragment.NewTimetableClickListener {
-    // Fragments - overview fragment
-    // Launches - editactivity on "new" fab clicked
-    // Launches -  viewactivity on item clicked
+public class OverviewActivity extends AppCompatActivity implements TimetablesOverviewFragment.CardClickedListener,
+        TimetablesOverviewFragment.NewTimetableClickListener {
 
-    private ObservableArrayList<TimetableContainer> timetables;
+    private ObservableArrayList<TimetableContainer> timetableContainers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +25,10 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
 
         TimetableFileManager fileManager = new TimetableFileManager(this);
 
-        timetables = new ObservableArrayList<>();
-        timetables.addAll(fileManager.loadAll());
+        timetableContainers = new ObservableArrayList<>();
+        timetableContainers.addAll(fileManager.loadAll());
 
-        transitionTo(TimetablesOverviewFragment.newInstance(timetables, this, this), false);
+        transitionTo(TimetablesOverviewFragment.newInstance(timetableContainers, this, this), false);
     }
 
     private void transitionTo(Fragment fragment, boolean addToBackStack) {
@@ -53,7 +51,7 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
     public void onCardClicked(int cardPosition) {
         Intent intent = new Intent(this, ViewActivity.class);
         // TODO - create refs static class to hold intent extra names
-        intent.putExtra("timetable", timetables.get(cardPosition));
+        intent.putExtra("timetable", timetableContainers.get(cardPosition));
         startActivity(intent);
         finish();
     }
