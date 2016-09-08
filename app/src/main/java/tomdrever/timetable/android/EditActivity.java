@@ -1,10 +1,12 @@
 package tomdrever.timetable.android;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.ui.FragmentBackPressedListener;
@@ -58,18 +60,35 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else {
-            Intent intent;
-
-            if (isNewTimetable) {
-                intent = new Intent(this, OverviewActivity.class);
-            } else {
-                intent = new Intent(this, ViewActivity.class);
-                intent.putExtra("timetable", getIntent().getSerializableExtra("timetable"));
-            }
-
-            startActivity(intent);
-            finish();
+            new AlertDialog.Builder(this)
+                    .setTitle("Back")
+                    .setMessage("Are you sure you want to discard your changes?")
+                    .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            back();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .show();
         }
+    }
+
+    private void back() {
+        Intent intent;
+
+        if (isNewTimetable) {
+            intent = new Intent(this, OverviewActivity.class);
+        } else {
+            intent = new Intent(this, ViewActivity.class);
+            intent.putExtra("timetable", getIntent().getSerializableExtra("timetable"));
+        }
+
+        startActivity(intent);
+        finish();
     }
 
     @Override

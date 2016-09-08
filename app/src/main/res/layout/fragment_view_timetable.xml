@@ -17,10 +17,10 @@
         >
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/view_timetable_header"
+            android:id="@+id/view_timetable_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
+            style="@style/AppBarLayout"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
@@ -77,8 +77,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
             android:src="@mipmap/ic_edit_white"
-            app:layout_anchor="@id/view_timetable_header"
-            app:layout_anchorGravity="bottom|right|end"
+            android:elevation="8dp"
+            app:layout_anchor="@id/view_timetable_appbar"
+            app:layout_anchorGravity="bottom|end"
             app:fabSize="mini"
             />
 

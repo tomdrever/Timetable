@@ -20,7 +20,7 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
+            style="@style/AppBarLayout"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
@@ -56,6 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/edit_timetable_name"
+                    android:textSize="24sp"
                     android:windowSoftInputMode="stateHidden"
                     style="@style/CapsEditText"
                     />

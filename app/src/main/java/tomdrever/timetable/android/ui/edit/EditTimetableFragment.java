@@ -87,8 +87,7 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timetableContainer.getTimetable().addDay(new Day(String.format("Today %s", timetableContainer.getTimetable().getDays().size() + 1)));
-
+                timetableContainer.getTimetable().addDay(new Day(String.format("Day %s", timetableContainer.getTimetable().getDays().size() + 1)));
             }
         });
         //endregion
