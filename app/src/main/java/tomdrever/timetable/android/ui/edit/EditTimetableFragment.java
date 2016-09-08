@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.TimetableFileManager;
+import tomdrever.timetable.android.ui.CardTouchedListener;
 import tomdrever.timetable.android.ui.DaysRecyclerViewAdapter;
 import tomdrever.timetable.android.ui.FragmentBackPressedListener;
 import tomdrever.timetable.data.Day;
@@ -24,7 +25,7 @@ import tomdrever.timetable.databinding.FragmentEditTimetableBinding;
 
 import java.util.Collections;
 
-public class EditTimetableFragment extends Fragment implements DaysRecyclerViewAdapter.DayCardClickListener,
+public class EditTimetableFragment extends Fragment implements CardTouchedListener,
         TimetableValueChangedListener {
     private TimetableContainer timetableContainer;
     private boolean isNewTimetable;
@@ -34,6 +35,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
     private DayClickedListener dayClickedListener;
 
     private DaysRecyclerViewAdapter recyclerViewAdapter;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
         final RecyclerView daysListRecyclerView = (RecyclerView) getView().findViewById(R.id.edit_timetable_days_list_recyclerview);
 
         recyclerViewAdapter = new DaysRecyclerViewAdapter(
-                timetableContainer.getTimetable().getDays(), this);
+                timetableContainer.getTimetable().getDays(), true, this);
 
         daysListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         daysListRecyclerView.setAdapter(recyclerViewAdapter);
@@ -92,11 +94,13 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
         //endregion
 
         //region ItemTouchHelper
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
-            public boolean isLongPressDragEnabled() {
-                return super.isLongPressDragEnabled();
+            public boolean isItemViewSwipeEnabled() {
+                return true;
             }
 
             @Override
@@ -116,15 +120,27 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
 
-                Collections.swap(recyclerViewAdapter.getDays(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                if (fromPosition < toPosition) {
+                    for (int i = fromPosition; i < toPosition; i++) {
+                        Collections.swap(timetableContainer.getTimetable().getDays(), i, i + 1);
+                    }
+                } else {
+                    for (int i = fromPosition; i > toPosition; i--) {
+                        Collections.swap(timetableContainer.getTimetable().getDays(), i, i - 1);
+                    }
+                }
+
+                recyclerViewAdapter.notifyItemMoved(fromPosition, toPosition);
 
                 return true;
             }
         };
         //endregion
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(daysListRecyclerView);
 
         // Set name and description to text boxes
@@ -151,12 +167,6 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
         newFragment.dayClickedListener = dayClickedListener;
 
         return newFragment;
-    }
-
-    @Override
-    public void onCardClicked(DaysRecyclerViewAdapter.DayViewHolder dayViewHolder, int position) {
-        // TODO - launch edit day fragment
-        dayClickedListener.onDayClicked(position);
     }
 
     @Override
@@ -192,10 +202,8 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
                     timetableContainer.setName(editTimetableName.getText().toString());
 
                     EditText editTimetableDescription = (EditText) getView().findViewById(R.id.edit_timetable_description);
-                    String desc = editTimetableDescription.getText().toString().trim();
-                    if (desc.isEmpty()) {
-                        timetableContainer.setDescription("No description");
-                    } else {
+                    String trimmedEditTextDescriptionString = editTimetableDescription.getText().toString().trim();
+                    if (!trimmedEditTextDescriptionString.isEmpty()) {
                         timetableContainer.setDescription(editTimetableDescription.getText().toString());
                     }
 
@@ -220,6 +228,16 @@ public class EditTimetableFragment extends Fragment implements DaysRecyclerViewA
     @Override
     public void onValueRemoved(int position) {
         recyclerViewAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onCardClicked(RecyclerView.ViewHolder viewHolder, int position) {
+        dayClickedListener.onDayClicked(position);
+    }
+
+    @Override
+    public void onCardDragHandleTouched(RecyclerView.ViewHolder viewHolder, int position) {
+        itemTouchHelper.startDrag(viewHolder);
     }
 
     public interface TimetableFinishedListener {

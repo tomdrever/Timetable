@@ -2,12 +2,16 @@ package tomdrever.timetable.android.ui.view;
 
 import android.content.Context;
 import android.databinding.ObservableArrayList;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.ui.CardTouchedListener;
 import tomdrever.timetable.data.TimetableContainer;
 
 import java.text.DateFormat;
@@ -20,9 +24,9 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
 
     private Context context;
 
-    private final TimetableCardClickListener listener;
+    private final CardTouchedListener listener;
 
-    TimetablesOverviewRecyclerViewAdapter(ObservableArrayList<TimetableContainer> timetableContainers, Context context, TimetableCardClickListener listener){
+    TimetablesOverviewRecyclerViewAdapter(ObservableArrayList<TimetableContainer> timetableContainers, Context context, CardTouchedListener listener){
         this.timetableContainers = timetableContainers;
         this.context = context;
         this.listener = listener;
@@ -30,7 +34,7 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
 
     @Override
     public TimetableDetailViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timetable_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timetable_card, parent, false);
 
         return new TimetableDetailViewHolder(view);
     }
@@ -50,7 +54,17 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onCardClicked(holder, i);
+                listener.onCardClicked(holder, holder.getAdapterPosition());
+            }
+        });
+
+        holder.dragHandleView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                    listener.onCardDragHandleTouched(holder, holder.getAdapterPosition());
+                }
+                return false;
             }
         });
     }
@@ -70,6 +84,7 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
         private TextView timetableDateCreatedView;
         private TextView timetableDescriptionView;
         private View itemView;
+        private ImageView dragHandleView;
 
         TimetableDetailViewHolder(final View itemView) {
             super(itemView);
@@ -78,10 +93,7 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
             timetableNameView = (TextView) itemView.findViewById(R.id.timetable_card_name);
             timetableDateCreatedView = (TextView) itemView.findViewById(R.id.timetable_date_created);
             timetableDescriptionView = (TextView) itemView.findViewById(R.id.timetable_description);
+            dragHandleView = (ImageView) itemView.findViewById(R.id.timetable_card_drag_handle);
         }
-    }
-
-    interface TimetableCardClickListener {
-        void onCardClicked(TimetableDetailViewHolder holder, int position);
     }
 }

@@ -12,12 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.ui.FragmentBackPressedListener;
+import tomdrever.timetable.android.ui.CardTouchedListener;
 import tomdrever.timetable.android.ui.DaysRecyclerViewAdapter;
+import tomdrever.timetable.android.ui.FragmentBackPressedListener;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.FragmentViewTimetableBinding;
 
-public class ViewTimetableFragment extends Fragment implements DaysRecyclerViewAdapter.DayCardClickListener {
+public class ViewTimetableFragment extends Fragment implements CardTouchedListener {
 
     private TimetableContainer timetableContainer;
 
@@ -59,7 +60,7 @@ public class ViewTimetableFragment extends Fragment implements DaysRecyclerViewA
         final RecyclerView daysListRecyclerView = (RecyclerView) getView().findViewById(R.id.view_timetable_days_list_recyclerview);
 
         final DaysRecyclerViewAdapter recyclerViewAdapter = new DaysRecyclerViewAdapter(
-                timetableContainer.getTimetable().getDays(), this);
+                timetableContainer.getTimetable().getDays(), false, this);
 
         daysListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         daysListRecyclerView.setAdapter(recyclerViewAdapter);
@@ -100,8 +101,13 @@ public class ViewTimetableFragment extends Fragment implements DaysRecyclerViewA
     }
 
     @Override
-    public void onCardClicked(DaysRecyclerViewAdapter.DayViewHolder dayViewHolder, int position) {
-        // TODO - switch to ViewDayFragment
+    public void onCardClicked(RecyclerView.ViewHolder viewHolder, int position) {
+
+    }
+
+    @Override
+    public void onCardDragHandleTouched(RecyclerView.ViewHolder viewHolder, int position) {
+
     }
 
     public interface ViewEditPressedListener {

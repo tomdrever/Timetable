@@ -13,7 +13,7 @@ import tomdrever.timetable.data.TimetableContainer;
 
 import java.util.Calendar;
 
-public class OverviewActivity extends AppCompatActivity implements TimetablesOverviewFragment.CardClickedListener,
+public class OverviewActivity extends AppCompatActivity implements TimetablesOverviewFragment.TimetableClickedListener,
         TimetablesOverviewFragment.NewTimetableClickListener {
 
     private ObservableArrayList<TimetableContainer> timetableContainers;
@@ -48,7 +48,7 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
     }
 
     @Override
-    public void onCardClicked(int cardPosition) {
+    public void onTimetableClicked(int cardPosition) {
         Intent intent = new Intent(this, ViewActivity.class);
         // TODO - create refs static class to hold intent extra names
         intent.putExtra("timetable", timetableContainers.get(cardPosition));

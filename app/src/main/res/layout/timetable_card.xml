@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/timetable_card_base_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,54 +8,65 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
     android:gravity="center"
-    android:orientation="vertical"
     >
 
-    <!--TITLE-->
-    <TextView
-        android:id="@+id/timetable_card_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:transitionName="card_timetable_name"
-        style="@style/TimetableCardTitleTextView"
+    <ImageView
+        android:id="@+id/timetable_card_drag_handle"
+        style="@style/DragHandleImageView"
         />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="4dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         >
 
-        <!--DESCRIPTION-->
+        <!--TITLE-->
         <TextView
-            android:id="@+id/timetable_description"
-            android:layout_height="wrap_content"
+            android:id="@+id/timetable_card_name"
             android:layout_width="wrap_content"
-            android:layout_margin="2dp"
-            style="@style/TimetableCardDetailsTextView"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            style="@style/TimetableCardTitleTextView"
             />
 
-        <!--SEPARATOR-->
-        <TextView
-            android:text="@string/divider_bullet"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_margin="2dp"
-            style="@style/TimetableCardDetailsTextView"
-            />
+            android:paddingBottom="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
 
-        <!--DATE CREATED-->
-        <TextView
-            android:id="@+id/timetable_date_created"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_margin="2dp"
-            style="@style/TimetableCardDetailsTextView"
-            />
+            <!--DESCRIPTION-->
+            <TextView
+                android:id="@+id/timetable_description"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="2dp"
+                style="@style/TimetableCardDetailsTextView"
+                />
+
+            <!--SEPARATOR-->
+            <TextView
+                android:text="@string/divider_bullet"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="2dp"
+                style="@style/TimetableCardDetailsTextView"
+                />
+
+            <!--DATE CREATED-->
+            <TextView
+                android:id="@+id/timetable_date_created"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="2dp"
+                style="@style/TimetableCardDetailsTextView"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

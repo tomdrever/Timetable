@@ -15,17 +15,21 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.*;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.TimetableFileManager;
+import tomdrever.timetable.android.ui.CardTouchedListener;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.FragmentTimetablesOverviewBinding;
 
-public class TimetablesOverviewFragment extends Fragment implements TimetablesOverviewRecyclerViewAdapter.TimetableCardClickListener {
-    private TimetablesOverviewRecyclerViewAdapter recyclerViewAdapter;
+import java.util.Collections;
 
-    private CardClickedListener cardClickedListener;
-    private NewTimetableClickListener newTimetableClickListener;
-
+public class TimetablesOverviewFragment extends Fragment implements CardTouchedListener {
     private ObservableArrayList<TimetableContainer> timetableContainers;
     private TimetableFileManager fileManager;
+
+    private TimetableClickedListener cardClickedListener;
+    private NewTimetableClickListener newTimetableClickListener;
+
+    private TimetablesOverviewRecyclerViewAdapter recyclerViewAdapter;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,7 +65,15 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
         //endregion
 
         //region ItemTouchHelper - swiping and dragging
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean isItemViewSwipeEnabled() {
+                return true;
+            }
+
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Store timetable data temporarily, so it can be restored
@@ -79,12 +91,26 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                // TODO - handle dragging (re-ordering) here?
-                return false;
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+
+                if (fromPosition < toPosition) {
+                    for (int i = fromPosition; i < toPosition; i++) {
+                        Collections.swap(timetableContainers, i, i + 1);
+                    }
+                } else {
+                    for (int i = fromPosition; i > toPosition; i--) {
+                        Collections.swap(timetableContainers, i, i - 1);
+                    }
+                }
+
+                recyclerViewAdapter.notifyItemMoved(fromPosition, toPosition);
+
+                return true;
             }
         };
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         //endregion
@@ -120,7 +146,7 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
     }
 
     public static TimetablesOverviewFragment newInstance(ObservableArrayList<TimetableContainer> timetables,
-                                                         CardClickedListener cardClickedListener,
+                                                         TimetableClickedListener cardClickedListener,
                                                          NewTimetableClickListener newTimetableClickListener) {
         TimetablesOverviewFragment newFragment = new TimetablesOverviewFragment();
         newFragment.timetableContainers = timetables;
@@ -130,12 +156,18 @@ public class TimetablesOverviewFragment extends Fragment implements TimetablesOv
     }
 
     @Override
-    public void onCardClicked(TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder holder, int position) {
-        cardClickedListener.onCardClicked(position);
+    public void onCardClicked(RecyclerView.ViewHolder viewHolder, int position) {
+        cardClickedListener.onTimetableClicked(position);
     }
 
-    public interface CardClickedListener {
-        void onCardClicked(int cardPosition);
+    @Override
+    public void onCardDragHandleTouched(RecyclerView.ViewHolder viewHolder, int position) {
+        itemTouchHelper.startDrag(viewHolder);
+    }
+
+
+    public interface TimetableClickedListener {
+        void onTimetableClicked(int cardPosition);
     }
 
     public interface NewTimetableClickListener {

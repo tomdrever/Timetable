@@ -7,9 +7,15 @@
     android:elevation="4dp"
     >
 
+    <!--TODO - make invisible if layout is view-->
+    <ImageView
+        android:id="@+id/edit_day_card_drag_handle"
+        style="@style/DragHandleImageView"
+        />
+
     <!--TITLE-->
     <TextView
-        android:id="@+id/day_name_card_title"
+        android:id="@+id/edit_day_name_card_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
