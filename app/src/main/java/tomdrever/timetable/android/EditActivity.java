@@ -70,7 +70,7 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
+                            dialog.cancel();
                         }
                     })
                     .show();

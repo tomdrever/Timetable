@@ -32,13 +32,13 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 />
 
-            <!-- TODO - Display basic timetable details here alongside -->
+            <!-- TODO - Display basic timetable details here alongside name and description-->
             <TextView
                 android:id="@+id/view_timetable_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text='@{timetableContainer.getName()}'
+                android:text='@string/empty_timetable'
                 android:transitionName="view_timetable_name"
                 style="@style/WhiteTitleTextView"
                 />
@@ -65,7 +65,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:text="@string/empty_timetable"
-                    android:visibility="@{timetableContainer.getTimetable().getDays().size() > 0 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{timetableContainer.timetable.days.size() > 0 ? View.GONE : View.VISIBLE}"
                     style="@style/EmptyListTextView"
                     />
 

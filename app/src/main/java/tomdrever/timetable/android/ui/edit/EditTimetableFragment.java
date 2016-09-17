@@ -64,7 +64,6 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Todo - onbackpressed, discard changes, etc
                     fragmentBackPressedListener.onFragmentBackPressed();
                 }
             });
@@ -193,9 +192,7 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
                     TimetableFileManager fileManager = new TimetableFileManager(getContext());
 
                     // If it's not a new timetable, delete the old file (just in case)
-                    if (!isNewTimetable) {
-                        fileManager.delete(timetableContainer.getName());
-                    }
+                    if (!isNewTimetable) fileManager.delete(timetableContainer.getName());
 
                     // Set name and description from text
                     timetableContainer.setName(editTimetableName.getText().toString());

@@ -2,23 +2,26 @@ package tomdrever.timetable.data;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.support.annotation.NonNull;
 import tomdrever.timetable.BR;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class TimetableContainer extends BaseObservable implements Serializable {
+public class TimetableContainer extends BaseObservable implements Serializable, Comparable<TimetableContainer> {
 
     private String name;
     private String description;
     private Date dateCreated;
     private Timetable timetable;
+    private int index;
 
-    public TimetableContainer(String name, String description, Date dateCreated, Timetable timetable) {
+    public TimetableContainer(String name, String description, Date dateCreated, Timetable timetable, int index) {
         this.name = name;
         this.description = description;
         this.dateCreated = dateCreated;
         this.timetable = timetable;
+        this.index = index;
     }
 
     public TimetableContainer(TimetableContainer timetableContainer) {
@@ -26,6 +29,7 @@ public class TimetableContainer extends BaseObservable implements Serializable {
         this.description = timetableContainer.getDescription();
         this.dateCreated = timetableContainer.getDateCreated();
         this.timetable = new Timetable(timetableContainer.getTimetable());
+        this.index = timetableContainer.getIndex();
     }
 
     @Bindable
@@ -48,6 +52,10 @@ public class TimetableContainer extends BaseObservable implements Serializable {
         return timetable;
     }
 
+    private int getIndex() {
+        return index;
+    }
+
     public void setTimetable(Timetable timetable) {
         this.timetable = timetable;
         notifyPropertyChanged(BR.timetable);
@@ -61,5 +69,14 @@ public class TimetableContainer extends BaseObservable implements Serializable {
     public void setName(String name) {
         this.name = name;
         notifyPropertyChanged(BR.name);
+    }
+
+    public void setIndex(int i) {
+        index = i;
+    }
+
+    @Override
+    public int compareTo(@NonNull TimetableContainer timetableContainer) {
+        return Integer.valueOf(this.index).compareTo(timetableContainer.index);
     }
 }

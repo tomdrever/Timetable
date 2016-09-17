@@ -53,7 +53,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:text='@string/no_timetables'
-                    android:visibility="@{timetables.size() > 0 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{timetables.size > 0 ? View.GONE : View.VISIBLE}"
                     style="@style/EmptyListTextView"
                     />
 

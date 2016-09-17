@@ -48,7 +48,6 @@ public class ViewTimetableFragment extends Fragment implements CardTouchedListen
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO - back w/ backstack? Set whether timetable was changed?
                     fragmentBackPressedListener.onFragmentBackPressed();
                 }
             });
@@ -113,36 +112,4 @@ public class ViewTimetableFragment extends Fragment implements CardTouchedListen
     public interface ViewEditPressedListener {
         void onViewEditPressed();
     }
-
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-
-        if (resultCode != RESULT_CANCELED) {
-            if (resultCode == TimetableActivityCodes.EDIT_NEW_TIMETABLE_SUCCESSFUL_CODE) {
-                // Editing (or creation) has successfully finished
-                // Unpack data and set to timetable object
-                // FIXME - timetable must be rebound. Zut.
-                timetableContainer = (TimetableContainer) intent.getSerializableExtra("timetabledetails");
-                binding.setTimetable(timetableContainer);
-                hasTimetableChanged = true;
-                Toast.makeText(this, "Saved changes", Toast.LENGTH_SHORT).show();
-            } else if (resultCode == TimetableActivityCodes.EDIT_NEW_TIMETABLE_FAILED_CODE) {
-                // Editing has finished, but changes have not been saved.
-
-                // TODO - Do nothing?
-                Toast.makeText(this, "Discarded changes", Toast.LENGTH_SHORT).show();
-            } else if (resultCode == TimetableActivityCodes.CREATE_NEW_TIMETABLE_FAILED_CODE) {
-                // Creation has finished, but changes have not been saved. Close
-                // activity
-
-                Toast.makeText(this, "Discarded timetable", Toast.LENGTH_SHORT).show();
-                setResult(TimetableActivityCodes.VIEW_FINISHED_TIMETABLE_UNCHANGED);
-                finish();
-            }
-        }
-    }
-
-    */
 }

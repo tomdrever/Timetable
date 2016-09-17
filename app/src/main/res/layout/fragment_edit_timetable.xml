@@ -90,8 +90,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:text="@string/empty_timetable"
-                        android:visibility="@{timetableContainer.getTimetable().getDays().size() > 0 ? View.GONE : View.VISIBLE}"
+                        android:text="@{timetableContainer.name}"
+                        android:visibility="@{timetableContainer.timetable.days.size() > 0 ? View.GONE : View.VISIBLE}"
                         style="@style/EmptyListTextView"
                         />
 

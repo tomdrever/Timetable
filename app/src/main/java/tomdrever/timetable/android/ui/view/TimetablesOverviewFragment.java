@@ -127,6 +127,16 @@ public class TimetablesOverviewFragment extends Fragment implements CardTouchedL
         //endregion
     }
 
+    @Override
+    public void onStop() {
+        for (TimetableContainer timetableContainer : timetableContainers) {
+            timetableContainer.setIndex(timetableContainers.indexOf(timetableContainer));
+            fileManager.save(timetableContainer);
+        }
+
+        super.onStop();
+    }
+
     private void add(TimetableContainer timetableContainer, int position) {
         fileManager.save(timetableContainer);
         timetableContainers.add(position, timetableContainer);

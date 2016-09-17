@@ -60,7 +60,8 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
     public void onNewTimetableClicked() {
         Intent intent = new Intent(this, EditActivity.class);
         intent.putExtra("isnewtimetable", true);
-        intent.putExtra("timetable", new TimetableContainer("", "", Calendar.getInstance().getTime(), new Timetable()));
+        intent.putExtra("timetable", new TimetableContainer("", "", Calendar.getInstance().getTime(), new Timetable(),
+                timetableContainers.size()));
         startActivity(intent);
         finish();
     }

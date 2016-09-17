@@ -3,16 +3,15 @@ package tomdrever.timetable.android;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
+import tomdrever.timetable.data.TimetableContainer;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import tomdrever.timetable.data.TimetableContainer;
+import java.util.Arrays;
 
 public class TimetableFileManager {
     public String directory;
@@ -74,18 +73,22 @@ public class TimetableFileManager {
         // timetable
 
         String[] fileNames = new File(directory).list();
-        ArrayList<TimetableContainer> timetables = new ArrayList<>();
+        ArrayList<TimetableContainer> initialTimetableContainers = new ArrayList<>();
 
         for (String fileName : fileNames) {
             try {
-                timetables.add(new Gson().fromJson(readFile(fileName), TimetableContainer.class));
+                initialTimetableContainers.add(new Gson().fromJson(readFile(fileName), TimetableContainer.class));
             }
             catch (IOException e){
                 Toast.makeText(context, "Error: Could not read file: " + fileName, Toast.LENGTH_SHORT).show();
             }
         }
 
-        return timetables;
+        TimetableContainer[] timetableContainersArray = initialTimetableContainers.toArray(new TimetableContainer[0]);
+
+        Arrays.sort(timetableContainersArray);
+
+        return new ArrayList<>(Arrays.asList(timetableContainersArray));
     }
 
     @NonNull
