@@ -1,4 +1,4 @@
-package tomdrever.timetable.android.ui.view;
+package tomdrever.timetable.android.fragments;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.ui.CardTouchedListener;
-import tomdrever.timetable.android.ui.DaysRecyclerViewAdapter;
-import tomdrever.timetable.android.ui.FragmentBackPressedListener;
+import tomdrever.timetable.android.listeners.CardTouchedListener;
+import tomdrever.timetable.android.DaysRecyclerViewAdapter;
+import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.FragmentViewTimetableBinding;
 
@@ -101,12 +101,12 @@ public class ViewTimetableFragment extends Fragment implements CardTouchedListen
 
     @Override
     public void onCardClicked(RecyclerView.ViewHolder viewHolder, int position) {
-
+		// TODO - launch ViewDay
     }
 
     @Override
     public void onCardDragHandleTouched(RecyclerView.ViewHolder viewHolder, int position) {
-
+		// REM - nothing
     }
 
     public interface ViewEditPressedListener {

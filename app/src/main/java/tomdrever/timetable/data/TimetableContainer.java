@@ -79,4 +79,15 @@ public class TimetableContainer extends BaseObservable implements Serializable, 
     public int compareTo(@NonNull TimetableContainer timetableContainer) {
         return Integer.valueOf(this.index).compareTo(timetableContainer.index);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof TimetableContainer) {
+            TimetableContainer other = (TimetableContainer) obj;
+            return other.getName().equals(name) && other.getDescription().equals(description) &&
+                    other.getDateCreated() == dateCreated && other.getTimetable().equals(timetable);
+        } else {
+            return super.equals(obj);
+        }
+    }
 }

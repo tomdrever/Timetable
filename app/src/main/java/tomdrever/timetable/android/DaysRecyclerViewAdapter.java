@@ -1,4 +1,4 @@
-package tomdrever.timetable.android.ui;
+package tomdrever.timetable.android;
 
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.listeners.CardTouchedListener;
 import tomdrever.timetable.data.Day;
 
 import java.util.ArrayList;
@@ -28,13 +29,13 @@ public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerVi
 
     @Override
     public DayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.day_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.day_card, parent, false);
 
         return new DayViewHolder(view, showDragHandle);
     }
 
     @Override
-    public void onBindViewHolder(final DayViewHolder holder, final int position) {
+    public void onBindViewHolder(final DayViewHolder holder, int position) {
         holder.dayNameView.setText(days.get(position).getName());
 
         holder.itemView.setTag(position);
@@ -64,18 +65,18 @@ public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerVi
     }
 
     static class DayViewHolder extends RecyclerView.ViewHolder{
-        private TextView dayNameView;
-        private View itemView;
+	    private View itemView;
 
+	    private TextView dayNameView;
         private ImageView dragHandleView;
 
-        DayViewHolder(final View itemView, boolean showDragHandle) {
+        DayViewHolder(View itemView, boolean showDragHandle) {
             super(itemView);
             this.itemView = itemView;
 
-            dayNameView = (TextView)itemView.findViewById(R.id.edit_day_name_card_title);
+            dayNameView = (TextView) itemView.findViewById(R.id.day_name_card_title);
 
-            dragHandleView = (ImageView)itemView.findViewById(R.id.edit_day_card_drag_handle);
+            dragHandleView = (ImageView) itemView.findViewById(R.id.day_card_drag_handle);
 
             if (!showDragHandle) dragHandleView.setVisibility(View.GONE);
         }

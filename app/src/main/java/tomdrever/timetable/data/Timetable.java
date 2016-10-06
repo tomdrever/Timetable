@@ -34,8 +34,7 @@ public class Timetable implements Serializable {
     private ObservableArrayList<Day> days;
 
     public void addDay(Day day){
-        days.add(day);
-        valueChangedListener.onValueAdded(days.size() - 1);
+        addDay(day, days.size());
     }
 
     public void addDay(Day day, int position) {
@@ -50,5 +49,15 @@ public class Timetable implements Serializable {
 
     public ObservableArrayList<Day> getDays(){
         return days;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Timetable) {
+            Timetable other = (Timetable) obj;
+            return other.getDays().equals(days);
+        }
+
+        return super.equals(obj);
     }
 }

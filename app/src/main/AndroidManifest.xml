@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".android.OverviewActivity"
+            android:name=".android.activities.OverviewActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,11 +17,11 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".android.ViewActivity"
+                android:name=".android.activities.ViewActivity"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".android.EditActivity"
+                android:name=".android.activities.EditActivity"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

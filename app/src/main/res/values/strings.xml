@@ -1,31 +1,33 @@
 <resources>
-    <string name="app_name">Timetable</string>
-    <string name="app_main_activity_name">Timetables</string>
-    <string name="app_new_timetable_activity_name">New Timetable</string>
-    <string name="app_edit_timetable_activity_name">Edit Timetable</string>
+	<string name="app_name">Timetable</string>
+	<string name="app_main_activity_name">Timetables</string>
+	<string name="app_new_timetable_activity_name">New Timetable</string>
+	<string name="app_edit_timetable_activity_name">Edit Timetable</string>
 
-    <string name="action_setup_timetable">Set up Timetable</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_finish_editing_timetable">Finish Editing Timetable</string>
-    <string name="action_preview_timetable">Preview Timetable</string>
+	<string name="action_setup_timetable">Set up Timetable</string>
+	<string name="action_settings">Settings</string>
+	<string name="action_finish_editing">Finish Editing</string>
+	<string name="action_preview_timetable">Preview Timetable</string>
 
-    <string name="action_edit_timetable">Edit This Timetable</string>
+	<string name="action_edit_timetable">Edit This Timetable</string>
 
-    <string name="edit_timetable_name">Name</string>
-    <string name="edit_timetable_description">Short description</string>
+	<string name="edit_timetable_name">Name</string>
+	<string name="edit_timetable_description">Short description</string>
+	<string name="edit_day_name">Name</string>
 
-    <string name="timetable_card_date">Created: %1$s</string>
+	<string name="timetable_card_date">Created: %1$s</string>
 
-    <string name="dialog_cancel">Cancel</string>
-    <string name="dialog.new_timetable_create">Create</string>
-    <string name="dialog.new_timetable_create_title">New Timetable</string>
+	<string name="dialog_cancel">Cancel</string>
+	<string name="dialog.new_timetable_create">Create</string>
+	<string name="dialog.new_timetable_create_title">New Timetable</string>
 
-    <string name="no_timetables">You have no timetables</string>
-    <string name="empty_timetable">This timetable is empty</string>
+	<string name="no_timetables">You have no timetables</string>
+	<string name="empty_timetable">This timetable is empty</string>
+	<string name="empty_day">This day is empty</string>
 
-    <string name="title_activity_view_timetable">View Timetable Activity</string>
-    <string name="title_activity_days_overview">Days Overview Activity</string>
+	<string name="title_activity_view_timetable">View Timetable Activity</string>
+	<string name="title_activity_days_overview">Days Overview Activity</string>
 
-    <string name="divider_bullet">&#8226;</string>
-    <string name="action_view_timetable_back">Back</string>
+	<string name="divider_bullet">&#8226;</string>
+	<string name="action_view_timetable_back">Back</string>
 </resources>

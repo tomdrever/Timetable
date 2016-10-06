@@ -1,4 +1,4 @@
-package tomdrever.timetable.android;
+package tomdrever.timetable.android.activities;
 
 import android.content.Intent;
 import android.databinding.ObservableArrayList;
@@ -7,7 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.ui.view.TimetablesOverviewFragment;
+import tomdrever.timetable.android.TimetableFileManager;
+import tomdrever.timetable.android.fragments.TimetablesOverviewFragment;
 import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.data.TimetableContainer;
 

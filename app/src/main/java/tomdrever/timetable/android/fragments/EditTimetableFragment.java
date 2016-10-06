@@ -1,4 +1,4 @@
-package tomdrever.timetable.android.ui.edit;
+package tomdrever.timetable.android.fragments;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -15,9 +15,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.TimetableFileManager;
-import tomdrever.timetable.android.ui.CardTouchedListener;
-import tomdrever.timetable.android.ui.DaysRecyclerViewAdapter;
-import tomdrever.timetable.android.ui.FragmentBackPressedListener;
+import tomdrever.timetable.android.listeners.EditingFinishedListener;
+import tomdrever.timetable.android.listeners.CardTouchedListener;
+import tomdrever.timetable.android.DaysRecyclerViewAdapter;
+import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.data.TimetableValueChangedListener;
@@ -25,12 +26,11 @@ import tomdrever.timetable.databinding.FragmentEditTimetableBinding;
 
 import java.util.Collections;
 
-public class EditTimetableFragment extends Fragment implements CardTouchedListener,
-        TimetableValueChangedListener {
+public class EditTimetableFragment extends Fragment implements CardTouchedListener, TimetableValueChangedListener {
     private TimetableContainer timetableContainer;
     private boolean isNewTimetable;
 
-    private TimetableFinishedListener newTimetableFinishedListener;
+    private EditingFinishedListener editingFinishedListener;
     private FragmentBackPressedListener fragmentBackPressedListener;
     private DayClickedListener dayClickedListener;
 
@@ -60,21 +60,18 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (toolbar != null) {
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    fragmentBackPressedListener.onFragmentBackPressed();
-                }
-            });
-        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentBackPressedListener.onFragmentBackPressed();
+            }
+        });
         //endregion
 
         //region RecyclerView
-        final RecyclerView daysListRecyclerView = (RecyclerView) getView().findViewById(R.id.edit_timetable_days_list_recyclerview);
+        RecyclerView daysListRecyclerView = (RecyclerView) getView().findViewById(R.id.edit_timetable_days_list_recyclerview);
 
-        recyclerViewAdapter = new DaysRecyclerViewAdapter(
-                timetableContainer.getTimetable().getDays(), true, this);
+        recyclerViewAdapter = new DaysRecyclerViewAdapter(timetableContainer.getTimetable().getDays(), true, this);
 
         daysListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         daysListRecyclerView.setAdapter(recyclerViewAdapter);
@@ -82,7 +79,6 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
 
         //region FAB
         FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.new_day_fab);
-        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,7 +148,7 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
     }
 
     public static EditTimetableFragment newInstance(TimetableContainer timetableContainer, boolean isNewTimetable,
-                                                    TimetableFinishedListener newTimetableFinishedListener,
+                                                    EditingFinishedListener editingFinishedListener,
                                                     FragmentBackPressedListener fragmentBackPressedListener,
                                                     DayClickedListener dayClickedListener) {
         EditTimetableFragment newFragment = new EditTimetableFragment();
@@ -160,7 +156,7 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
         newFragment.isNewTimetable = isNewTimetable;
         newFragment.timetableContainer = timetableContainer;
 
-        newFragment.newTimetableFinishedListener = newTimetableFinishedListener;
+        newFragment.editingFinishedListener = editingFinishedListener;
         newFragment.fragmentBackPressedListener = fragmentBackPressedListener;
         newFragment.dayClickedListener = dayClickedListener;
 
@@ -169,14 +165,14 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_edit_timetable, menu);
+        inflater.inflate(R.menu.menu_edit, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_finish_editing_timetable: // On "done" pressed
+            case R.id.action_finish_editing:
                 EditText editTimetableName = (EditText) getView().findViewById(R.id.edit_timetable_name);
                 // Check the timetable has been given a name
                 String name = editTimetableName.getText().toString().trim();
@@ -206,7 +202,9 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
                     // Save over timetable
                     fileManager.save(timetableContainer);
 
-                    newTimetableFinishedListener.OnTimetableFinished();
+                    Toast.makeText(getContext(), "Saved " + timetableContainer.getName(), Toast.LENGTH_SHORT).show();
+
+                    editingFinishedListener.onEditingTimetableFinished();
                 }
 
                 return true;
@@ -234,10 +232,6 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
     @Override
     public void onCardDragHandleTouched(RecyclerView.ViewHolder viewHolder, int position) {
         itemTouchHelper.startDrag(viewHolder);
-    }
-
-    public interface TimetableFinishedListener {
-        void OnTimetableFinished();
     }
 
     public interface DayClickedListener {

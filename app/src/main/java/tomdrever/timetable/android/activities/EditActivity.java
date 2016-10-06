@@ -1,4 +1,4 @@
-package tomdrever.timetable.android;
+package tomdrever.timetable.android.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,12 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.ui.FragmentBackPressedListener;
-import tomdrever.timetable.android.ui.edit.EditDayFragment;
-import tomdrever.timetable.android.ui.edit.EditTimetableFragment;
+import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
+import tomdrever.timetable.android.fragments.EditDayFragment;
+import tomdrever.timetable.android.fragments.EditTimetableFragment;
+import tomdrever.timetable.android.listeners.EditingFinishedListener;
 import tomdrever.timetable.data.TimetableContainer;
 
-public class EditActivity extends AppCompatActivity implements EditTimetableFragment.TimetableFinishedListener,
+public class EditActivity extends AppCompatActivity implements EditingFinishedListener,
         FragmentBackPressedListener, EditTimetableFragment.DayClickedListener {
 
     private TimetableContainer timetableContainer;
@@ -48,32 +49,30 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
     }
 
     @Override
-    public void OnTimetableFinished() {
-        Intent intent = new Intent(this, ViewActivity.class);
-        intent.putExtra("timetable", timetableContainer);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
     public void onFragmentBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else {
-            new AlertDialog.Builder(this)
-                    .setTitle("Back")
-                    .setMessage("Are you sure you want to discard your changes?")
-                    .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            back();
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    })
-                    .show();
+            TimetableContainer initialTimetableContainer = (TimetableContainer) getIntent().getSerializableExtra("timetable");
+
+            if (!initialTimetableContainer.equals(timetableContainer)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Back")
+                        .setMessage("Are you sure you want to discard your changes?")
+                        .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                back();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+            } else {
+                back();
+            }
         }
     }
 
@@ -93,6 +92,20 @@ public class EditActivity extends AppCompatActivity implements EditTimetableFrag
 
     @Override
     public void onDayClicked(int position) {
-        transitionTo(EditDayFragment.newInstance(timetableContainer.getTimetable().getDays().get(position), this), true);
+        transitionTo(EditDayFragment.newInstance(timetableContainer.getTimetable().getDays().get(position),
+                this, this), true);
+    }
+
+    @Override
+    public void onEditingTimetableFinished() {
+        Intent intent = new Intent(this, ViewActivity.class);
+        intent.putExtra("timetable", timetableContainer);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onEditingDayFinished() {
+        onFragmentBackPressed();
     }
 }

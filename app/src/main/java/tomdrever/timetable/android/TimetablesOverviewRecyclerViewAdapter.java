@@ -1,6 +1,5 @@
-package tomdrever.timetable.android.ui.view;
+package tomdrever.timetable.android;
 
-import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.ui.CardTouchedListener;
+import tomdrever.timetable.android.listeners.CardTouchedListener;
 import tomdrever.timetable.data.TimetableContainer;
 
 import java.text.DateFormat;
@@ -19,16 +18,13 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Objects;
 
-class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder> {
+public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder> {
     private ObservableArrayList<TimetableContainer> timetableContainers;
-
-    private Context context;
 
     private final CardTouchedListener listener;
 
-    TimetablesOverviewRecyclerViewAdapter(ObservableArrayList<TimetableContainer> timetableContainers, Context context, CardTouchedListener listener){
+    public TimetablesOverviewRecyclerViewAdapter(ObservableArrayList<TimetableContainer> timetableContainers, CardTouchedListener listener){
         this.timetableContainers = timetableContainers;
-        this.context = context;
         this.listener = listener;
     }
 
@@ -43,7 +39,7 @@ class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<Timetab
     public void onBindViewHolder(final TimetableDetailViewHolder holder, final int i) {
         // Format and add new details
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-        holder.timetableDateCreatedView.setText(context.getResources().getString(R.string.timetable_card_date,
+        holder.timetableDateCreatedView.setText(holder.itemView.getContext().getResources().getString(R.string.timetable_card_date,
                 df.format(timetableContainers.get(i).getDateCreated())));
         String desc = timetableContainers.get(i).getDescription();
         holder.timetableDescriptionView.setText(!Objects.equals(desc, "") ? desc : "No description"); // android api stuffs. leave as !=

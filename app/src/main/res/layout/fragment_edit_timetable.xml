@@ -1,113 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".android.ui.edit.EditTimetableFragment"
-    >
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".android.fragments.EditTimetableFragment"
+>
 
-    <data>
-        <import type="android.view.View"/>
-        <variable name="timetableContainer" type="tomdrever.timetable.data.TimetableContainer"/>
-        <variable name="isnewtimetable" type="boolean"/>
-    </data>
+	<data>
+		<import type="android.view.View"/>
+		<variable name="timetableContainer" type="tomdrever.timetable.data.TimetableContainer"/>
+		<variable name="isnewtimetable" type="boolean"/>
+	</data>
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/CoordinatorLayout"
-        >
+	<android.support.design.widget.CoordinatorLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			style="@style/CoordinatorLayout"
+	>
 
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/AppBarLayout"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+		<android.support.design.widget.AppBarLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				style="@style/AppBarLayout"
+				app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/edit_timetable_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:title='@{isnewtimetable ? "Create Timetable" : "Edit " + timetableContainer.name}'
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                />
+			<android.support.v7.widget.Toolbar
+					android:id="@+id/edit_timetable_toolbar"
+					android:layout_width="match_parent"
+					android:layout_height="?attr/actionBarSize"
+					android:background="?attr/colorPrimary"
+					android:title='@{isnewtimetable ? "Create Timetable" : "Edit " + timetableContainer.name}'
+					app:popupTheme="@style/AppTheme.PopupOverlay"
+			/>
 
-        </android.support.design.widget.AppBarLayout>
+		</android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp"
-                android:descendantFocusability="beforeDescendants"
-                android:focusableInTouchMode="true"
-                >
+			<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="8dp"
+					android:descendantFocusability="beforeDescendants"
+					android:focusableInTouchMode="true"
+			>
 
-                <EditText
-                    android:id="@+id/edit_timetable_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/edit_timetable_name"
-                    android:textSize="24sp"
-                    android:windowSoftInputMode="stateHidden"
-                    style="@style/CapsEditText"
-                    />
+				<EditText
+						android:id="@+id/edit_timetable_name"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="@string/edit_timetable_name"
+						android:textSize="24sp"
+						android:windowSoftInputMode="stateHidden"
+						style="@style/CapsEditText"
+				/>
 
-                <EditText
-                    android:id="@+id/edit_timetable_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/edit_timetable_description"
-                    style="@style/BasicEditText"
-                    />
+				<EditText
+						android:id="@+id/edit_timetable_description"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="@string/edit_timetable_description"
+						style="@style/BasicEditText"
+				/>
 
-            </LinearLayout>
+			</LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/edit_timetable_days_list_recyclerview_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+			<RelativeLayout
+					android:id="@+id/edit_timetable_days_list_recyclerview_container"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+			>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/edit_timetable_days_list_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center|start"
-                    />
+				<android.support.v7.widget.RecyclerView
+						android:id="@+id/edit_timetable_days_list_recyclerview"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:layout_gravity="center|start"
+				/>
 
-                <TextView
-                        android:id="@+id/no_timetables"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="@{timetableContainer.name}"
-                        android:visibility="@{timetableContainer.timetable.days.size() > 0 ? View.GONE : View.VISIBLE}"
-                        style="@style/EmptyListTextView"
-                        />
+				<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_centerHorizontal="true"
+						android:layout_centerVertical="true"
+						android:text="@string/empty_timetable"
+						android:visibility="@{timetableContainer.timetable.days.size() > 0 ? View.GONE : View.VISIBLE}"
+						style="@style/EmptyListTextView"
+				/>
 
-            </RelativeLayout>
+			</RelativeLayout>
 
-        </LinearLayout>
+		</LinearLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/new_day_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@mipmap/ic_add_white"
-            />
+		<android.support.design.widget.FloatingActionButton
+				android:id="@+id/new_day_fab"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="bottom|end"
+				android:layout_margin="@dimen/fab_margin"
+				android:src="@mipmap/ic_add_white"
+		/>
 
-    </android.support.design.widget.CoordinatorLayout>
+	</android.support.design.widget.CoordinatorLayout>
 
 </layout>

@@ -1,55 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".android.ui.edit.EditDayFragment"
-    >
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		tools:context=".android.fragments.EditDayFragment"
+>
 
-    <data>
-        <variable name="day" type="tomdrever.timetable.data.Day"/>
-    </data>
+	<data>
+		<import type="android.view.View"/>
+		<variable name="day" type="tomdrever.timetable.data.Day"/>
+	</data>
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
-        >
+	<android.support.design.widget.CoordinatorLayout
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+			android:fitsSystemWindows="true"
+	>
 
-        <!--TOOLBAR-->
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/AppBarLayout"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+		<!--TOOLBAR-->
+		<android.support.design.widget.AppBarLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				style="@style/AppBarLayout"
+				app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/edit_day_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:title='@{"Edit " + day.name}'
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                />
+			<android.support.v7.widget.Toolbar
+					android:id="@+id/edit_day_toolbar"
+					android:layout_width="match_parent"
+					android:layout_height="?attr/actionBarSize"
+					android:background="?attr/colorPrimary"
+					android:title='@{"Edit " + day.name}'
+					app:popupTheme="@style/AppTheme.PopupOverlay"
+			/>
 
-        </android.support.design.widget.AppBarLayout>
+		</android.support.design.widget.AppBarLayout>
 
-        <!--CONTENT-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+		<!--CONTENT-->
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		>
 
-            <!--RecyclerView for periods-->
+			<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="8dp"
+					android:descendantFocusability="beforeDescendants"
+					android:focusableInTouchMode="true"
+			>
 
-            <!--EditText for name-->
+				<EditText
+						android:id="@+id/edit_day_name"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="@string/edit_day_name"
+						android:textSize="24sp"
+						android:windowSoftInputMode="stateHidden"
+						style="@style/CapsEditText"
+				/>
 
-            <!--Attach picture-->
+			</LinearLayout>
 
-        </RelativeLayout>
+			<!--RecyclerView for periods-->
+			<RelativeLayout
+					android:id="@+id/edit_day_periods_list_recyclerview_container"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+			>
 
-    </android.support.design.widget.CoordinatorLayout>
+				<android.support.v7.widget.RecyclerView
+						android:id="@+id/edit_day_periods_list_recyclerview"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:layout_gravity="center|start"
+				/>
+
+				<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_centerHorizontal="true"
+						android:layout_centerVertical="true"
+						android:text="@string/empty_day"
+						android:visibility="@{day.periods.size() > 0 ? View.GONE : View.VISIBLE}"
+						style="@style/EmptyListTextView"
+				/>
+
+			</RelativeLayout>
+
+			<!--EditText for name-->
+
+			<!--Attach picture?-->
+
+		</LinearLayout>
+
+		<android.support.design.widget.FloatingActionButton
+				android:id="@+id/new_period_fab"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="bottom|end"
+				android:layout_margin="@dimen/fab_margin"
+				android:src="@mipmap/ic_add_white"
+		/>
+
+	</android.support.design.widget.CoordinatorLayout>
 
 </layout>

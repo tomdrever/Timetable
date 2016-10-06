@@ -1,4 +1,4 @@
-package tomdrever.timetable.android.ui.edit;
+package tomdrever.timetable.android.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

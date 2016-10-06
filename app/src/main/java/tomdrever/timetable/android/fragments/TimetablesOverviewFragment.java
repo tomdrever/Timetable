@@ -1,4 +1,4 @@
-package tomdrever.timetable.android.ui.view;
+package tomdrever.timetable.android.fragments;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
@@ -15,7 +15,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.*;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.TimetableFileManager;
-import tomdrever.timetable.android.ui.CardTouchedListener;
+import tomdrever.timetable.android.TimetablesOverviewRecyclerViewAdapter;
+import tomdrever.timetable.android.listeners.CardTouchedListener;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.FragmentTimetablesOverviewBinding;
 
@@ -36,7 +37,7 @@ public class TimetablesOverviewFragment extends Fragment implements CardTouchedL
         super.onCreate(savedInstanceState);
         FragmentTimetablesOverviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timetables_overview, container, false);
 
-        recyclerViewAdapter = new TimetablesOverviewRecyclerViewAdapter(timetableContainers, getContext(), this);
+        recyclerViewAdapter = new TimetablesOverviewRecyclerViewAdapter(timetableContainers, this);
         binding.setTimetables(timetableContainers);
 
         fileManager = new TimetableFileManager(getContext());

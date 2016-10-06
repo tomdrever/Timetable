@@ -1,4 +1,4 @@
-package tomdrever.timetable.android.ui;
+package tomdrever.timetable.android.listeners;
 
 public interface FragmentBackPressedListener {
     void onFragmentBackPressed();

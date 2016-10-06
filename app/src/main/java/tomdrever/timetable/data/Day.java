@@ -15,7 +15,8 @@ public class Day extends BaseObservable implements Serializable {
         return periods;
     }
 
-    public void addPeriod(Period period){
+    public void addPeriod(Period period) {
+        // TODO -  reorganise periods on addition or removal to order chronologically
         periods.add(period);
     }
 
@@ -41,7 +42,7 @@ public class Day extends BaseObservable implements Serializable {
         periods = new ArrayList<>(day.getPeriods());
     }
 
-    // TODO -  reorganise periods on addition or removal to order chronologically
+
     @Bindable
     public LocalTime getStartTime(){
         return periods.get(0).getStartTime();
