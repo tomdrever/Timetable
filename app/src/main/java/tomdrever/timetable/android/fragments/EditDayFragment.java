@@ -4,11 +4,13 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.*;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,16 +19,20 @@ import tomdrever.timetable.android.PeriodsRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.CardTouchedListener;
 import tomdrever.timetable.android.listeners.EditingFinishedListener;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
+import tomdrever.timetable.data.DataValueChangedListener;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
 import tomdrever.timetable.databinding.FragmentEditDayBinding;
 
-public class EditDayFragment extends Fragment implements CardTouchedListener {
+public class EditDayFragment extends Fragment implements CardTouchedListener, DataValueChangedListener {
     private Day day;
 	private int dayPosition;
 
     private FragmentBackPressedListener fragmentBackPressedListener;
     private EditingFinishedListener editingFinishedListener;
+
+	private PeriodsRecyclerViewAdapter recyclerViewAdapter;
+	private ItemTouchHelper itemTouchHelper;
 
     // REM - periods cannot be reordered, they are automatically arranged chronologically
     // REM - clicking one (or clicking to add a new one) launches a dialog
@@ -60,11 +66,45 @@ public class EditDayFragment extends Fragment implements CardTouchedListener {
         //region RecyclerView
 	    RecyclerView daysListRecyclerView = (RecyclerView) getView().findViewById(R.id.edit_day_periods_list_recyclerview);
 
-	    PeriodsRecyclerViewAdapter recyclerViewAdapter = new PeriodsRecyclerViewAdapter(day.getPeriods(), this);
+	    recyclerViewAdapter = new PeriodsRecyclerViewAdapter(day.getPeriods(), this);
 
 	    daysListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 	    daysListRecyclerView.setAdapter(recyclerViewAdapter);
         //endregion
+
+	    //region ItemTouchHelper
+	    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0,
+			    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+		    @Override
+		    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+			    return false;
+		    }
+
+		    @Override
+		    public boolean isItemViewSwipeEnabled() {
+			    return true;
+		    }
+
+		    @Override
+		    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+			    final Period tempPeriod = day.getPeriods().get(viewHolder.getAdapterPosition());
+			    final int tempPosition = viewHolder.getAdapterPosition();
+			    day.removePeriod(tempPosition);
+			    Snackbar.make(viewHolder.itemView, tempPeriod.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
+				    @Override
+				    public void onClick(View v) {
+					    // Re-add
+					    day.addPeriod(tempPeriod, tempPosition);
+				    }
+			    }).show();
+
+		    }
+	    };
+	    //endregion
+
+	    itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+	    itemTouchHelper.attachToRecyclerView(daysListRecyclerView);
 
         //region FAB
         FloatingActionButton fab = (FloatingActionButton)getView().findViewById(R.id.new_period_fab);
@@ -86,6 +126,7 @@ public class EditDayFragment extends Fragment implements CardTouchedListener {
                                               EditingFinishedListener editingFinishedListener) {
         EditDayFragment newFragment = new EditDayFragment();
         newFragment.day = day;
+	    newFragment.day.setValueChangedListener(newFragment);
 	    newFragment.dayPosition = dayPosition;
         newFragment.fragmentBackPressedListener = fragmentBackPressedListener;
         newFragment.editingFinishedListener = editingFinishedListener;
@@ -131,4 +172,14 @@ public class EditDayFragment extends Fragment implements CardTouchedListener {
     public void onCardDragHandleTouched(RecyclerView.ViewHolder viewHolder, int position) {
         // TODO - nothing
     }
+
+	@Override
+	public void onValueAdded(int position) {
+		recyclerViewAdapter.notifyItemInserted(position);
+	}
+
+	@Override
+	public void onValueRemoved(int position) {
+		recyclerViewAdapter.notifyItemRemoved(position);
+	}
 }

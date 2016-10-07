@@ -5,13 +5,13 @@ import android.databinding.ObservableArrayList;
 import java.io.Serializable;
 
 public class Timetable implements Serializable {
-    private transient TimetableValueChangedListener valueChangedListener;
+    private transient DataValueChangedListener valueChangedListener;
 
-    private TimetableValueChangedListener getValueChangedListener() {
+    private DataValueChangedListener getValueChangedListener() {
         return valueChangedListener;
     }
 
-    public void setValueChangedListener(TimetableValueChangedListener valueChangedListener) {
+    public void setValueChangedListener(DataValueChangedListener valueChangedListener) {
         this.valueChangedListener = valueChangedListener;
     }
 
@@ -20,7 +20,7 @@ public class Timetable implements Serializable {
         valueChangedListener = null;
     }
 
-    public Timetable(TimetableValueChangedListener valueChangedListener) {
+    public Timetable(DataValueChangedListener valueChangedListener) {
         days = new ObservableArrayList<>();
         this.valueChangedListener = valueChangedListener;
     }

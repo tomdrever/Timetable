@@ -52,7 +52,7 @@ public class PeriodsRecyclerViewAdapter extends RecyclerView.Adapter<PeriodsRecy
 
 	    private TextView periodNameView;
 
-        public PeriodViewHolder(View itemView) {
+        PeriodViewHolder(View itemView) {
             super(itemView);
 
             this.itemView = itemView;

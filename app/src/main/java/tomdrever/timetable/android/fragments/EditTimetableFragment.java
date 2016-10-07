@@ -21,12 +21,12 @@ import tomdrever.timetable.android.DaysRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.TimetableContainer;
-import tomdrever.timetable.data.TimetableValueChangedListener;
+import tomdrever.timetable.data.DataValueChangedListener;
 import tomdrever.timetable.databinding.FragmentEditTimetableBinding;
 
 import java.util.Collections;
 
-public class EditTimetableFragment extends Fragment implements CardTouchedListener, TimetableValueChangedListener {
+public class EditTimetableFragment extends Fragment implements CardTouchedListener, DataValueChangedListener {
     private TimetableContainer timetableContainer;
     private boolean isNewTimetable;
 
@@ -82,7 +82,8 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timetableContainer.getTimetable().addDay(new Day(String.format("Day %s", timetableContainer.getTimetable().getDays().size() + 1)));
+                timetableContainer.getTimetable().addDay(new Day(
+                		String.format("Day %s", timetableContainer.getTimetable().getDays().size() + 1)));
             }
         });
         //endregion

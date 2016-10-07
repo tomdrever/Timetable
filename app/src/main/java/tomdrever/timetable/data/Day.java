@@ -2,28 +2,43 @@ package tomdrever.timetable.data;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.ObservableArrayList;
 import org.joda.time.LocalTime;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Day extends BaseObservable implements Serializable {
-    private ArrayList<Period> periods;
+    private ObservableArrayList<Period> periods;
+
+	private transient DataValueChangedListener valueChangedListener;
+
+	public void setValueChangedListener(DataValueChangedListener valueChangedListener) {
+		this.valueChangedListener = valueChangedListener;
+	}
+
+	private DataValueChangedListener getValueChangedListener() {
+		return valueChangedListener;
+	}
 
     @Bindable
-    public ArrayList<Period> getPeriods() {
+    public ObservableArrayList<Period> getPeriods() {
         return periods;
     }
 
     public void addPeriod(Period period) {
-        // TODO -  reorganise periods on addition or removal to order chronologically
-        periods.add(period);
+        addPeriod(period, periods.size());
     }
 
-    public void removePeriod(Period period){
-        periods.remove(period);
+    public void addPeriod(Period period, int position) {
+	    // TODO -  reorganise periods on addition or removal to order chronologically
+	    periods.add(position, period);
+	    valueChangedListener.onValueAdded(position);
     }
 
+    public void removePeriod(int position){
+        periods.remove(position);
+	    valueChangedListener.onValueRemoved(position);
+    }
 
     private String name;
 
@@ -32,14 +47,23 @@ public class Day extends BaseObservable implements Serializable {
 
     public void setName(String name){ this.name = name; }
 
-    public Day(String name) {
+	public Day(String name) {
+		this.name = name;
+		this.valueChangedListener = null;
+		periods = new ObservableArrayList<>();
+	}
+
+    public Day(String name, DataValueChangedListener valueChangedListener) {
         this.name = name;
-        periods = new ArrayList<>();
+	    this.valueChangedListener = valueChangedListener;
+        periods = new ObservableArrayList<>();
     }
 
     public Day(Day day) {
         name = day.getName();
-        periods = new ArrayList<>(day.getPeriods());
+	    valueChangedListener = day.getValueChangedListener();
+        periods = new ObservableArrayList<>();
+	    periods.addAll(day.getPeriods());
     }
 
 
