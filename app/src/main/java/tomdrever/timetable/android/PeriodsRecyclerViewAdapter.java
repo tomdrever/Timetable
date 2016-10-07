@@ -30,7 +30,7 @@ public class PeriodsRecyclerViewAdapter extends RecyclerView.Adapter<PeriodsRecy
 
     @Override
     public void onBindViewHolder(final PeriodViewHolder holder, int position) {
-		holder.periodNameView.setText( periods.get(position).getPeriodMetaData().getName());
+		holder.periodNameView.setText(periods.get(position).getName());
 
 	    holder.itemView.setTag(position);
 

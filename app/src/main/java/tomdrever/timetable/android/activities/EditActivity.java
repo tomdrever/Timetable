@@ -5,14 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.android.fragments.EditDayFragment;
 import tomdrever.timetable.android.fragments.EditTimetableFragment;
 import tomdrever.timetable.android.listeners.EditingFinishedListener;
+import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
+import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.TimetableContainer;
 
 public class EditActivity extends AppCompatActivity implements EditingFinishedListener,
@@ -51,7 +53,8 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
     @Override
     public void onFragmentBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
+	        FragmentManager fm = getSupportFragmentManager();
+            fm.popBackStack();
         } else {
             TimetableContainer initialTimetableContainer = (TimetableContainer) getIntent().getSerializableExtra("timetable");
 
@@ -92,12 +95,12 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
 
     @Override
     public void onDayClicked(int position) {
-        transitionTo(EditDayFragment.newInstance(timetableContainer.getTimetable().getDays().get(position),
-                this, this), true);
+        transitionTo(EditDayFragment.newInstance(new Day(timetableContainer.getTimetable().getDays().get(position)),
+                position, this, this), true);
     }
 
     @Override
-    public void onEditingTimetableFinished() {
+    public void onEditingTimetableFinished(TimetableContainer timetableContainer) {
         Intent intent = new Intent(this, ViewActivity.class);
         intent.putExtra("timetable", timetableContainer);
         startActivity(intent);
@@ -105,7 +108,10 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
     }
 
     @Override
-    public void onEditingDayFinished() {
-        onFragmentBackPressed();
+    public void onEditingDayFinished(Day day, int position) {
+	    timetableContainer.getTimetable().getDays().set(position, day);
+	    // Remove EditDay from the backstack
+	    getSupportFragmentManager().popBackStackImmediate();
+	    //transitionTo(EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this, this), false);
     }
 }

@@ -204,7 +204,7 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
 
                     Toast.makeText(getContext(), "Saved " + timetableContainer.getName(), Toast.LENGTH_SHORT).show();
 
-                    editingFinishedListener.onEditingTimetableFinished();
+                    editingFinishedListener.onEditingTimetableFinished(timetableContainer);
                 }
 
                 return true;

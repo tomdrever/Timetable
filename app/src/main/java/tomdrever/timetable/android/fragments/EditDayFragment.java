@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.EditText;
+import android.widget.Toast;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.PeriodsRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.CardTouchedListener;
@@ -22,6 +23,7 @@ import tomdrever.timetable.databinding.FragmentEditDayBinding;
 
 public class EditDayFragment extends Fragment implements CardTouchedListener {
     private Day day;
+	private int dayPosition;
 
     private FragmentBackPressedListener fragmentBackPressedListener;
     private EditingFinishedListener editingFinishedListener;
@@ -79,11 +81,12 @@ public class EditDayFragment extends Fragment implements CardTouchedListener {
         ((EditText) getView().findViewById(R.id.edit_day_name)).setText(day.getName());
     }
 
-    public static EditDayFragment newInstance(Day day,
+    public static EditDayFragment newInstance(Day day, int dayPosition,
                                               FragmentBackPressedListener fragmentBackPressedListener,
                                               EditingFinishedListener editingFinishedListener) {
         EditDayFragment newFragment = new EditDayFragment();
         newFragment.day = day;
+	    newFragment.dayPosition = dayPosition;
         newFragment.fragmentBackPressedListener = fragmentBackPressedListener;
         newFragment.editingFinishedListener = editingFinishedListener;
         return newFragment;
@@ -100,7 +103,18 @@ public class EditDayFragment extends Fragment implements CardTouchedListener {
         switch (item.getItemId()) {
             case R.id.action_finish_editing:
                 // TODO - save day into timetable
-                editingFinishedListener.onEditingDayFinished();
+	            EditText editDayName = (EditText) getView().findViewById(R.id.edit_day_name);
+	            // Check the timetable has been given a name
+	            String name = editDayName.getText().toString().trim();
+	            if (name.isEmpty()) {
+		            // If not, tell the user
+		            Toast.makeText(getContext(), "The day needs a name!", Toast.LENGTH_SHORT).show();
+
+		            // TODO - highlight name field to the user in some way - USER, DO THIS!
+	            } else {
+		            day.setName(name);
+		            editingFinishedListener.onEditingDayFinished(day, dayPosition);
+	            }
                 return true;
 
             default:
