@@ -32,9 +32,9 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
 
         Intent intent = getIntent();
 
-        isNewTimetable = intent.getBooleanExtra("isnewtimetable", false);
+        isNewTimetable = intent.getBooleanExtra(IntentExtraTags.ISNEWTIMETABLE, false);
 
-        timetableContainer = new TimetableContainer((TimetableContainer) intent.getSerializableExtra("timetable"));
+        timetableContainer = new TimetableContainer((TimetableContainer) intent.getSerializableExtra(IntentExtraTags.TIMETABLECONTAINER));
 
         transitionTo(EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this, this), false);
     }
@@ -57,7 +57,8 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
 	        FragmentManager fm = getSupportFragmentManager();
             fm.popBackStack();
         } else {
-            TimetableContainer initialTimetableContainer = (TimetableContainer) getIntent().getSerializableExtra("timetable");
+            TimetableContainer initialTimetableContainer =
+		            (TimetableContainer) getIntent().getSerializableExtra(IntentExtraTags.TIMETABLECONTAINER);
 
             if (!initialTimetableContainer.equals(timetableContainer)) {
                 new AlertDialog.Builder(this)
@@ -87,7 +88,8 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
             intent = new Intent(this, OverviewActivity.class);
         } else {
             intent = new Intent(this, ViewActivity.class);
-            intent.putExtra(IntentExtraTags.TIMETABLECONTAINER, getIntent().getSerializableExtra("timetable"));
+            intent.putExtra(IntentExtraTags.TIMETABLECONTAINER,
+		            getIntent().getSerializableExtra(IntentExtraTags.TIMETABLECONTAINER));
         }
 
         startActivity(intent);

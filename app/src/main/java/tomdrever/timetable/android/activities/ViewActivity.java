@@ -24,7 +24,7 @@ public class ViewActivity extends AppCompatActivity implements FragmentBackPress
 
         Intent intent = getIntent();
 
-        timetableContainer = (TimetableContainer) intent.getSerializableExtra("timetable");
+        timetableContainer = (TimetableContainer) intent.getSerializableExtra(IntentExtraTags.TIMETABLECONTAINER);
 
         transitionTo(ViewTimetableFragment.newInstance(timetableContainer, this, this), false);
     }

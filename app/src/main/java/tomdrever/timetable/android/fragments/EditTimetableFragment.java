@@ -14,14 +14,14 @@ import android.view.*;
 import android.widget.EditText;
 import android.widget.Toast;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.TimetableFileManager;
+import tomdrever.timetable.utility.TimetableFileManager;
 import tomdrever.timetable.android.listeners.EditingFinishedListener;
 import tomdrever.timetable.android.listeners.CardTouchedListener;
-import tomdrever.timetable.android.DaysRecyclerViewAdapter;
+import tomdrever.timetable.android.adapters.DaysRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.TimetableContainer;
-import tomdrever.timetable.data.DataValueChangedListener;
+import tomdrever.timetable.data.listeners.DataValueChangedListener;
 import tomdrever.timetable.databinding.FragmentEditTimetableBinding;
 
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package tomdrever.timetable.android;
+package tomdrever.timetable.android.adapters;
 
 import android.databinding.ObservableArrayList;
 import android.support.v4.view.MotionEventCompat;

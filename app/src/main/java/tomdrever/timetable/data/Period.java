@@ -1,6 +1,6 @@
 package tomdrever.timetable.data;
 
-import org.joda.time.Duration;
+import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
 import java.io.Serializable;
@@ -37,8 +37,8 @@ public class Period implements Serializable {
         return endTime;
     }
 
-    public Duration getDuration() {
-        return new Duration(startTime.toDateTimeToday(), endTime.toDateTimeToday());
+    public Interval getTimeSpan() {
+        return new Interval(startTime.toDateTimeToday(), endTime.toDateTimeToday());
     }
 
 	private Map<String, Boolean> periodDescription;

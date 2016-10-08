@@ -4,6 +4,8 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import org.joda.time.LocalTime;
+import org.joda.time.Interval;
+import tomdrever.timetable.data.listeners.DataValueChangedListener;
 
 import java.io.Serializable;
 
@@ -76,4 +78,19 @@ public class Day extends BaseObservable implements Serializable {
     public LocalTime getEndTime(){
         return  periods.get(periods.size() - 1).getEndTime();
     }
+
+	public Period getPeriodAt(LocalTime time) {
+
+		// Preliminary "is within day" checks
+		if (new Interval(getStartTime().toDateTimeToday(), getEndTime().toDateTimeToday()).contains(time.toDateTimeToday()))
+			return null;
+
+		// Will stop at the first instance - there should only be one tho
+		for (Period period : periods) {
+			if (period.getTimeSpan().contains(time.toDateTimeToday()))
+				return period;
+		}
+
+		return null;
+	}
 }

@@ -1,6 +1,7 @@
 package tomdrever.timetable.data;
 
 import android.databinding.ObservableArrayList;
+import tomdrever.timetable.data.listeners.DataValueChangedListener;
 
 import java.io.Serializable;
 

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.listeners.CardTouchedListener;
-import tomdrever.timetable.android.DaysRecyclerViewAdapter;
+import tomdrever.timetable.android.adapters.DaysRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.FragmentViewTimetableBinding;

@@ -15,11 +15,11 @@ import android.view.*;
 import android.widget.EditText;
 import android.widget.Toast;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.PeriodsRecyclerViewAdapter;
+import tomdrever.timetable.android.adapters.PeriodsRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.CardTouchedListener;
 import tomdrever.timetable.android.listeners.EditingFinishedListener;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
-import tomdrever.timetable.data.DataValueChangedListener;
+import tomdrever.timetable.data.listeners.DataValueChangedListener;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
 import tomdrever.timetable.databinding.FragmentEditDayBinding;
@@ -165,7 +165,7 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
     @Override
     public void onCardClicked(RecyclerView.ViewHolder viewHolder, int position) {
 	    EditPeriodDialogFragment dialogFragment = EditPeriodDialogFragment.newInstance(day.getPeriods().get(position),
-			    day.getPeriods().size(), EditDayFragment.this);
+			    position, EditDayFragment.this);
 	    dialogFragment.show(getFragmentManager(), "");
     }
 
