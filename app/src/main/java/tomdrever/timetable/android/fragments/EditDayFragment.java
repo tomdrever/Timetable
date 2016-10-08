@@ -24,7 +24,8 @@ import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
 import tomdrever.timetable.databinding.FragmentEditDayBinding;
 
-public class EditDayFragment extends Fragment implements CardTouchedListener, DataValueChangedListener {
+public class EditDayFragment extends Fragment implements CardTouchedListener, DataValueChangedListener,
+		EditPeriodDialogFragment.FragmentSuccessListener{
     private Day day;
 	private int dayPosition;
 
@@ -112,7 +113,9 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
             @Override
             public void onClick(View view) {
                 // TODO - launch period dialog
-                day.addPeriod(new Period("Period 1"));
+	            EditPeriodDialogFragment dialogFragment = EditPeriodDialogFragment.newInstance(null, day.getPeriods().size(),
+			            EditDayFragment.this);
+	            dialogFragment.show(getFragmentManager(), "");
             }
         });
         //endregion
@@ -165,7 +168,9 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
 
     @Override
     public void onCardClicked(RecyclerView.ViewHolder viewHolder, int position) {
-        // TODO - launch EditPeriodDialog or whatever
+	    EditPeriodDialogFragment dialogFragment = EditPeriodDialogFragment.newInstance(day.getPeriods().get(position),
+			    day.getPeriods().size(), EditDayFragment.this);
+	    dialogFragment.show(getFragmentManager(), "");
     }
 
     @Override
@@ -181,5 +186,14 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
 	@Override
 	public void onValueRemoved(int position) {
 		recyclerViewAdapter.notifyItemRemoved(position);
+	}
+
+	@Override
+	public void onFragmentSuccess(Period period, int periodPosition) {
+		if (periodPosition >= day.getPeriods().size()) {
+			day.addPeriod(period);
+		} else {
+			day.getPeriods().set(periodPosition, period);
+		}
 	}
 }
