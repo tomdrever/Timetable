@@ -10,6 +10,7 @@ import tomdrever.timetable.R;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.android.fragments.ViewTimetableFragment;
 import tomdrever.timetable.data.TimetableContainer;
+import tomdrever.timetable.utility.IntentExtraTags;
 
 public class ViewActivity extends AppCompatActivity implements FragmentBackPressedListener,
         ViewTimetableFragment.ViewEditPressedListener {
@@ -54,8 +55,8 @@ public class ViewActivity extends AppCompatActivity implements FragmentBackPress
     @Override
     public void onViewEditPressed() {
         Intent intent = new Intent(this, EditActivity.class);
-        intent.putExtra("isnewtimetable", false);
-        intent.putExtra("timetable", timetableContainer);
+        intent.putExtra(IntentExtraTags.ISNEWTIMETABLE, false);
+        intent.putExtra(IntentExtraTags.TIMETABLECONTAINER, timetableContainer);
         startActivity(intent);
         finish();
     }

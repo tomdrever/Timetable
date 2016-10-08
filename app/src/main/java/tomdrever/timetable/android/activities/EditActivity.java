@@ -16,6 +16,7 @@ import tomdrever.timetable.android.listeners.EditingFinishedListener;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.TimetableContainer;
+import tomdrever.timetable.utility.IntentExtraTags;
 
 public class EditActivity extends AppCompatActivity implements EditingFinishedListener,
         FragmentBackPressedListener, EditTimetableFragment.DayClickedListener {
@@ -86,7 +87,7 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
             intent = new Intent(this, OverviewActivity.class);
         } else {
             intent = new Intent(this, ViewActivity.class);
-            intent.putExtra("timetable", getIntent().getSerializableExtra("timetable"));
+            intent.putExtra(IntentExtraTags.TIMETABLECONTAINER, getIntent().getSerializableExtra("timetable"));
         }
 
         startActivity(intent);
@@ -102,7 +103,7 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
     @Override
     public void onEditingTimetableFinished(TimetableContainer timetableContainer) {
         Intent intent = new Intent(this, ViewActivity.class);
-        intent.putExtra("timetable", timetableContainer);
+        intent.putExtra(IntentExtraTags.TIMETABLECONTAINER, timetableContainer);
         startActivity(intent);
         finish();
     }

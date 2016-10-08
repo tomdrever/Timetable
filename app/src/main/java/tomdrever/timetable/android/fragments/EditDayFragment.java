@@ -36,8 +36,6 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
 	private ItemTouchHelper itemTouchHelper;
 
     // REM - periods cannot be reordered, they are automatically arranged chronologically
-    // REM - clicking one (or clicking to add a new one) launches a dialog
-    // REM - clicking finish is the same as going back, but the day is saved (woot)
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,7 +110,6 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO - launch period dialog
 	            EditPeriodDialogFragment dialogFragment = EditPeriodDialogFragment.newInstance(null, day.getPeriods().size(),
 			            EditDayFragment.this);
 	            dialogFragment.show(getFragmentManager(), "");
@@ -146,7 +143,6 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_finish_editing:
-                // TODO - save day into timetable
 	            EditText editDayName = (EditText) getView().findViewById(R.id.edit_day_name);
 	            // Check the timetable has been given a name
 	            String name = editDayName.getText().toString().trim();
@@ -175,7 +171,7 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
 
     @Override
     public void onCardDragHandleTouched(RecyclerView.ViewHolder viewHolder, int position) {
-        // TODO - nothing
+        // REM - nothing
     }
 
 	@Override

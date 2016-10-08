@@ -11,6 +11,7 @@ import tomdrever.timetable.android.TimetableFileManager;
 import tomdrever.timetable.android.fragments.TimetablesOverviewFragment;
 import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.data.TimetableContainer;
+import tomdrever.timetable.utility.IntentExtraTags;
 
 import java.util.Calendar;
 
@@ -51,8 +52,7 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
     @Override
     public void onTimetableClicked(int cardPosition) {
         Intent intent = new Intent(this, ViewActivity.class);
-        // TODO - create refs static class to hold intent extra names
-        intent.putExtra("timetable", timetableContainers.get(cardPosition));
+        intent.putExtra(IntentExtraTags.TIMETABLECONTAINER, timetableContainers.get(cardPosition));
         startActivity(intent);
         finish();
     }
@@ -60,8 +60,8 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
     @Override
     public void onNewTimetableClicked() {
         Intent intent = new Intent(this, EditActivity.class);
-        intent.putExtra("isnewtimetable", true);
-        intent.putExtra("timetable", new TimetableContainer("", "", Calendar.getInstance().getTime(), new Timetable(),
+        intent.putExtra(IntentExtraTags.ISNEWTIMETABLE, true);
+        intent.putExtra(IntentExtraTags.TIMETABLECONTAINER, new TimetableContainer("", "", Calendar.getInstance().getTime(), new Timetable(),
                 timetableContainers.size()));
         startActivity(intent);
         finish();

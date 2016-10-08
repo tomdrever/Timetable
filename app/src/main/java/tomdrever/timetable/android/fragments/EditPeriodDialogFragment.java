@@ -38,6 +38,8 @@ public class EditPeriodDialogFragment extends DialogFragment {
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialogInterface, int i) {
+				// TODO - assign name to period.
+				// TODO - pull other data from UI to period also
 				successListener.onFragmentSuccess(period, periodPosition);
 			}
 		});
