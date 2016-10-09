@@ -14,6 +14,7 @@
 	<string name="edit_timetable_name">Name</string>
 	<string name="edit_timetable_description">Short description</string>
 	<string name="edit_day_name">Name</string>
+	<string name="edit_period_name">Name</string>
 
 	<string name="timetable_card_date">Created: %1$s</string>
 
