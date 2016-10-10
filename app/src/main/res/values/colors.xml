@@ -9,7 +9,8 @@
 
 	<color name="black">#000000</color>
 	<color name="white">#ffffff</color>
-	<color name="grey">#263238</color>
+	<color name="grey">#616161</color>
+	<color name="lightGrey">#757575</color>
 
 	<color name="transparent">#00000000</color>
 </resources>

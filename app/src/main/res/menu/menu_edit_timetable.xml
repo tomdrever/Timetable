@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 	<item
-			android:id="@+id/action_finish_editing"
+			android:id="@+id/action_save_edit"
 			android:orderInCategory="2"
-			android:icon="@mipmap/ic_done_white"
-			android:title="@string/action_finish_editing"
+			android:icon="@mipmap/ic_save"
+			android:title="@string/action_save_edit"
 			app:showAsAction="always"/>
 </menu>

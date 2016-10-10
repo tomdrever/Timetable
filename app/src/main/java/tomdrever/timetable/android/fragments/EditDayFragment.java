@@ -19,23 +19,22 @@ import tomdrever.timetable.android.adapters.PeriodsRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.CardTouchedListener;
 import tomdrever.timetable.android.listeners.EditingFinishedListener;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
-import tomdrever.timetable.data.listeners.DataValueChangedListener;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
+import tomdrever.timetable.data.listeners.DataValueChangedListener;
 import tomdrever.timetable.databinding.FragmentEditDayBinding;
 
 public class EditDayFragment extends Fragment implements CardTouchedListener, DataValueChangedListener,
-		EditPeriodDialogFragment.FragmentSuccessListener{
+		EditPeriodDialogFragment.FragmentSuccessListener {
     private Day day;
 	private int dayPosition;
 
-    private FragmentBackPressedListener fragmentBackPressedListener;
+	private FragmentBackPressedListener backPressedListener;
     private EditingFinishedListener editingFinishedListener;
 
 	private PeriodsRecyclerViewAdapter recyclerViewAdapter;
-	private ItemTouchHelper itemTouchHelper;
 
-    // REM - periods cannot be reordered, they are automatically arranged chronologically
+	// REM - periods cannot be reordered, they are automatically arranged chronologically
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentBackPressedListener.onFragmentBackPressed();
+	            backPressedListener.onFragmentBackPressed();
             }
         });
         //endregion
@@ -100,10 +99,9 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
 
 		    }
 	    };
-	    //endregion
-
-	    itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+	    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 	    itemTouchHelper.attachToRecyclerView(daysListRecyclerView);
+	    //endregion
 
         //region FAB
         FloatingActionButton fab = (FloatingActionButton)getView().findViewById(R.id.new_period_fab);
@@ -121,28 +119,33 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
         ((EditText) getView().findViewById(R.id.edit_day_name)).setText(day.getName());
     }
 
-    public static EditDayFragment newInstance(Day day, int dayPosition,
-                                              FragmentBackPressedListener fragmentBackPressedListener,
-                                              EditingFinishedListener editingFinishedListener) {
+	@Override
+	public void onDetach() {
+		super.onDetach();
+	}
+
+	public static EditDayFragment newInstance(Day day, int dayPosition,
+	                                          FragmentBackPressedListener backPressedListener,
+	                                          EditingFinishedListener editingFinishedListener) {
         EditDayFragment newFragment = new EditDayFragment();
         newFragment.day = day;
 	    newFragment.day.setValueChangedListener(newFragment);
 	    newFragment.dayPosition = dayPosition;
-        newFragment.fragmentBackPressedListener = fragmentBackPressedListener;
+		newFragment.backPressedListener = backPressedListener;
         newFragment.editingFinishedListener = editingFinishedListener;
         return newFragment;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_edit, menu);
+        inflater.inflate(R.menu.menu_edit_day, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_finish_editing:
+            case R.id.action_done_edit:
 	            EditText editDayName = (EditText) getView().findViewById(R.id.edit_day_name);
 	            // Check the timetable has been given a name
 	            String name = editDayName.getText().toString().trim();
@@ -191,5 +194,7 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
 		} else {
 			day.getPeriods().set(periodPosition, period);
 		}
+
+		recyclerViewAdapter.notifyItemChanged(periodPosition);
 	}
 }

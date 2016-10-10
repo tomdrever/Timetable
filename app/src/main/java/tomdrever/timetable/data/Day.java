@@ -8,6 +8,7 @@ import org.joda.time.Interval;
 import tomdrever.timetable.data.listeners.DataValueChangedListener;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Day extends BaseObservable implements Serializable {
     private ObservableArrayList<Period> periods;
@@ -64,8 +65,11 @@ public class Day extends BaseObservable implements Serializable {
     public Day(Day day) {
         name = day.getName();
 	    valueChangedListener = day.getValueChangedListener();
+
         periods = new ObservableArrayList<>();
-	    periods.addAll(day.getPeriods());
+	    for (int i = 0; i < day.getPeriods().size(); i++) {
+		    periods.add(new Period(day.getPeriods().get(i)));
+	    }
     }
 
 
@@ -92,5 +96,17 @@ public class Day extends BaseObservable implements Serializable {
 		}
 
 		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Day) {
+			Day other = (Day) obj;
+
+			return Objects.equals(other.name, name) && other.periods.size() == periods.size() &&
+					other.periods.equals(periods);
+		}
+
+		return super.equals(obj);
 	}
 }

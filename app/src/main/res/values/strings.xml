@@ -6,7 +6,7 @@
 
 	<string name="action_setup_timetable">Set up Timetable</string>
 	<string name="action_settings">Settings</string>
-	<string name="action_finish_editing">Finish Editing</string>
+	<string name="action_save_edit">Save</string>
 	<string name="action_preview_timetable">Preview Timetable</string>
 
 	<string name="action_edit_timetable">Edit This Timetable</string>
@@ -31,4 +31,5 @@
 
 	<string name="divider_bullet">&#8226;</string>
 	<string name="action_view_timetable_back">Back</string>
+	<string name="action_done_edit">Done</string>
 </resources>

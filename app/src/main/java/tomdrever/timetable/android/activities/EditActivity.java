@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.fragments.EditDayFragment;
 import tomdrever.timetable.android.fragments.EditTimetableFragment;
@@ -56,6 +57,7 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
 	        FragmentManager fm = getSupportFragmentManager();
             fm.popBackStack();
+	        Toast.makeText(EditActivity.this, "Discarded changes", Toast.LENGTH_SHORT).show();
         } else {
             TimetableContainer initialTimetableContainer =
 		            (TimetableContainer) getIntent().getSerializableExtra(IntentExtraTags.TIMETABLECONTAINER);
@@ -66,22 +68,19 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
                         .setMessage("Are you sure you want to discard your changes?")
                         .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                back();
+	                            Toast.makeText(EditActivity.this, "Discarded changes", Toast.LENGTH_SHORT).show();
+	                            leaveActivity();
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
+                        .setNegativeButton("Cancel", null)
                         .show();
             } else {
-                back();
+                leaveActivity();
             }
         }
     }
 
-    private void back() {
+    private void leaveActivity() {
         Intent intent;
 
         if (isNewTimetable) {
@@ -115,6 +114,6 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
 	    timetableContainer.getTimetable().getDays().set(position, day);
 	    // Remove EditDay from the backstack
 	    getSupportFragmentManager().popBackStackImmediate();
-	    //transitionTo(EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this, this), false);
+	    EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this, this);
     }
 }

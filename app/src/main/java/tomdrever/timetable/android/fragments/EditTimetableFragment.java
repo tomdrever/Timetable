@@ -133,10 +133,10 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
                 return true;
             }
         };
-        //endregion
 
-        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(daysListRecyclerView);
+	    itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+	    itemTouchHelper.attachToRecyclerView(daysListRecyclerView);
+        //endregion
 
         // Set name and description to text boxes
         if (!isNewTimetable) {
@@ -166,14 +166,14 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_edit, menu);
+        inflater.inflate(R.menu.menu_edit_timetable, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_finish_editing:
+            case R.id.action_save_edit:
                 EditText editTimetableName = (EditText) getView().findViewById(R.id.edit_timetable_name);
                 // Check the timetable has been given a name
                 String name = editTimetableName.getText().toString().trim();

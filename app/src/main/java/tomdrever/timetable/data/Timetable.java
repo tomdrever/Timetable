@@ -27,9 +27,12 @@ public class Timetable implements Serializable {
     }
 
     public Timetable(Timetable timetable) {
-        days = new ObservableArrayList<>();
-        days.addAll(timetable.getDays());
-        valueChangedListener = timetable.getValueChangedListener();
+	    valueChangedListener = timetable.getValueChangedListener();
+
+	    days = new ObservableArrayList<>();
+	    for (int i = 0; i < timetable.getDays().size(); i++) {
+		    days.add(new Day(timetable.getDays().get(i)));
+	    }
     }
 
     private ObservableArrayList<Day> days;
@@ -56,7 +59,7 @@ public class Timetable implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof Timetable) {
             Timetable other = (Timetable) obj;
-            return other.getDays().equals(days);
+            return other.days.equals(days) && other.days.size() == days.size();
         }
 
         return super.equals(obj);

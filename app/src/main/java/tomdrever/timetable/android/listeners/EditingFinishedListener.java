@@ -5,5 +5,5 @@ import tomdrever.timetable.data.TimetableContainer;
 
 public interface EditingFinishedListener {
     void onEditingTimetableFinished(TimetableContainer timetableContainer);
-    void onEditingDayFinished(Day day, int position);
+	void onEditingDayFinished(Day day, int position);
 }
