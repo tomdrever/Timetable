@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.data.Timetable;
@@ -29,6 +30,7 @@ public class TimetableListController extends BaseController {
     private TimetableListAdapter adapter;
 
     @BindView(R.id.timetables_list_recyclerview) RecyclerView recyclerView;
+    @BindView(R.id.no_timetables) TextView noTimetablesTextView;
 
     @Override
     protected View inflateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
@@ -45,11 +47,14 @@ public class TimetableListController extends BaseController {
 
         timetables = fileManager.loadAll();
 
+        updateNoTimetablesTextView();
+
         adapter = new TimetableListAdapter(LayoutInflater.from(view.getContext()), timetables);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 
+        // region Swiping
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
@@ -83,15 +88,29 @@ public class TimetableListController extends BaseController {
 
                 if (fromPosition < toPosition) {
                     for (int i = fromPosition; i < toPosition; i++) {
-                        Timetable temp = timetables.get(i);
-                        timetables.set(i, timetables.get(i + 1));
-                        timetables.set(i + 1, temp);
+                        Timetable timetable1 = timetables.get(i);
+                        timetable1.setIndex(i + 1);
+                        fileManager.save(timetable1);
+                        
+                        Timetable timetable2 = timetables.get(i + 1);
+                        timetable2.setIndex(i);
+                        fileManager.save(timetable2);
+                        
+                        timetables.set(i, timetable2);
+                        timetables.set(i + 1, timetable1);
                     }
                 } else {
                     for (int i = fromPosition; i > toPosition; i--) {
-                        Timetable temp = timetables.get(i);
-                        timetables.set(i, timetables.get(i - 1));
-                        timetables.set(i - 1, temp);
+                        Timetable timetable1 = timetables.get(i);
+                        timetable1.setIndex(i - 1);
+                        fileManager.save(timetable1);
+
+                        Timetable timetable2 = timetables.get(i - 1);
+                        timetable2.setIndex(i);
+                        fileManager.save(timetable2);
+
+                        timetables.set(i, timetable2);
+                        timetables.set(i - 1, timetable1);
                     }
                 }
 
@@ -103,18 +122,39 @@ public class TimetableListController extends BaseController {
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+        // endregion
     }
 
     private void add(Timetable timetable, int position) {
         fileManager.save(timetable);
         timetables.add(position, timetable);
         adapter.notifyItemInserted(position);
+
+        updateNoTimetablesTextView();
     }
 
     private void remove(int position) {
         fileManager.delete(timetables.get(position).getName());
         timetables.remove(position);
         adapter.notifyItemRemoved(position);
+
+        updateNoTimetablesTextView();
+    }
+
+    private void updateNoTimetablesTextView() {
+        if (timetables.isEmpty()) {
+            noTimetablesTextView.setVisibility(View.VISIBLE);
+        } else {
+            noTimetablesTextView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @OnClick(R.id.new_timetable_fab)
+    void onFabClick() {
+        Timetable t = new Timetable();
+        t.setName("New tt " + (timetables.size()));
+        t.setIndex(timetables.size());
+        add(t, timetables.size());
     }
 
     class TimetableListAdapter extends RecyclerView.Adapter<TimetableListAdapter.TimetableViewHolder> {
@@ -155,7 +195,7 @@ public class TimetableListController extends BaseController {
 
             public void bind(Timetable item) {
                 nameTextView.setText(item.getName());
-                descriptionTextView.setText(item.getDescription());
+                descriptionTextView.setText("Index: " + item.getIndex());
             }
         }
     }

@@ -2,10 +2,11 @@ package tomdrever.timetable.data;
 
 import java.util.ArrayList;
 
-public class Timetable {
+public class Timetable implements Comparable<Timetable>{
     private String name;
     private String description;
     private ArrayList<Day> days;
+    private int index;
 
     public Timetable() {
         days = new ArrayList<>();
@@ -49,5 +50,18 @@ public class Timetable {
 
     public ArrayList<Day> getDays(){
         return days;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    @Override
+    public int compareTo(Timetable timetable) {
+        return Integer.compare(index, timetable.index);
     }
 }

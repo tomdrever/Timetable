@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import tomdrever.timetable.data.Timetable;
 
@@ -42,6 +43,12 @@ public class TimetableFileManager {
         }
     }
 
+    public void saveAll(ArrayList<Timetable> timetables) {
+        for (Timetable timetable : timetables) {
+            save(timetable);
+        }
+    }
+
     public void delete(String name) {
         new File(directory + name).delete();
     }
@@ -58,44 +65,21 @@ public class TimetableFileManager {
     }
 
     public ArrayList<Timetable> loadAll() {
-        /*
+
         String[] fileNames = new File(directory).list();
-        ArrayList<Timetable> initialTimetables = new ArrayList<>();
+        ArrayList<Timetable> timetables = new ArrayList<>();
 
         for (String fileName : fileNames) {
             try {
-                initialTimetables.add(new Gson().fromJson(readFile(fileName), Timetable.class));
+                timetables.add(new Gson().fromJson(readFile(fileName), Timetable.class));
             }
             catch (IOException e){
                 Toast.makeText(context, "Error: Could not read file: " + fileName, Toast.LENGTH_SHORT).show();
             }
         }
 
-        Timetable[] timetableArray = initialTimetables.toArray(new Timetable[0]);
-
-        Arrays.sort(timetableArray);
-
-        return timetableArray;
-        */
-        ArrayList<Timetable> timetables = new ArrayList<>();
-
-        Timetable t1 = new Timetable();
-        t1.setName("T1");
-        t1.setDescription("Test desc 1");
-        timetables.add(t1);
-
-        Timetable t2 = new Timetable();
-        t2.setName("T2");
-        timetables.add(t2);
-
-        Timetable t3 = new Timetable();
-        t3.setName("T3");
-        t3.setDescription("Test desc 3");
-        timetables.add(t3);
-
-        Timetable t4 = new Timetable();
-        t4.setName("T4");
-        timetables.add(t4);
+        // Sort by index
+        Collections.sort(timetables);
 
         return timetables;
     }
