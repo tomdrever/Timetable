@@ -57,6 +57,8 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
 	        FragmentManager fm = getSupportFragmentManager();
             fm.popBackStack();
+            // if the day has been changed, tell the user they've discarded changes
+
 	        Toast.makeText(EditActivity.this, "Discarded changes", Toast.LENGTH_SHORT).show();
         } else {
             TimetableContainer initialTimetableContainer =
