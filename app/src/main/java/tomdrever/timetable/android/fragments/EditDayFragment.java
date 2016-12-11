@@ -1,5 +1,5 @@
 package tomdrever.timetable.android.fragments;
-
+/*
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -198,3 +198,4 @@ public class EditDayFragment extends Fragment implements CardTouchedListener, Da
 		recyclerViewAdapter.notifyItemChanged(periodPosition);
 	}
 }
+*/

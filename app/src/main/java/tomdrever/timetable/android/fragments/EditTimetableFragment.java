@@ -1,5 +1,5 @@
 package tomdrever.timetable.android.fragments;
-
+/*
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,7 +20,6 @@ import tomdrever.timetable.android.listeners.CardTouchedListener;
 import tomdrever.timetable.android.adapters.DaysRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.data.Day;
-import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.data.listeners.DataValueChangedListener;
 import tomdrever.timetable.databinding.FragmentEditTimetableBinding;
 
@@ -239,3 +238,4 @@ public class EditTimetableFragment extends Fragment implements CardTouchedListen
         void onDayClicked(int position);
     }
 }
+*/

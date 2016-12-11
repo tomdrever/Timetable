@@ -1,5 +1,5 @@
 package tomdrever.timetable.android.activities;
-
+/*
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import tomdrever.timetable.android.fragments.EditTimetableFragment;
 import tomdrever.timetable.android.listeners.EditingFinishedListener;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.data.Day;
-import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.utility.IntentExtraTags;
 
 public class EditActivity extends AppCompatActivity implements EditingFinishedListener,
@@ -119,3 +118,4 @@ public class EditActivity extends AppCompatActivity implements EditingFinishedLi
 	    EditTimetableFragment.newInstance(timetableContainer, isNewTimetable, this, this, this);
     }
 }
+*/

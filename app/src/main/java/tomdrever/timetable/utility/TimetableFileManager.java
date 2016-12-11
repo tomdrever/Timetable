@@ -3,15 +3,16 @@ package tomdrever.timetable.utility;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
-import tomdrever.timetable.data.TimetableContainer;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import tomdrever.timetable.data.Timetable;
 
 public class TimetableFileManager {
     private String directory;
@@ -27,18 +28,17 @@ public class TimetableFileManager {
         }
     }
 
-    public void save(TimetableContainer timetableContainer) {
-        String fileContents = new Gson().toJson(timetableContainer);
+    public void save(Timetable timetable) {
+        String fileContents = new Gson().toJson(timetable);
 
         try {
-            File fileToSave = new File(directory, timetableContainer.getName());
+            File fileToSave = new File(directory, timetable.getName());
             FileOutputStream outputStream = new FileOutputStream(fileToSave);
             outputStream.write(fileContents.getBytes());
             outputStream.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, "Error: Could not save file: " + timetableContainer.getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Error: Could not save file: " + timetable.getName(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -46,36 +46,58 @@ public class TimetableFileManager {
         new File(directory + name).delete();
     }
 
-    public TimetableContainer load(String name) {
+    public Timetable load(String name) {
         try {
-            return new Gson().fromJson(readFile(name), TimetableContainer.class);
+            return new Gson().fromJson(readFile(name), Timetable.class);
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, "Error: Could not read file: " + name, Toast.LENGTH_SHORT).show();
-
         }
 
         return null;
     }
 
-    public ArrayList<TimetableContainer> loadAll() {
+    public ArrayList<Timetable> loadAll() {
+        /*
         String[] fileNames = new File(directory).list();
-        ArrayList<TimetableContainer> initialTimetableContainers = new ArrayList<>();
+        ArrayList<Timetable> initialTimetables = new ArrayList<>();
 
         for (String fileName : fileNames) {
             try {
-                initialTimetableContainers.add(new Gson().fromJson(readFile(fileName), TimetableContainer.class));
+                initialTimetables.add(new Gson().fromJson(readFile(fileName), Timetable.class));
             }
             catch (IOException e){
                 Toast.makeText(context, "Error: Could not read file: " + fileName, Toast.LENGTH_SHORT).show();
             }
         }
 
-        TimetableContainer[] timetableContainersArray = initialTimetableContainers.toArray(new TimetableContainer[0]);
+        Timetable[] timetableArray = initialTimetables.toArray(new Timetable[0]);
 
-        Arrays.sort(timetableContainersArray);
+        Arrays.sort(timetableArray);
 
-        return new ArrayList<>(Arrays.asList(timetableContainersArray));
+        return timetableArray;
+        */
+        ArrayList<Timetable> timetables = new ArrayList<>();
+
+        Timetable t1 = new Timetable();
+        t1.setName("T1");
+        t1.setDescription("Test desc 1");
+        timetables.add(t1);
+
+        Timetable t2 = new Timetable();
+        t2.setName("T2");
+        timetables.add(t2);
+
+        Timetable t3 = new Timetable();
+        t3.setName("T3");
+        t3.setDescription("Test desc 3");
+        timetables.add(t3);
+
+        Timetable t4 = new Timetable();
+        t4.setName("T4");
+        timetables.add(t4);
+
+        return timetables;
     }
 
     @NonNull

@@ -1,5 +1,5 @@
 package tomdrever.timetable.android.activities;
-
+/*
 import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import tomdrever.timetable.R;
 import tomdrever.timetable.utility.TimetableFileManager;
 import tomdrever.timetable.android.fragments.TimetablesOverviewFragment;
 import tomdrever.timetable.data.Timetable;
-import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.utility.IntentExtraTags;
 
 import java.util.Calendar;
@@ -67,3 +66,4 @@ public class OverviewActivity extends AppCompatActivity implements TimetablesOve
         finish();
     }
 }
+*/

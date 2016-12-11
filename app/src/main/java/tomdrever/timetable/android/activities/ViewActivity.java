@@ -1,5 +1,5 @@
 package tomdrever.timetable.android.activities;
-
+/*
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.listeners.FragmentBackPressedListener;
 import tomdrever.timetable.android.fragments.ViewTimetableFragment;
-import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.utility.IntentExtraTags;
 
 public class ViewActivity extends AppCompatActivity implements FragmentBackPressedListener,
@@ -61,3 +60,4 @@ public class ViewActivity extends AppCompatActivity implements FragmentBackPress
         finish();
     }
 }
+*/

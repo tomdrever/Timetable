@@ -1,41 +1,39 @@
 package tomdrever.timetable.data;
 
-import android.databinding.ObservableArrayList;
-import tomdrever.timetable.data.listeners.DataValueChangedListener;
+import java.util.ArrayList;
 
-import java.io.Serializable;
-
-public class Timetable implements Serializable {
-    private transient DataValueChangedListener valueChangedListener;
-
-    private DataValueChangedListener getValueChangedListener() {
-        return valueChangedListener;
-    }
-
-    public void setValueChangedListener(DataValueChangedListener valueChangedListener) {
-        this.valueChangedListener = valueChangedListener;
-    }
+public class Timetable {
+    private String name;
+    private String description;
+    private ArrayList<Day> days;
 
     public Timetable() {
-        days = new ObservableArrayList<>();
-        valueChangedListener = null;
+        days = new ArrayList<>();
     }
 
-    public Timetable(DataValueChangedListener valueChangedListener) {
-        days = new ObservableArrayList<>();
-        this.valueChangedListener = valueChangedListener;
-    }
-
+    // Clone constructor
     public Timetable(Timetable timetable) {
-	    valueChangedListener = timetable.getValueChangedListener();
-
-	    days = new ObservableArrayList<>();
+	    days = new ArrayList<>();
 	    for (int i = 0; i < timetable.getDays().size(); i++) {
 		    days.add(new Day(timetable.getDays().get(i)));
 	    }
     }
 
-    private ObservableArrayList<Day> days;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public void addDay(Day day){
         addDay(day, days.size());
@@ -43,25 +41,13 @@ public class Timetable implements Serializable {
 
     public void addDay(Day day, int position) {
         days.add(position, day);
-        valueChangedListener.onValueAdded(position);
     }
 
     public void removeDay(int position) {
         days.remove(position);
-        valueChangedListener.onValueRemoved(position);
     }
 
-    public ObservableArrayList<Day> getDays(){
+    public ArrayList<Day> getDays(){
         return days;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Timetable) {
-            Timetable other = (Timetable) obj;
-            return other.days.equals(days) && other.days.size() == days.size();
-        }
-
-        return super.equals(obj);
     }
 }

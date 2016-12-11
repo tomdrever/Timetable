@@ -7,7 +7,7 @@
 
 	<data>
 		<import type="android.view.View"/>
-		<variable name="timetableContainer" type="tomdrever.timetable.data.TimetableContainer"/>
+		<variable name="timetable" type="tomdrever.timetable.data.Timetable"/>
 		<variable name="isnewtimetable" type="boolean"/>
 	</data>
 
@@ -29,7 +29,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="?attr/actionBarSize"
 					android:background="?attr/colorPrimary"
-					android:title='@{isnewtimetable ? "Create Timetable" : "Edit " + timetableContainer.name}'
+					android:title='@{isnewtimetable ? "Create Timetable" : "Edit " + timetable.name}'
 					app:popupTheme="@style/AppTheme.PopupOverlay"
 			/>
 
@@ -89,7 +89,7 @@
 						android:layout_centerHorizontal="true"
 						android:layout_centerVertical="true"
 						android:text="@string/empty_timetable"
-						android:visibility="@{timetableContainer.timetable.days.size() > 0 ? View.GONE : View.VISIBLE}"
+						android:visibility="@{timetable.days.size() > 0 ? View.GONE : View.VISIBLE}"
 						style="@style/EmptyListTextView"
 				/>
 

@@ -12,7 +12,7 @@ import com.bluelinelabs.conductor.RouterTransaction;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.controllers.HomeController;
+import tomdrever.timetable.android.controllers.TimetableListController;
 
 public class MainActivity extends AppCompatActivity implements ActionBarProvider {
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarProvider
 
         router = Conductor.attachRouter(this, container, savedInstanceState);
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(new HomeController()));
+            router.setRoot(RouterTransaction.with(new TimetableListController()));
         }
     }
 

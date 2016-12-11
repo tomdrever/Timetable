@@ -1,5 +1,5 @@
 package tomdrever.timetable.android.fragments;
-
+/*
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import tomdrever.timetable.R;
 import tomdrever.timetable.utility.TimetableFileManager;
 import tomdrever.timetable.android.adapters.TimetablesOverviewRecyclerViewAdapter;
 import tomdrever.timetable.android.listeners.CardTouchedListener;
-import tomdrever.timetable.data.TimetableContainer;
 import tomdrever.timetable.databinding.FragmentTimetablesOverviewBinding;
 
 import java.util.Collections;
@@ -185,3 +184,4 @@ public class TimetablesOverviewFragment extends Fragment implements CardTouchedL
         void onNewTimetableClicked();
     }
 }
+*/

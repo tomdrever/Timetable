@@ -8,7 +8,7 @@
 	<data>
 		<import type="android.view.View"/>
 		<import type="android.databinding.ObservableList"/>
-		<variable name="timetables" type="ObservableList&lt;tomdrever.timetable.data.TimetableContainer&gt;"/>
+		<variable name="timetables" type="ObservableList&lt;tomdrever.timetable.data.Timetable&gt;"/>
 	</data>
 
 	<android.support.design.widget.CoordinatorLayout

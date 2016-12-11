@@ -1,23 +1,6 @@
 package tomdrever.timetable.android.adapters;
 
-import android.databinding.ObservableArrayList;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import tomdrever.timetable.R;
-import tomdrever.timetable.android.listeners.CardTouchedListener;
-import tomdrever.timetable.data.TimetableContainer;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.Objects;
-
+/*
 public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<TimetablesOverviewRecyclerViewAdapter.TimetableDetailViewHolder> {
     private ObservableArrayList<TimetableContainer> timetableContainers;
 
@@ -92,4 +75,4 @@ public class TimetablesOverviewRecyclerViewAdapter extends RecyclerView.Adapter<
             dragHandleView = (ImageView) itemView.findViewById(R.id.timetable_card_drag_handle);
         }
     }
-}
+} */
