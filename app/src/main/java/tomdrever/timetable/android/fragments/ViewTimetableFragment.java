@@ -27,7 +27,7 @@ public class ViewTimetableFragment extends Fragment implements CardTouchedListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Bind timetable to layout
-        FragmentViewTimetableBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_timetable, container, false);
+        FragmentViewTimetableBinding binding = DataBindingUtil.inflate(inflater, R.layout.controller_view_timetable, container, false);
         binding.setTimetableContainer(timetableContainer);
 
         return binding.getRoot();

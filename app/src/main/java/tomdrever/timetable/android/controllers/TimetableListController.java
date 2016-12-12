@@ -88,29 +88,11 @@ public class TimetableListController extends BaseController {
 
                 if (fromPosition < toPosition) {
                     for (int i = fromPosition; i < toPosition; i++) {
-                        Timetable timetable1 = timetables.get(i);
-                        timetable1.setIndex(i + 1);
-                        fileManager.save(timetable1);
-                        
-                        Timetable timetable2 = timetables.get(i + 1);
-                        timetable2.setIndex(i);
-                        fileManager.save(timetable2);
-                        
-                        timetables.set(i, timetable2);
-                        timetables.set(i + 1, timetable1);
+                        swap(i, i + 1);
                     }
                 } else {
                     for (int i = fromPosition; i > toPosition; i--) {
-                        Timetable timetable1 = timetables.get(i);
-                        timetable1.setIndex(i - 1);
-                        fileManager.save(timetable1);
-
-                        Timetable timetable2 = timetables.get(i - 1);
-                        timetable2.setIndex(i);
-                        fileManager.save(timetable2);
-
-                        timetables.set(i, timetable2);
-                        timetables.set(i - 1, timetable1);
+                        swap(i, i - 1);
                     }
                 }
 
@@ -139,6 +121,19 @@ public class TimetableListController extends BaseController {
         adapter.notifyItemRemoved(position);
 
         updateNoTimetablesTextView();
+    }
+
+    private void swap(int position1, int position2) {
+        Timetable timetable1 = timetables.get(position1);
+        timetable1.setIndex(position2);
+        fileManager.save(timetable1);
+
+        Timetable timetable2 = timetables.get(position2);
+        timetable2.setIndex(position1);
+        fileManager.save(timetable2);
+
+        timetables.set(position1, timetable2);
+        timetables.set(position2, timetable1);
     }
 
     private void updateNoTimetablesTextView() {
