@@ -152,8 +152,9 @@ public class TimetableListController extends BaseController {
     @OnClick(R.id.new_timetable_fab)
     void onFabClick() {
         Timetable t = new Timetable();
-        t.setName("New tt " + (timetables.size()));
+        t.setName("New tt " + timetables.size());
         t.setIndex(timetables.size());
+        t.setDescription("desc " + timetables.size());
         add(t, timetables.size());
     }
 
@@ -162,7 +163,7 @@ public class TimetableListController extends BaseController {
         private final LayoutInflater inflater;
         private final ArrayList<Timetable> items;
 
-        public TimetableListAdapter(LayoutInflater inflater, ArrayList<Timetable> timetables) {
+        TimetableListAdapter(LayoutInflater inflater, ArrayList<Timetable> timetables) {
             this.inflater = inflater;
             this.items = timetables;
         }
@@ -182,12 +183,12 @@ public class TimetableListController extends BaseController {
             return items.toArray().length;
         }
 
-        public class TimetableViewHolder extends RecyclerView.ViewHolder {
+        class TimetableViewHolder extends RecyclerView.ViewHolder {
 
             @BindView(R.id.timetable_card_name) TextView nameTextView;
             @BindView(R.id.timetable_card_description) TextView descriptionTextView;
 
-            public TimetableViewHolder(View itemView) {
+            TimetableViewHolder(View itemView) {
                 super(itemView);
 
                 ButterKnife.bind(this, itemView);
@@ -195,7 +196,12 @@ public class TimetableListController extends BaseController {
 
             public void bind(Timetable item) {
                 nameTextView.setText(item.getName());
-                descriptionTextView.setText("Index: " + item.getIndex());
+                descriptionTextView.setText(item.getDescription());
+            }
+
+            @OnClick(R.id.timetable_card_content_view)
+            void onCardClicked() {
+                Snackbar.make(getView(), "Clicked", Snackbar.LENGTH_SHORT).show();
             }
         }
     }

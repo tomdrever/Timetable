@@ -3,9 +3,11 @@
 	<style name="DragHandleImageView">
 		<item name="android:layout_width">42dp</item>
 		<item name="android:layout_height">42dp</item>
-		<item name="android:layout_gravity">center_vertical|end</item>
 		<item name="android:scaleType">centerCrop</item>
 		<item name="android:padding">8dp</item>
+		<item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
 		<item name="android:src">@mipmap/ic_drag_handle</item>
 	</style>
 </resources>
