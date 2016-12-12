@@ -11,6 +11,7 @@ import com.bluelinelabs.conductor.Controller;
 
 import tomdrever.timetable.android.ActionBarProvider;
 import tomdrever.timetable.R;
+import tomdrever.timetable.utility.TimetableFileManager;
 
 public abstract class BaseController extends ButterKnifeController {
 
@@ -24,6 +25,12 @@ public abstract class BaseController extends ButterKnifeController {
     protected ActionBar getActionBar() {
         ActionBarProvider actionBarProvider = ((ActionBarProvider)getActivity());
         return actionBarProvider != null ? actionBarProvider.getSupportActionBar() : null;
+    }
+
+    private TimetableFileManager fileManager;
+    protected TimetableFileManager getFileManager() {
+        if (fileManager == null) fileManager = new TimetableFileManager(getApplicationContext());
+        return fileManager;
     }
 
     @Override

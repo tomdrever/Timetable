@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bluelinelabs.conductor.RouterTransaction;
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,7 +45,9 @@ public class ViewTimetableController extends BaseController {
 
     @Override
     public boolean handleBack() {
-        getRouter().pushController(RouterTransaction.with(new TimetableListController()));
+        getRouter().pushController(RouterTransaction.with(new TimetableListController())
+                .popChangeHandler(new FadeChangeHandler())
+                .pushChangeHandler(new FadeChangeHandler()));
 
         return true;
     }
@@ -56,7 +59,8 @@ public class ViewTimetableController extends BaseController {
 
     @OnClick(R.id.edit_timetable_fab)
     void onFabClicked() {
-        // Todo - launch edit timetable
-        getRouter().pushController(RouterTransaction.with(new EditTimetableController(timetable)));
+        getRouter().pushController(RouterTransaction.with(new EditTimetableController(timetable))
+                .popChangeHandler(new FadeChangeHandler())
+                .pushChangeHandler(new FadeChangeHandler()));
     }
 }

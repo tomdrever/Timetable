@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bluelinelabs.conductor.RouterTransaction;
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
 
 import java.util.ArrayList;
 
@@ -21,11 +22,8 @@ import butterknife.OnClick;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.data.Timetable;
-import tomdrever.timetable.utility.TimetableFileManager;
 
 public class TimetableListController extends BaseController {
-
-    private TimetableFileManager fileManager;
 
     private ArrayList<Timetable> timetables;
 
@@ -43,11 +41,7 @@ public class TimetableListController extends BaseController {
     protected void onViewBound(@NonNull View view) {
         super.onViewBound(view);
 
-        if (fileManager == null) {
-            fileManager = new TimetableFileManager(getApplicationContext());
-        }
-
-        timetables = fileManager.loadAll();
+        timetables = getFileManager().loadAll();
 
         updateNoTimetablesTextView();
 
@@ -110,7 +104,7 @@ public class TimetableListController extends BaseController {
     }
 
     private void add(Timetable timetable, int position) {
-        fileManager.save(timetable);
+        getFileManager().save(timetable);
         timetables.add(position, timetable);
         adapter.notifyItemInserted(position);
 
@@ -118,7 +112,7 @@ public class TimetableListController extends BaseController {
     }
 
     private void remove(int position) {
-        fileManager.delete(timetables.get(position).getName());
+        getFileManager().delete(timetables.get(position).getName());
         timetables.remove(position);
         adapter.notifyItemRemoved(position);
 
@@ -128,11 +122,11 @@ public class TimetableListController extends BaseController {
     private void swap(int position1, int position2) {
         Timetable timetable1 = timetables.get(position1);
         timetable1.setIndex(position2);
-        fileManager.save(timetable1);
+        getFileManager().save(timetable1);
 
         Timetable timetable2 = timetables.get(position2);
         timetable2.setIndex(position1);
-        fileManager.save(timetable2);
+        getFileManager().save(timetable2);
 
         timetables.set(position1, timetable2);
         timetables.set(position2, timetable1);
@@ -160,8 +154,9 @@ public class TimetableListController extends BaseController {
 
     @OnClick(R.id.new_timetable_fab)
     void onFabClick() {
-        // TODO - Launch edit timetable (flag new_tt = true)
-        getRouter().pushController(RouterTransaction.with(new EditTimetableController()));
+        getRouter().pushController(RouterTransaction.with(new EditTimetableController(timetables.size()))
+                .popChangeHandler(new FadeChangeHandler())
+                .pushChangeHandler(new FadeChangeHandler()));
     }
 
     class TimetableListAdapter extends RecyclerView.Adapter<TimetableListAdapter.TimetableViewHolder> {
@@ -211,7 +206,9 @@ public class TimetableListController extends BaseController {
 
             @OnClick(R.id.timetable_card_content_view)
             void onCardClicked() {
-                getRouter().pushController(RouterTransaction.with(new ViewTimetableController(item)));
+                getRouter().pushController(RouterTransaction.with(new ViewTimetableController(item))
+                        .popChangeHandler(new FadeChangeHandler())
+                        .pushChangeHandler(new FadeChangeHandler()));
             }
         }
     }

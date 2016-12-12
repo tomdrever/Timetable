@@ -3,12 +3,14 @@ package tomdrever.timetable.data;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
-import org.joda.time.LocalTime;
+
 import org.joda.time.Interval;
-import tomdrever.timetable.data.listeners.DataValueChangedListener;
+import org.joda.time.LocalTime;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import tomdrever.timetable.data.listeners.DataValueChangedListener;
 
 public class Day extends BaseObservable implements Serializable {
     private ObservableArrayList<Period> periods;
@@ -34,6 +36,8 @@ public class Day extends BaseObservable implements Serializable {
 
     public void addPeriod(Period period, int position) {
 	    // TODO -  reorganise periods on addition or removal to order chronologically
+		// collections.sort
+		// period.compare, based on final time?
 	    periods.add(position, period);
 	    valueChangedListener.onValueAdded(position);
     }
