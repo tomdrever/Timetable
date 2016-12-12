@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bluelinelabs.conductor.RouterTransaction;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -144,13 +146,22 @@ public class TimetableListController extends BaseController {
         }
     }
 
+    @Override
+    protected String getTitle() {
+        return "Timetables";
+    }
+
+    @Override
+    public boolean handleBack() {
+        getActivity().finish();
+
+        return true;
+    }
+
     @OnClick(R.id.new_timetable_fab)
     void onFabClick() {
-        Timetable t = new Timetable();
-        t.setName("New tt " + timetables.size());
-        t.setIndex(timetables.size());
-        t.setDescription("desc " + timetables.size());
-        add(t, timetables.size());
+        // TODO - Launch edit timetable (flag new_tt = true)
+        getRouter().pushController(RouterTransaction.with(new EditTimetableController()));
     }
 
     class TimetableListAdapter extends RecyclerView.Adapter<TimetableListAdapter.TimetableViewHolder> {
@@ -183,6 +194,8 @@ public class TimetableListController extends BaseController {
             @BindView(R.id.timetable_card_name) TextView nameTextView;
             @BindView(R.id.timetable_card_description) TextView descriptionTextView;
 
+            Timetable item;
+
             TimetableViewHolder(View itemView) {
                 super(itemView);
 
@@ -190,13 +203,15 @@ public class TimetableListController extends BaseController {
             }
 
             public void bind(Timetable item) {
+                this.item = item;
+
                 nameTextView.setText(item.getName());
                 descriptionTextView.setText(item.getDescription());
             }
 
             @OnClick(R.id.timetable_card_content_view)
             void onCardClicked() {
-                Snackbar.make(getView(), "Clicked", Snackbar.LENGTH_SHORT).show();
+                getRouter().pushController(RouterTransaction.with(new ViewTimetableController(item)));
             }
         }
     }
