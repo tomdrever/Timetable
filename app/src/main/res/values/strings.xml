@@ -32,4 +32,5 @@
 	<string name="divider_bullet">&#8226;</string>
 	<string name="action_view_timetable_back">Back</string>
 	<string name="action_done_edit">Done</string>
+	<string name="action_edit_view">Edit</string>
 </resources>

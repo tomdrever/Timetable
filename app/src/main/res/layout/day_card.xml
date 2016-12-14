@@ -7,11 +7,6 @@
 		android:elevation="4dp"
 >
 
-	<ImageView
-			android:id="@+id/day_card_drag_handle"
-			style="@style/DragHandleImageView"
-	/>
-
 	<!--TITLE-->
 	<TextView
 			android:id="@+id/day_name_card_title"

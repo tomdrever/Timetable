@@ -39,17 +39,6 @@
         />-->
 	</RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/edit_timetable_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@mipmap/ic_edit_white"
-        android:elevation="8dp"
-        app:layout_anchorGravity="bottom|end"
-        app:fabSize="mini"
-    />
-
 </RelativeLayout>
 
 

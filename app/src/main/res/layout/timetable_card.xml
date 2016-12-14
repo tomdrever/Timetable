@@ -39,9 +39,4 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/timetable_card_drag_handle"
-        style="@style/DragHandleImageView"
-     />
-
 </LinearLayout>

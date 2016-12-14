@@ -1,19 +1,6 @@
 package tomdrever.timetable.android.adapters;
 
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import tomdrever.timetable.R;
-import tomdrever.timetable.android.listeners.CardTouchedListener;
-import tomdrever.timetable.data.Day;
-
-import java.util.ArrayList;
-
+/*
 public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerViewAdapter.DayViewHolder> {
     private ArrayList<Day> days;
 
@@ -81,4 +68,4 @@ public class DaysRecyclerViewAdapter extends RecyclerView.Adapter<DaysRecyclerVi
             if (!showDragHandle) dragHandleView.setVisibility(View.GONE);
         }
     }
-}
+}*/

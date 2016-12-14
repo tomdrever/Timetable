@@ -1,12 +1,16 @@
 package tomdrever.timetable.android.controllers;
 
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +26,11 @@ public class EditTimetableController extends BaseController {
 
     private Timetable timetable;
 
-    @BindView(R.id.edit_timetable_name) TextView nameTextView;
-    @BindView(R.id.edit_timetable_description) TextView descriptionTextView;
+    @BindView(R.id.edit_timetable_name) EditText nameEditText;
+    @BindView(R.id.edit_timetable_description) EditText descriptionEditText;
+
+    @BindView(R.id.name_input_layout) TextInputLayout nameTextInputLayout;
+    @BindView(R.id.description_input_layout) TextInputLayout descriptionTextInputLayout;
 
     public EditTimetableController() { }
 
@@ -54,8 +61,13 @@ public class EditTimetableController extends BaseController {
 
         setHasOptionsMenu(true);
 
-        nameTextView.setText(timetable.getName() != null ? timetable.getName() : "");
-        descriptionTextView.setText(timetable.getDescription() != null ? timetable.getDescription() : "");
+        nameEditText.setText(timetable.getName() != null ? timetable.getName() : "");
+        nameTextInputLayout.setHint(getActivity().getString(R.string.edit_timetable_name));
+        nameEditText.setOnEditorActionListener(new ActionListener());
+
+        descriptionEditText.setText(timetable.getDescription() != null ? timetable.getDescription() : "");
+        descriptionTextInputLayout.setHint(getActivity().getString(R.string.edit_timetable_description));
+        descriptionEditText.setOnEditorActionListener(new ActionListener());
     }
 
     @Override
@@ -64,18 +76,17 @@ public class EditTimetableController extends BaseController {
         inflater.inflate(R.menu.menu_edit_timetable, menu);
     }
 
-    // TODO - on menu click, save timetable (w/ days, name and description and INDEX)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_save_edit) {
             // Save timetable
             // Check input
-            String name = nameTextView.getText().toString().trim();
+            String name = nameEditText.getText().toString().trim();
 
             if (name.isEmpty()) {
                 Toast.makeText(getActivity(), "The timetable needs a name!", Toast.LENGTH_SHORT).show();
             } else {
-                String description = descriptionTextView.getText().toString().trim();
+                String description = descriptionEditText.getText().toString().trim();
 
                 // If this is an existing timetable, get rid of the old version before saving
                 if (timetable.getName() != null) getFileManager().delete(timetable.getName());
@@ -103,5 +114,19 @@ public class EditTimetableController extends BaseController {
     @Override
     protected String getTitle() {
         return timetable.getName() != null ? "Edit " + timetable.getName() : "Create Timetable";
+    }
+
+    private static class ActionListener implements TextView.OnEditorActionListener {
+
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                // show error
+            } else {
+                // hide error
+            }
+
+            return true;
+        }
     }
 }

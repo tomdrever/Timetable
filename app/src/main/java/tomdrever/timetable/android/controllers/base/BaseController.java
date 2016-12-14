@@ -70,6 +70,13 @@ public abstract class BaseController extends ButterKnifeController {
         ActionBar actionBar = getActionBar();
         if (title != null && actionBar != null) {
             actionBar.setTitle(title);
+
+            String subtitle = getSubtitle();
+            if (subtitle != null) {
+                actionBar.setSubtitle(subtitle);
+            } else {
+                actionBar.setSubtitle("");
+            }
         }
     }
 
@@ -79,6 +86,10 @@ public abstract class BaseController extends ButterKnifeController {
     }
 
     protected String getTitle() {
+        return null;
+    }
+
+    protected String getSubtitle() {
         return null;
     }
 }
