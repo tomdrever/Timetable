@@ -10,9 +10,10 @@
     android:focusableInTouchMode="true"
     >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
     >
 
 	    <LinearLayout
@@ -20,17 +21,14 @@
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
             android:background="@android:color/white"
-            android:padding="4dp"
-            android:elevation="8dp"
+            android:elevation="4dp"
+            android:layout_marginBottom="8dp"
 	    >
             <TextView
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:textColor="@color/accent"
-                android:text="Details"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:padding="12dp"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_timetable_details_heading"
+                style="@style/SettingsHeadingTextView"
             />
 
 			<!-- Name edit text -->
@@ -38,7 +36,8 @@
 				android:id="@+id/name_input_layout"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				style="@style/BasicTextInputLayout"
+				android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
 				app:errorEnabled="true"
 			>
 
@@ -59,7 +58,8 @@
 				android:id="@+id/description_input_layout"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				style="@style/BasicTextInputLayout"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
 				app:errorEnabled="true"
             >
 
@@ -76,6 +76,22 @@
 			</android.support.design.widget.TextInputLayout>
 
 	    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:elevation="4dp"
+        >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_timetable_days_heading"
+                style="@style/SettingsHeadingTextView"
+            />
+
+        </LinearLayout>
 
         <!--
 	    <RelativeLayout
@@ -102,16 +118,7 @@
 
 	    </RelativeLayout>-->
 
-    </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/new_day_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_white"
-        />
+    </LinearLayout>
 
 </LinearLayout>
 
