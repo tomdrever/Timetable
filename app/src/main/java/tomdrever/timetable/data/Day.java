@@ -17,6 +17,10 @@ public class Day extends BaseObservable implements Serializable {
 
 	private transient DataValueChangedListener valueChangedListener;
 
+	public Day() {
+
+	}
+
 	public void setValueChangedListener(DataValueChangedListener valueChangedListener) {
 		this.valueChangedListener = valueChangedListener;
 	}

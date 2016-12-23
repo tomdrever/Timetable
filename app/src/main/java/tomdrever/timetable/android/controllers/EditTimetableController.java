@@ -190,6 +190,9 @@ public class EditTimetableController extends BaseController {
                     @Override
                     public void onClick(View view) {
                         // Todo - launch EditDayController with day clicked
+                        getRouter().pushController(RouterTransaction.with(new EditDayController(days.get(position)))
+                                .popChangeHandler(new FadeChangeHandler())
+                                .pushChangeHandler(new FadeChangeHandler()));
                     }
                 });
                 // endregion
@@ -281,20 +284,12 @@ public class EditTimetableController extends BaseController {
                                 // Invalidates the view to force a redraw
                                 itemView.invalidate();
 
+                                Toast.makeText(getActivity(), "Day moved from " + position + " to " + targetPosition, Toast.LENGTH_SHORT).show();
+
                                 // Returns true. DragEvent.getResult() will return true.
                                 return true;
 
                             case DragEvent.ACTION_DRAG_ENDED:
-
-                                // Does a getResult(), and displays what happened.
-                                if (event.getResult()) {
-                                    Toast.makeText(getActivity(), "The drop was handled.", Toast.LENGTH_LONG);
-
-                                } else {
-                                    Toast.makeText(getActivity(), "The drop didn't work.", Toast.LENGTH_LONG);
-
-                                }
-
                                 // returns true; the value is ignored.
                                 return true;
                         }
@@ -310,9 +305,20 @@ public class EditTimetableController extends BaseController {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        days.add(new Day("New"));
+                        final Day newDay = new Day();
+
+                        EditDayController editDayController = new EditDayController(newDay);
+                        editDayController.setOnControllerFinished(new OnControllerFinished() {
+                            @Override
+                            public void run() {
+                                days.add(newDay);
+                            }
+                        });
 
                         // Todo - launch EditDayController for new day
+                        getRouter().pushController(RouterTransaction.with(editDayController)
+                                .popChangeHandler(new FadeChangeHandler())
+                                .pushChangeHandler(new FadeChangeHandler()));
                     }
                 });
             }
