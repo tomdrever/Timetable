@@ -1,21 +1,27 @@
 package tomdrever.timetable.android.controllers;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluelinelabs.conductor.RouterTransaction;
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import tomdrever.timetable.R;
@@ -31,6 +37,8 @@ public class EditTimetableController extends BaseController {
 
     @BindView(R.id.name_input_layout) TextInputLayout nameTextInputLayout;
     @BindView(R.id.description_input_layout) TextInputLayout descriptionTextInputLayout;
+
+    @BindView(R.id.edit_timetable_days) GridView daysGridView;
 
     public EditTimetableController() { }
 
@@ -63,11 +71,18 @@ public class EditTimetableController extends BaseController {
 
         nameEditText.setText(timetable.getName() != null ? timetable.getName() : "");
         nameTextInputLayout.setHint(getActivity().getString(R.string.edit_timetable_name));
-        nameEditText.setOnEditorActionListener(new ActionListener());
 
         descriptionEditText.setText(timetable.getDescription() != null ? timetable.getDescription() : "");
         descriptionTextInputLayout.setHint(getActivity().getString(R.string.edit_timetable_description));
-        descriptionEditText.setOnEditorActionListener(new ActionListener());
+
+        daysGridView.setAdapter(new DayGridAdapter(getApplicationContext()));
+
+        daysGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -116,17 +131,62 @@ public class EditTimetableController extends BaseController {
         return timetable.getName() != null ? "Edit " + timetable.getName() : "Create Timetable";
     }
 
-    private static class ActionListener implements TextView.OnEditorActionListener {
+    class DayGridAdapter extends BaseAdapter {
+
+        private Context context;
+
+        private ArrayList<Integer> imageViewIds;
+        private ArrayList<Integer> textViewIds;
+
+        public DayGridAdapter(Context context) {
+            this.context = context;
+
+            imageViewIds = new ArrayList<>();
+            textViewIds = new ArrayList<>();
+        }
 
         @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == EditorInfo.IME_ACTION_GO) {
-                // show error
+        public int getCount() {
+            return timetable.getDays().size()+ 1;
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            View itemView;
+
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            if (convertView == null) {
+                itemView = inflater.inflate(R.layout.day_grid_item_view, null);
             } else {
-                // hide error
+                itemView = convertView;
             }
 
-            return true;
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.day_grid_image);
+            TextView textView = (TextView) itemView.findViewById(R.id.day_grid_text);
+
+            imageView.setImageResource(R.drawable.circle);
+
+            if (position != timetable.getDays().size()) {
+                imageView.setColorFilter(Color.rgb(50, 50, 255));
+                textView.setText(String.valueOf(timetable.getDays().get(position).getName().charAt(0)));
+            } else {
+                imageView.setColorFilter(Color.rgb(255, 50, 50));
+                textView.setText("+");
+            }
+
+            return itemView;
         }
     }
 }
