@@ -3,38 +3,30 @@ package tomdrever.timetable.android.controllers;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-// From android guide on drag and drop
-// TODO - make better; circles
+import tomdrever.timetable.R;
+
+// Adapted from the android guide on drag and drop
 class DragShadowBuilder extends View.DragShadowBuilder {
 
-    // The drag shadow image, defined as a drawable thing
     private static Drawable shadow;
 
-    // Defines the constructor for myDragShadowBuilder
     public DragShadowBuilder(View v) {
-
-        // Stores the View parameter passed to myDragShadowBuilder.
         super(v);
 
         // Creates a draggable image that will fill the Canvas provided by the system.
-        shadow = new ColorDrawable(Color.LTGRAY);
+        shadow = v.getContext().getResources().getDrawable(R.drawable.circle, null);
+        shadow.setTint(Color.LTGRAY);
     }
 
-    // Defines a callback that sends the drag shadow dimensions and touch point back to the
-    // system.
     @Override
     public void onProvideShadowMetrics (Point size, Point touch) {
-        // Defines local variables
+
         int width, height;
 
-        // Sets the width of the shadow to half the width of the original View
-        width = getView().getWidth();
-
-        // Sets the height of the shadow to half the height of the original View
+        width = getView().getHeight();
         height = getView().getHeight();
 
         // The drag shadow is a ColorDrawable. This sets its dimensions to be the same as the

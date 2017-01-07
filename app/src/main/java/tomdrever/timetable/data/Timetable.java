@@ -1,6 +1,7 @@
 package tomdrever.timetable.data;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Timetable implements Comparable<Timetable>{
     private String name;
@@ -12,7 +13,6 @@ public class Timetable implements Comparable<Timetable>{
         days = new ArrayList<>();
     }
 
-    // Clone constructor
     public Timetable(Timetable timetable) {
 	    days = new ArrayList<>();
 	    for (int i = 0; i < timetable.getDays().size(); i++) {
@@ -62,6 +62,18 @@ public class Timetable implements Comparable<Timetable>{
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Timetable) {
+            Timetable other = (Timetable) obj;
+
+            return Objects.equals(other.name, name) && other.days.size() == days.size() &&
+                    other.days.equals(days);
+        }
+
+        return super.equals(obj);
     }
 
     @Override

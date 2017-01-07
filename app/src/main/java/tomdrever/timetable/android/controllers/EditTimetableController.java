@@ -3,9 +3,11 @@ package tomdrever.timetable.android.controllers;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,8 +66,36 @@ public class EditTimetableController extends BaseController {
 
     @Override
     public boolean handleBack() {
-        // TODO - "Discard changes?"
-        return super.handleBack();
+        String name = nameEditText.getText().toString().trim();
+        String description = descriptionEditText.getText().toString().trim();
+
+        if (!newTimetable(name, description, days).equals(timetable)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setTitle("Discard changes?");
+
+            // Add the buttons
+            builder.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // Discard changes
+                    getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
+                            .popChangeHandler(new FadeChangeHandler())
+                            .pushChangeHandler(new FadeChangeHandler()));
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
+
+            // Create the AlertDialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+        return true;
     }
 
     @Override
@@ -111,21 +141,26 @@ public class EditTimetableController extends BaseController {
                 // If this is an existing timetable, get rid of the old version before saving
                 if (timetable.getName() != null) getFileManager().delete(timetable.getName());
 
-                timetable.setName(name);
-                timetable.setDescription(description);
-
-                timetable.setDays(days);
-
-                getFileManager().save(timetable);
+                getFileManager().save(newTimetable(name, description, days));
 
                 // Done - launch view of that timetable
-                getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
+                getRouter().pushController(RouterTransaction.with(
+                        new ViewTimetableController(newTimetable(name, description, days)))
                         .popChangeHandler(new FadeChangeHandler())
                         .pushChangeHandler(new FadeChangeHandler()));
             }
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Timetable newTimetable(String name, String description, ArrayList<Day> days) {
+        Timetable newTimetable = new Timetable(timetable);
+        newTimetable.setName(name);
+        newTimetable.setDescription(description);
+        newTimetable.setDays(days);
+
+        return newTimetable;
     }
 
     @Override
@@ -180,17 +215,18 @@ public class EditTimetableController extends BaseController {
             imageView.setImageResource(R.drawable.circle);
 
             if (position != days.size()) {
+                // NOTE - for all items bar the last, which is the "add new" button
                 imageView.setColorFilter(Color.rgb(50, 50, 255));
                 itemView.setTag(position);
 
-                textView.setText(String.valueOf(getItem(position).getName().charAt(0)) + position);
+                textView.setText(String.valueOf(getItem(position).getName().charAt(0)));
 
                 // region OnClick
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // Todo - launch EditDayController with day clicked
-                        getRouter().pushController(RouterTransaction.with(new EditDayController(days.get(position)))
+                        getRouter().pushController(RouterTransaction.with(new EditDayController(days.get(position), timetable))
                                 .popChangeHandler(new FadeChangeHandler())
                                 .pushChangeHandler(new FadeChangeHandler()));
                     }
@@ -201,18 +237,17 @@ public class EditTimetableController extends BaseController {
                 itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        // Todo - handle long click; being drag
 
                         ClipData.Item item = new ClipData.Item(String.valueOf(itemView.getTag()));
 
-                        ClipData dragData = new ClipData(String.valueOf(itemView.getTag()), new String[] {ClipDescription.MIMETYPE_TEXT_PLAIN}, item);
+                        ClipData dragData = new ClipData(String.valueOf(itemView.getTag()),
+                                new String[] { ClipDescription.MIMETYPE_TEXT_PLAIN }, item);
 
-                        View.DragShadowBuilder shadow = new DragShadowBuilder(itemView);
+                        View.DragShadowBuilder shadowBuilder = new DragShadowBuilder(itemView);
 
                         // Starts the drag
-
                         itemView.startDrag(dragData,  // the data to be dragged
-                                shadow,  // the drag shadow builder
+                                shadowBuilder,  // the drag shadow builder
                                 null,      // no need to use local data
                                 0          // flags (not currently used, set to 0)
                         );
@@ -244,28 +279,23 @@ public class EditTimetableController extends BaseController {
                                 // not receive events again until ACTION_DRAG_ENDED is sent.
                                 return false;
 
-                            case DragEvent.ACTION_DRAG_ENTERED:
+                            case DragEvent.ACTION_DRAG_ENTERED: return true;
 
-                                return true;
+                            case DragEvent.ACTION_DRAG_LOCATION: return true;
 
-                            case DragEvent.ACTION_DRAG_LOCATION:
-
-                                // Ignore the event
-                                return true;
-
-                            case DragEvent.ACTION_DRAG_EXITED:
-
-                                return true;
+                            case DragEvent.ACTION_DRAG_EXITED: return true;
 
                             case DragEvent.ACTION_DROP:
 
                                 // Gets the item containing the dragged data
                                 ClipData.Item item = event.getClipData().getItemAt(0);
 
-                                // Gets the text data from the item.
+                                // Get the data (the positions) from the two views
                                 int position = Integer.valueOf(item.getText().toString());
-
                                 int targetPosition = (int) view.getTag();
+
+                                // NOTE - no need to do anything if the day hasn't been moved
+                                if (position == targetPosition) return true;
 
                                 if (position < targetPosition) {
                                     for (int i = position; i < targetPosition; i++) {
@@ -282,7 +312,7 @@ public class EditTimetableController extends BaseController {
                                 }
 
                                 // Invalidates the view to force a redraw
-                                itemView.invalidate();
+                                //itemView.invalidate();
 
                                 Toast.makeText(getActivity(), "Day moved from " + position + " to " + targetPosition, Toast.LENGTH_SHORT).show();
 
@@ -299,6 +329,7 @@ public class EditTimetableController extends BaseController {
                 });
                 // endregion
             } else {
+                // NOTE - for the "add new button"
                 imageView.setColorFilter(Color.rgb(255, 50, 50));
                 textView.setText("+");
 
@@ -307,7 +338,7 @@ public class EditTimetableController extends BaseController {
                     public void onClick(View view) {
                         final Day newDay = new Day();
 
-                        EditDayController editDayController = new EditDayController(newDay);
+                        EditDayController editDayController = new EditDayController(newDay, timetable);
                         editDayController.setOnControllerFinished(new OnControllerFinished() {
                             @Override
                             public void run() {
@@ -315,7 +346,6 @@ public class EditTimetableController extends BaseController {
                             }
                         });
 
-                        // Todo - launch EditDayController for new day
                         getRouter().pushController(RouterTransaction.with(editDayController)
                                 .popChangeHandler(new FadeChangeHandler())
                                 .pushChangeHandler(new FadeChangeHandler()));

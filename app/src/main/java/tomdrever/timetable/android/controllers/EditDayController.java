@@ -11,20 +11,20 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bluelinelabs.conductor.RouterTransaction;
+
 import butterknife.BindView;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.data.Day;
+import tomdrever.timetable.data.Timetable;
 
 public class EditDayController extends BaseController {
 
     private Day day;
+    private Timetable parentTimetable;
 
     private OnControllerFinished onControllerFinished;
-
-    public OnControllerFinished getOnControllerFinished() {
-        return onControllerFinished;
-    }
 
     public void setOnControllerFinished(OnControllerFinished onControllerFinished) {
         this.onControllerFinished = onControllerFinished;
@@ -33,12 +33,11 @@ public class EditDayController extends BaseController {
     @BindView(R.id.day_name_input_layout) TextInputLayout dayNameInputLayout;
     @BindView(R.id.edit_day_name) EditText dayNameEditText;
 
-    public EditDayController() {
-        this.day = new Day();
-    }
+    public EditDayController() {}
 
-    public EditDayController(Day day) {
+    public EditDayController(Day day, Timetable parentTimetable) {
         this.day = day;
+        this.parentTimetable = parentTimetable;
     }
 
     @Override
@@ -70,20 +69,21 @@ public class EditDayController extends BaseController {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_done_edit) {
-            // Simply "done". Saving is ONLY done in edittimetable
-            // TODO - goto edittimetable w/ this day added to days
+            // NOTE - Simply "done". Saving is ONLY done in edittimetable
 
             String name = dayNameEditText.getText().toString().trim();
 
             if (name.isEmpty()) {
                 Toast.makeText(getActivity(), "The day needs a name!", Toast.LENGTH_SHORT).show();
+
+                return true;
             } else {
                 day.setName(name);
             }
 
             if (onControllerFinished != null) onControllerFinished.run();
 
-            handleBack();
+            getRouter().pushController(RouterTransaction.with(new EditTimetableController(parentTimetable)));
         }
 
         return true;

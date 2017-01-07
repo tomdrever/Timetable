@@ -1,36 +1,15 @@
 package tomdrever.timetable.data;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
-import android.databinding.ObservableArrayList;
-
 import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
-import tomdrever.timetable.data.listeners.DataValueChangedListener;
+public class Day {
+    private ArrayList<Period> periods;
 
-public class Day extends BaseObservable implements Serializable {
-    private ObservableArrayList<Period> periods;
-
-	private transient DataValueChangedListener valueChangedListener;
-
-	public Day() {
-
-	}
-
-	public void setValueChangedListener(DataValueChangedListener valueChangedListener) {
-		this.valueChangedListener = valueChangedListener;
-	}
-
-	private DataValueChangedListener getValueChangedListener() {
-		return valueChangedListener;
-	}
-
-    @Bindable
-    public ObservableArrayList<Period> getPeriods() {
+    public ArrayList<Period> getPeriods() {
         return periods;
     }
 
@@ -43,50 +22,40 @@ public class Day extends BaseObservable implements Serializable {
 		// collections.sort
 		// period.compare, based on final time?
 	    periods.add(position, period);
-	    valueChangedListener.onValueAdded(position);
     }
 
     public void removePeriod(int position){
         periods.remove(position);
-	    valueChangedListener.onValueRemoved(position);
     }
 
     private String name;
 
-    @Bindable
     public String getName(){ return name; }
 
     public void setName(String name){ this.name = name; }
 
+	public Day() {
+        periods = new ArrayList<>();
+    }
+
 	public Day(String name) {
 		this.name = name;
-		this.valueChangedListener = null;
-		periods = new ObservableArrayList<>();
+        periods = new ArrayList<>();
 	}
-
-    public Day(String name, DataValueChangedListener valueChangedListener) {
-        this.name = name;
-	    this.valueChangedListener = valueChangedListener;
-        periods = new ObservableArrayList<>();
-    }
 
     public Day(Day day) {
         name = day.getName();
-	    valueChangedListener = day.getValueChangedListener();
 
-        periods = new ObservableArrayList<>();
+        periods = new ArrayList<>();
 	    for (int i = 0; i < day.getPeriods().size(); i++) {
 		    periods.add(new Period(day.getPeriods().get(i)));
 	    }
     }
 
-
-    @Bindable
     public LocalTime getStartTime(){
         return periods.get(0).getStartTime();
     }
 
-    @Bindable
     public LocalTime getEndTime(){
         return  periods.get(periods.size() - 1).getEndTime();
     }
