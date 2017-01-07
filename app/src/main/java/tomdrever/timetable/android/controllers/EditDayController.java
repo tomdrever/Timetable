@@ -1,7 +1,9 @@
 package tomdrever.timetable.android.controllers;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.bluelinelabs.conductor.RouterTransaction;
 
 import butterknife.BindView;
 import tomdrever.timetable.R;
@@ -60,6 +60,44 @@ public class EditDayController extends BaseController {
         return true;
     }
 
+    // TODO - fix navigation (preferably with a universal system)
+    @Override
+    public boolean handleBack() {
+        String name = dayNameEditText.getText().toString().trim();
+
+        if (!day.equals(newDay(name))) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setTitle("Discard changes?");
+
+            //region Buttons
+
+            // Add the buttons
+            builder.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // Discard changes
+                    EditDayController.super.handleBack();
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
+
+            // endregion
+
+            // Create the AlertDialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            return super.handleBack();
+        }
+
+        return true;
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -69,24 +107,30 @@ public class EditDayController extends BaseController {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_done_edit) {
-            // NOTE - Simply "done". Saving is ONLY done in edittimetable
+            // NOTE - Simply "done". File saving is ONLY done in edittimetable
 
             String name = dayNameEditText.getText().toString().trim();
 
             if (name.isEmpty()) {
                 Toast.makeText(getActivity(), "The day needs a name!", Toast.LENGTH_SHORT).show();
-
                 return true;
-            } else {
-                day.setName(name);
             }
+
+            day.setName(name);
 
             if (onControllerFinished != null) onControllerFinished.run();
 
-            getRouter().pushController(RouterTransaction.with(new EditTimetableController(parentTimetable)));
+            super.handleBack();
         }
 
         return true;
+    }
+
+    private Day newDay(String name) {
+        Day newDay = new Day(day);
+        day.setName(name);
+
+        return newDay;
     }
 
     @Override

@@ -7,8 +7,8 @@
 >
     <ImageView
         android:id="@+id/day_grid_image"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
+        android:layout_height="65dp"
+        android:layout_width="65dp"
         android:layout_gravity="center"
     />
 

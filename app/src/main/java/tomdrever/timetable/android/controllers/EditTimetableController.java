@@ -69,18 +69,29 @@ public class EditTimetableController extends BaseController {
         String name = nameEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
 
-        if (!newTimetable(name, description, days).equals(timetable)) {
+        final Timetable newTimetable = newTimetable(name, description, days);
+
+        if (!newTimetable.equals(timetable)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             builder.setTitle("Discard changes?");
+
+            // region Buttons
 
             // Add the buttons
             builder.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // Discard changes
-                    getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
-                            .popChangeHandler(new FadeChangeHandler())
-                            .pushChangeHandler(new FadeChangeHandler()));
+
+                    if (newTimetable.isEmpty()) {
+                        getRouter().pushController(RouterTransaction.with(new TimetableListController())
+                                .popChangeHandler(new FadeChangeHandler())
+                                .pushChangeHandler(new FadeChangeHandler()));
+                    } else {
+                        getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
+                                .popChangeHandler(new FadeChangeHandler())
+                                .pushChangeHandler(new FadeChangeHandler()));
+                    }
                 }
             });
 
@@ -90,9 +101,23 @@ public class EditTimetableController extends BaseController {
                 }
             });
 
+            // endregion
+
             // Create the AlertDialog
             AlertDialog dialog = builder.create();
             dialog.show();
+        } else {
+            if (newTimetable.isEmpty()) {
+                getRouter().pushController(RouterTransaction.with(new TimetableListController())
+                        .popChangeHandler(new FadeChangeHandler())
+                        .pushChangeHandler(new FadeChangeHandler()));
+
+                return true;
+            }
+
+            getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
+                    .popChangeHandler(new FadeChangeHandler())
+                    .pushChangeHandler(new FadeChangeHandler()));
         }
 
         return true;
@@ -135,20 +160,22 @@ public class EditTimetableController extends BaseController {
 
             if (name.isEmpty()) {
                 Toast.makeText(getActivity(), "The timetable needs a name!", Toast.LENGTH_SHORT).show();
-            } else {
-                String description = descriptionEditText.getText().toString().trim();
-
-                // If this is an existing timetable, get rid of the old version before saving
-                if (timetable.getName() != null) getFileManager().delete(timetable.getName());
-
-                getFileManager().save(newTimetable(name, description, days));
-
-                // Done - launch view of that timetable
-                getRouter().pushController(RouterTransaction.with(
-                        new ViewTimetableController(newTimetable(name, description, days)))
-                        .popChangeHandler(new FadeChangeHandler())
-                        .pushChangeHandler(new FadeChangeHandler()));
+                return true;
             }
+
+            String description = descriptionEditText.getText().toString().trim();
+
+            // If this is an existing timetable, get rid of the old version before saving
+            if (timetable.getName() != null) getFileManager().delete(timetable.getName());
+
+            getFileManager().save(newTimetable(name, description, days));
+
+            // Done - launch view of that timetable
+            getRouter().pushController(RouterTransaction.with(
+                    new ViewTimetableController(newTimetable(name, description, days)))
+                    .popChangeHandler(new FadeChangeHandler())
+                    .pushChangeHandler(new FadeChangeHandler()));
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -210,9 +237,10 @@ public class EditTimetableController extends BaseController {
             }
 
             ImageView imageView = (ImageView) itemView.findViewById(R.id.day_grid_image);
-            TextView textView = (TextView) itemView.findViewById(R.id.day_grid_text);
-
             imageView.setImageResource(R.drawable.circle);
+
+            TextView textView = (TextView) itemView.findViewById(R.id.day_grid_text);
+            textView.setTextSize(22);
 
             if (position != days.size()) {
                 // NOTE - for all items bar the last, which is the "add new" button
@@ -225,7 +253,6 @@ public class EditTimetableController extends BaseController {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // Todo - launch EditDayController with day clicked
                         getRouter().pushController(RouterTransaction.with(new EditDayController(days.get(position), timetable))
                                 .popChangeHandler(new FadeChangeHandler())
                                 .pushChangeHandler(new FadeChangeHandler()));
@@ -237,6 +264,8 @@ public class EditTimetableController extends BaseController {
                 itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
+
+                        // TODO - add "delete" view somewhere, and set its onDragListener
 
                         ClipData.Item item = new ClipData.Item(String.valueOf(itemView.getTag()));
 

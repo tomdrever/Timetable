@@ -64,6 +64,10 @@ public class Timetable implements Comparable<Timetable>{
         this.index = index;
     }
 
+    public boolean isEmpty() {
+        return (name == null || name.equals("")) && (description == null || description.equals("")) && days.size() == 0;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Timetable) {
