@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.DragEvent;
@@ -231,11 +232,12 @@ public class EditTimetableController extends BaseController implements View.OnDr
                 // Gets the item containing the dragged data
                 ClipData.Item item = event.getClipData().getItemAt(0);
 
-                // Get the data (the positions) from the two views
-                int position = Integer.valueOf(item.getText().toString());
+                final int position = Integer.valueOf(item.getText().toString());
+
+                final Day day = days.get(position);
 
                 if (view.getId() == R.id.day_grid_item) {
-                    int targetPosition = (int) view.getTag();
+                    final int targetPosition = (int) view.getTag();
 
                     // NOTE - no need to do anything if the day hasn't been moved
                     if (position == targetPosition) return true;
@@ -252,9 +254,36 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
                     dayGridAdapter.notifyDataSetChanged();
 
+                    Snackbar.make(view,
+                            day.getName() + " moved from " + (position + 1) + " to " + (targetPosition + 1),
+                            Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (targetPosition < position) {
+                                for (int i = targetPosition; i < position; i++) {
+                                    swap(i, i + 1);
+                                }
+                            } else {
+                                for (int i = targetPosition; i > position; i--) {
+                                    swap(i, i - 1);
+                                }
+                            }
+
+                            dayGridAdapter.notifyDataSetChanged();
+                        }
+                    }).show();
+
                 } else if (view.getId() == R.id.delete_day) {
                     days.remove(position);
                     dayGridAdapter.notifyDataSetChanged();
+
+                    Snackbar.make(view, day.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            days.add(position, day);
+                            dayGridAdapter.notifyDataSetChanged();
+                        }
+                    }).show();
                 }
                 // Returns true. DragEvent.getResult() will return true.
                 return true;
