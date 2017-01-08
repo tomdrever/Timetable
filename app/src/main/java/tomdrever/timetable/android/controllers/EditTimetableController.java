@@ -33,7 +33,7 @@ import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Timetable;
 
-public class EditTimetableController extends BaseController {
+public class EditTimetableController extends BaseController implements View.OnDragListener {
 
     private Timetable timetable;
 
@@ -62,6 +62,16 @@ public class EditTimetableController extends BaseController {
     public EditTimetableController(Timetable timetable) {
         this.timetable = timetable;
         days = new ArrayList<>(timetable.getDays());
+    }
+
+    private void setupActionbar() {
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View v = inflater.inflate(R.layout.edit_day_actionbar_delete, null);
+        v.setOnDragListener(this);
+
+        getActionBar().setDisplayShowCustomEnabled(false);
+        getActionBar().setCustomView(v);
     }
 
     @Override
@@ -134,6 +144,8 @@ public class EditTimetableController extends BaseController {
 
         setHasOptionsMenu(true);
 
+        setupActionbar();
+
         nameEditText.setText(timetable.getName() != null ? timetable.getName() : "");
         nameTextInputLayout.setHint(getActivity().getString(R.string.edit_timetable_name));
 
@@ -200,6 +212,61 @@ public class EditTimetableController extends BaseController {
         return timetable.getName() != null ? "Edit " + timetable.getName() : "Create Timetable";
     }
 
+    @Override
+    public boolean onDrag(View view, DragEvent event) {
+        final int action = event.getAction();
+
+        switch(action) {
+
+            case DragEvent.ACTION_DRAG_STARTED:
+                return event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN);
+
+            case DragEvent.ACTION_DRAG_ENTERED: return true;
+
+            case DragEvent.ACTION_DRAG_LOCATION: return true;
+
+            case DragEvent.ACTION_DRAG_EXITED: return true;
+
+            case DragEvent.ACTION_DROP:
+                // Gets the item containing the dragged data
+                ClipData.Item item = event.getClipData().getItemAt(0);
+
+                // Get the data (the positions) from the two views
+                int position = Integer.valueOf(item.getText().toString());
+
+                if (view.getId() == R.id.day_grid_item) {
+                    int targetPosition = (int) view.getTag();
+
+                    // NOTE - no need to do anything if the day hasn't been moved
+                    if (position == targetPosition) return true;
+
+                    if (position < targetPosition) {
+                        for (int i = position; i < targetPosition; i++) {
+                            swap(i, i + 1);
+                        }
+                    } else {
+                        for (int i = position; i > targetPosition; i--) {
+                            swap(i, i - 1);
+                        }
+                    }
+
+                    dayGridAdapter.notifyDataSetChanged();
+
+                } else if (view.getId() == R.id.delete_day) {
+                    days.remove(position);
+                    dayGridAdapter.notifyDataSetChanged();
+                }
+                // Returns true. DragEvent.getResult() will return true.
+                return true;
+
+            case DragEvent.ACTION_DRAG_ENDED:
+                showActionbarContent();
+                return true;
+        }
+
+        return false;
+    }
+
     private class DayGridAdapter extends BaseAdapter {
 
         private Context context;
@@ -225,16 +292,12 @@ public class EditTimetableController extends BaseController {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-
             final View itemView;
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            if (convertView == null) {
-                itemView = inflater.inflate(R.layout.day_grid_item_view, null);
-            } else {
-                itemView = convertView;
-            }
+            if (convertView == null) itemView = inflater.inflate(R.layout.day_grid_item_view, null);
+            else itemView = convertView;
 
             ImageView imageView = (ImageView) itemView.findViewById(R.id.day_grid_image);
             imageView.setImageResource(R.drawable.circle);
@@ -253,7 +316,7 @@ public class EditTimetableController extends BaseController {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getRouter().pushController(RouterTransaction.with(new EditDayController(days.get(position), timetable))
+                        getRouter().pushController(RouterTransaction.with(new EditDayController(days.get(position)))
                                 .popChangeHandler(new FadeChangeHandler())
                                 .pushChangeHandler(new FadeChangeHandler()));
                     }
@@ -266,6 +329,8 @@ public class EditTimetableController extends BaseController {
                     public boolean onLongClick(View view) {
 
                         // TODO - add "delete" view somewhere, and set its onDragListener
+                        // hide toolbar and title
+                        hideActionbarContent();
 
                         ClipData.Item item = new ClipData.Item(String.valueOf(itemView.getTag()));
 
@@ -286,77 +351,7 @@ public class EditTimetableController extends BaseController {
                 });
                 // endregion
 
-                // region Dragging
-                itemView.setOnDragListener(new View.OnDragListener() {
-                    @Override
-                    public boolean onDrag(View view, DragEvent event) {
-                        final int action = event.getAction();
-
-                        switch(action) {
-
-                            case DragEvent.ACTION_DRAG_STARTED:
-
-                                // Determines if this View can accept the dragged data
-                                if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-
-                                    // returns true to indicate that the View can accept the dragged data.
-                                    return true;
-
-                                }
-
-                                // Returns false. During the current drag and drop operation, this View will
-                                // not receive events again until ACTION_DRAG_ENDED is sent.
-                                return false;
-
-                            case DragEvent.ACTION_DRAG_ENTERED: return true;
-
-                            case DragEvent.ACTION_DRAG_LOCATION: return true;
-
-                            case DragEvent.ACTION_DRAG_EXITED: return true;
-
-                            case DragEvent.ACTION_DROP:
-
-                                // Gets the item containing the dragged data
-                                ClipData.Item item = event.getClipData().getItemAt(0);
-
-                                // Get the data (the positions) from the two views
-                                int position = Integer.valueOf(item.getText().toString());
-                                int targetPosition = (int) view.getTag();
-
-                                // NOTE - no need to do anything if the day hasn't been moved
-                                if (position == targetPosition) return true;
-
-                                if (position < targetPosition) {
-                                    for (int i = position; i < targetPosition; i++) {
-                                        swap(i, i + 1);
-                                    }
-                                } else {
-                                    for (int i = position; i > targetPosition; i--) {
-                                        swap(i, i - 1);
-                                    }
-                                }
-
-                                synchronized (dayGridAdapter) {
-                                    dayGridAdapter.notifyDataSetChanged();
-                                }
-
-                                // Invalidates the view to force a redraw
-                                //itemView.invalidate();
-
-                                Toast.makeText(getActivity(), "Day moved from " + position + " to " + targetPosition, Toast.LENGTH_SHORT).show();
-
-                                // Returns true. DragEvent.getResult() will return true.
-                                return true;
-
-                            case DragEvent.ACTION_DRAG_ENDED:
-                                // returns true; the value is ignored.
-                                return true;
-                        }
-
-                        return false;
-                    }
-                });
-                // endregion
+                itemView.setOnDragListener(EditTimetableController.this);
             } else {
                 // NOTE - for the "add new button"
                 imageView.setColorFilter(Color.rgb(255, 50, 50));
@@ -367,7 +362,7 @@ public class EditTimetableController extends BaseController {
                     public void onClick(View view) {
                         final Day newDay = new Day();
 
-                        EditDayController editDayController = new EditDayController(newDay, timetable);
+                        EditDayController editDayController = new EditDayController(newDay);
                         editDayController.setOnControllerFinished(new OnControllerFinished() {
                             @Override
                             public void run() {
@@ -395,5 +390,24 @@ public class EditTimetableController extends BaseController {
 
         days.set(position1, day2);
         days.set(position2, day1);
+    }
+
+    // Hide Back, Title and options menu; show Delete view
+    private void hideActionbarContent() {
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayShowTitleEnabled(false);
+
+        setOptionsMenuHidden(true);
+
+        getActionBar().setDisplayShowCustomEnabled(true);
+    }
+
+    // Show Back, Title and options menu; hide Delete view
+    private void showActionbarContent() {
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowTitleEnabled(true);
+
+        setOptionsMenuHidden(false);
+        getActionBar().setDisplayShowCustomEnabled(false);
     }
 }

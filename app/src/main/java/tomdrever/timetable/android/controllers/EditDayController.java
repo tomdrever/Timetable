@@ -17,12 +17,10 @@ import butterknife.BindView;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.data.Day;
-import tomdrever.timetable.data.Timetable;
 
 public class EditDayController extends BaseController {
 
     private Day day;
-    private Timetable parentTimetable;
 
     private OnControllerFinished onControllerFinished;
 
@@ -35,9 +33,8 @@ public class EditDayController extends BaseController {
 
     public EditDayController() {}
 
-    public EditDayController(Day day, Timetable parentTimetable) {
+    public EditDayController(Day day) {
         this.day = day;
-        this.parentTimetable = parentTimetable;
     }
 
     @Override
@@ -76,7 +73,7 @@ public class EditDayController extends BaseController {
             builder.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // Discard changes
-                    EditDayController.super.handleBack();
+                    getRouter().popCurrentController();
                 }
             });
 
@@ -92,7 +89,9 @@ public class EditDayController extends BaseController {
             AlertDialog dialog = builder.create();
             dialog.show();
         } else {
-            return super.handleBack();
+            getRouter().popCurrentController();
+
+            return true;
         }
 
         return true;
@@ -120,7 +119,7 @@ public class EditDayController extends BaseController {
 
             if (onControllerFinished != null) onControllerFinished.run();
 
-            super.handleBack();
+            getRouter().popCurrentController();
         }
 
         return true;
