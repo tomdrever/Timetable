@@ -33,6 +33,6 @@
 	<string name="action_view_timetable_back">Back</string>
 	<string name="action_done_edit">Done</string>
 	<string name="action_edit_view">Edit</string>
-	<string name="edit_timetable_days_heading">Days</string>
-	<string name="edit_timetable_details_heading">Details</string>
+	<string name="edit_days_heading">Days</string>
+	<string name="edit_details_heading">Details</string>
 </resources>

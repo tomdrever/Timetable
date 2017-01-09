@@ -167,8 +167,6 @@ public class EditTimetableController extends BaseController implements View.OnDr
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_save_edit) {
-            // Save timetable
-            // Check input
             String name = nameEditText.getText().toString().trim();
 
             if (name.isEmpty()) {
@@ -188,6 +186,8 @@ public class EditTimetableController extends BaseController implements View.OnDr
                     new ViewTimetableController(newTimetable(name, description, days)))
                     .popChangeHandler(new FadeChangeHandler())
                     .pushChangeHandler(new FadeChangeHandler()));
+
+            Toast.makeText(getActivity(), name + " saved!", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -285,11 +285,11 @@ public class EditTimetableController extends BaseController implements View.OnDr
                         }
                     }).show();
                 }
-                // Returns true. DragEvent.getResult() will return true.
+
                 return true;
 
             case DragEvent.ACTION_DRAG_ENDED:
-                showActionbarContent();
+                showDeleteDayIcon(false);
                 return true;
         }
 
@@ -359,7 +359,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
                         // TODO - add "delete" view somewhere, and set its onDragListener
                         // hide toolbar and title
-                        hideActionbarContent();
+                        showDeleteDayIcon(true);
 
                         ClipData.Item item = new ClipData.Item(String.valueOf(itemView.getTag()));
 
@@ -412,31 +412,17 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
     private void swap(int position1, int position2) {
         Day day1 = days.get(position1);
-        // Update?
-
         Day day2 = days.get(position2);
-        // Update?
 
         days.set(position1, day2);
         days.set(position2, day1);
     }
 
-    // Hide Back, Title and options menu; show Delete view
-    private void hideActionbarContent() {
-        getActionBar().setDisplayHomeAsUpEnabled(false);
-        getActionBar().setDisplayShowTitleEnabled(false);
+    private void showDeleteDayIcon(boolean showDelete) {
+        getActionBar().setDisplayHomeAsUpEnabled(!showDelete);
+        getActionBar().setDisplayShowTitleEnabled(!showDelete);
 
-        setOptionsMenuHidden(true);
-
-        getActionBar().setDisplayShowCustomEnabled(true);
-    }
-
-    // Show Back, Title and options menu; hide Delete view
-    private void showActionbarContent() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setDisplayShowTitleEnabled(true);
-
-        setOptionsMenuHidden(false);
-        getActionBar().setDisplayShowCustomEnabled(false);
+        setOptionsMenuHidden(showDelete);
+        getActionBar().setDisplayShowCustomEnabled(showDelete);
     }
 }

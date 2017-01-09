@@ -13,26 +13,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@android:color/white"
-        android:elevation="4dp"
-        android:layout_marginBottom="8dp"
+        style="@style/EditCardLayout"
         >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/edit_timetable_details_heading"
+            android:text="@string/edit_details_heading"
             style="@style/SettingsHeadingTextView"
-            />
+        />
 
         <!-- Name edit text -->
         <android.support.design.widget.TextInputLayout
             android:id="@+id/name_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
             app:errorEnabled="true"
             >
 
@@ -53,8 +48,6 @@
             android:id="@+id/description_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
             app:errorEnabled="true"
             >
 
@@ -74,24 +67,21 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/white"
-        android:elevation="4dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content"
+        style="@style/EditCardLayout"
         >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/edit_timetable_days_heading"
+            android:text="@string/edit_days_heading"
             style="@style/SettingsHeadingTextView"
         />
 
         <GridView
             android:id="@+id/edit_timetable_days"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginBottom="12dp"

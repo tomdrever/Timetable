@@ -8,22 +8,24 @@
 	app:layout_behavior="@string/appbar_scrolling_view_behavior"
 >
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:padding="8dp"
-		android:descendantFocusability="beforeDescendants"
-		android:focusableInTouchMode="true"
-	>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/EditCardLayout"
+    >
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/edit_details_heading"
+			style="@style/SettingsHeadingTextView"
+		/>
 
 		<!-- Name edit text -->
 		<android.support.design.widget.TextInputLayout
 			android:id="@+id/day_name_input_layout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="12dp"
-			android:layout_marginRight="12dp"
 			app:errorEnabled="true"
 		>
 

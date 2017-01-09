@@ -127,7 +127,7 @@ public class EditDayController extends BaseController {
 
     private Day newDay(String name) {
         Day newDay = new Day(day);
-        day.setName(name);
+        newDay.setName(name);
 
         return newDay;
     }
