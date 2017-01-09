@@ -1,98 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical"
-	app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:clickable="true"
-    android:focusableInTouchMode="true"
-    >
-
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+>
     <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/EditCardLayout"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:clipChildren="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/edit_details_heading"
-            style="@style/SettingsHeadingTextView"
-        />
-
-        <!-- Name edit text -->
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/name_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
+            style="@style/EditCardLayout"
             >
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_timetable_name"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionGo"
-                android:inputType="text"
-                android:maxLines="1"
-                style="@style/BasicEditText"
+                android:text="@string/edit_details_heading"
+                style="@style/SettingsHeadingTextView"
                 />
 
-        </android.support.design.widget.TextInputLayout>
+            <!-- Name edit text -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/name_input_layout"
+                android:layout_width="match_parent"
+                style="@style/BasicTextInputLayout"
+                >
 
-        <!-- Description edit text -->
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/description_input_layout"
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_timetable_name"
+                    android:layout_width="match_parent"
+                    android:imeOptions="actionGo"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    style="@style/BasicEditText"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Description edit text -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/description_input_layout"
+                android:layout_width="match_parent"
+                style="@style/BasicTextInputLayout"
+                android:layout_marginBottom="8dp"
+                >
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_timetable_description"
+                    android:layout_width="match_parent"
+                    android:imeOptions="actionGo"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    style="@style/BasicEditText"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
+            style="@style/EditCardLayout"
             >
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_timetable_description"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionGo"
-                android:inputType="text"
-                android:maxLines="1"
-                style="@style/BasicEditText"
+                android:text="@string/edit_days_heading"
+                style="@style/SettingsHeadingTextView"
                 />
 
-        </android.support.design.widget.TextInputLayout>
+            <tomdrever.timetable.android.views.ExpandableGridView
+                android:id="@+id/edit_timetable_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="12dp"
+                android:horizontalSpacing="4dp"
+                android:verticalSpacing="4dp"
+                android:numColumns="4"
+                android:stretchMode="columnWidth"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
+</ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/EditCardLayout"
-        >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_days_heading"
-            style="@style/SettingsHeadingTextView"
-        />
-
-        <GridView
-            android:id="@+id/edit_timetable_days"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="12dp"
-            android:horizontalSpacing="4dp"
-            android:verticalSpacing="4dp"
-            android:numColumns="4"
-            android:stretchMode="columnWidth"
-            android:gravity="center"
-        />
-
-    </LinearLayout>
-
-</LinearLayout>
 

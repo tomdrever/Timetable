@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
+import tomdrever.timetable.android.views.ExpandableGridView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Timetable;
 
@@ -46,7 +46,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
     @BindView(R.id.name_input_layout) TextInputLayout nameTextInputLayout;
     @BindView(R.id.description_input_layout) TextInputLayout descriptionTextInputLayout;
 
-    @BindView(R.id.edit_timetable_days) GridView daysGridView;
+    @BindView(R.id.edit_timetable_days) ExpandableGridView daysGridView;
 
     private DayGridAdapter dayGridAdapter;
 
