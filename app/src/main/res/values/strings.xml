@@ -35,4 +35,6 @@
 	<string name="action_edit_view">Edit</string>
 	<string name="edit_days_heading">Days</string>
 	<string name="edit_details_heading">Details</string>
+	<string name="no_periods">There are no time periods set for this day!</string>
+	<string name="edit_periods_heading">Periods</string>
 </resources>

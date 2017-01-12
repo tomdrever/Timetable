@@ -229,7 +229,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
             case DragEvent.ACTION_DRAG_EXITED: return true;
 
             case DragEvent.ACTION_DROP:
-                // Gets the item containing the dragged data
+                // Gets the timetable containing the dragged data
                 ClipData.Item item = event.getClipData().getItemAt(0);
 
                 final int position = Integer.valueOf(item.getText().toString());
@@ -356,8 +356,6 @@ public class EditTimetableController extends BaseController implements View.OnDr
                 itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-
-                        // TODO - add "delete" view somewhere, and set its onDragListener
                         // hide toolbar and title
                         showDeleteDayIcon(true);
 

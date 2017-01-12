@@ -13,12 +13,15 @@ public class Day {
         return periods;
     }
 
+    public void setPeriods(ArrayList<Period> periods) {
+        this.periods = periods;
+    }
+
     public void addPeriod(Period period) {
         addPeriod(period, periods.size());
     }
 
     public void addPeriod(Period period, int position) {
-	    // TODO -  reorganise periods on addition or removal to order chronologically
 		// collections.sort
 		// period.compare, based on final time?
 	    periods.add(position, period);

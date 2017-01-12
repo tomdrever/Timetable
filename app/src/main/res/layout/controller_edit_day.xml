@@ -1,78 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:orientation="vertical"
-	app:layout_behavior="@string/appbar_scrolling_view_behavior"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
 >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/EditCardLayout"
-    >
+        android:orientation="vertical"
+        android:fillViewport="true"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/edit_details_heading"
-			style="@style/SettingsHeadingTextView"
-		/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
 
-		<!-- Name edit text -->
-		<android.support.design.widget.TextInputLayout
-			android:id="@+id/day_name_input_layout"
-			android:layout_width="match_parent"
-			style="@style/BasicTextInputLayout"
-			android:layout_marginBottom="8dp"
-		>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/EditCardLayout"
+                >
 
-			<android.support.design.widget.TextInputEditText
-				android:id="@+id/edit_day_name"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:imeOptions="actionGo"
-				android:inputType="text"
-				android:maxLines="1"
-				style="@style/BasicEditText"
-			/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_details_heading"
+                    style="@style/SettingsHeadingTextView"
+                    />
 
-		</android.support.design.widget.TextInputLayout>
+                <!-- Name edit text -->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/day_name_input_layout"
+                    android:layout_width="match_parent"
+                    style="@style/BasicTextInputLayout"
+                    android:layout_marginBottom="8dp"
+                    >
 
-	</LinearLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_day_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionGo"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        style="@style/BasicEditText"
+                        />
 
-	<!--RecyclerView for periods-->
-	<RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-	>
+                </android.support.design.widget.TextInputLayout>
 
-		<android.support.v7.widget.RecyclerView
-			android:id="@+id/edit_day_periods_list_recyclerview"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_gravity="center|start"
-		/>
+            </LinearLayout>
 
-		<!--
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/EditCardLayout"
+                >
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
-			android:layout_centerVertical="true"
-			android:text="@string/empty_day"
-			android:visibility="@{day.periods.size() > 0 ? View.GONE : View.VISIBLE}"
-			style="@style/EmptyListTextView"
-			/>
-			-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_periods_heading"
+                    style="@style/SettingsHeadingTextView"
+                    />
 
-	</RelativeLayout>
+                <tomdrever.timetable.android.views.ExpandableRecyclerView
+                    android:id="@+id/edit_periods_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
 
-		<!--EditText for name-->
+                <TextView
+                    android:id="@+id/no_periods"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_periods"
+                    android:textSize="20sp"
+                    android:gravity="center_vertical"
+                    android:visibility="invisible"
+                    style="@style/EmptyListTextView"
+                    />
 
-		<!--Attach picture?-->
+            </LinearLayout>
 
-</LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/new_period_fab"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_white"
+        />
+
+</RelativeLayout>

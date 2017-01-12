@@ -67,12 +67,12 @@ public class TimetableListController extends BaseController {
                 // Store timetable data temporarily, so it can be restored
                 final Timetable tempTimetableContainer = timetables.get(viewHolder.getAdapterPosition());
                 final int tempPosition = viewHolder.getAdapterPosition();
-                remove(tempPosition);
+                removeTimetableAt(tempPosition);
                 Snackbar.make(viewHolder.itemView, tempTimetableContainer.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Restore
-                        add(tempTimetableContainer, tempPosition);
+                        addTimetableAt(tempTimetableContainer, tempPosition);
                     }
                 }).show();
             }
@@ -84,11 +84,11 @@ public class TimetableListController extends BaseController {
 
                 if (fromPosition < toPosition) {
                     for (int i = fromPosition; i < toPosition; i++) {
-                        swap(i, i + 1);
+                        swapTimetablesAt(i, i + 1);
                     }
                 } else {
                     for (int i = fromPosition; i > toPosition; i--) {
-                        swap(i, i - 1);
+                        swapTimetablesAt(i, i - 1);
                     }
                 }
 
@@ -103,7 +103,7 @@ public class TimetableListController extends BaseController {
         // endregion
     }
 
-    private void add(Timetable timetable, int position) {
+    private void addTimetableAt(Timetable timetable, int position) {
         getFileManager().save(timetable);
         timetables.add(position, timetable);
         adapter.notifyItemInserted(position);
@@ -111,7 +111,7 @@ public class TimetableListController extends BaseController {
         updateNoTimetablesTextView();
     }
 
-    private void remove(int position) {
+    private void removeTimetableAt(int position) {
         getFileManager().delete(timetables.get(position).getName());
         timetables.remove(position);
         adapter.notifyItemRemoved(position);
@@ -119,7 +119,7 @@ public class TimetableListController extends BaseController {
         updateNoTimetablesTextView();
     }
 
-    private void swap(int position1, int position2) {
+    private void swapTimetablesAt(int position1, int position2) {
         Timetable timetable1 = timetables.get(position1);
         timetable1.setIndex(position2);
         getFileManager().save(timetable1);
@@ -133,11 +133,10 @@ public class TimetableListController extends BaseController {
     }
 
     private void updateNoTimetablesTextView() {
-        if (timetables.isEmpty()) {
+        if (timetables.isEmpty())
             noTimetablesTextView.setVisibility(View.VISIBLE);
-        } else {
+        else
             noTimetablesTextView.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override
@@ -160,7 +159,6 @@ public class TimetableListController extends BaseController {
     }
 
     class TimetableListAdapter extends RecyclerView.Adapter<TimetableListAdapter.TimetableViewHolder> {
-
         private final LayoutInflater inflater;
         private final ArrayList<Timetable> items;
 
@@ -181,7 +179,7 @@ public class TimetableListController extends BaseController {
 
         @Override
         public int getItemCount() {
-            return items.toArray().length;
+            return items.size();
         }
 
         class TimetableViewHolder extends RecyclerView.ViewHolder {
@@ -189,7 +187,7 @@ public class TimetableListController extends BaseController {
             @BindView(R.id.timetable_card_name) TextView nameTextView;
             @BindView(R.id.timetable_card_description) TextView descriptionTextView;
 
-            Timetable item;
+            Timetable timetable;
 
             TimetableViewHolder(View itemView) {
                 super(itemView);
@@ -198,15 +196,15 @@ public class TimetableListController extends BaseController {
             }
 
             public void bind(Timetable item) {
-                this.item = item;
+                this.timetable = item;
 
-                nameTextView.setText(item.getName());
-                descriptionTextView.setText(item.getDescription());
+                nameTextView.setText(timetable.getName());
+                descriptionTextView.setText(timetable.getDescription());
             }
 
             @OnClick(R.id.timetable_card_content_view)
             void onCardClicked() {
-                getRouter().pushController(RouterTransaction.with(new ViewTimetableController(item))
+                getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
                         .popChangeHandler(new FadeChangeHandler())
                         .pushChangeHandler(new FadeChangeHandler()));
             }

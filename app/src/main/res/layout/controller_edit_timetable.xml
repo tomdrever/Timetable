@@ -13,27 +13,27 @@
         android:focusableInTouchMode="true"
         android:clipChildren="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+    >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/EditCardLayout"
-            >
+        >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/edit_details_heading"
                 style="@style/SettingsHeadingTextView"
-                />
+            />
 
             <!-- Name edit text -->
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/name_input_layout"
                 android:layout_width="match_parent"
                 style="@style/BasicTextInputLayout"
-                >
+            >
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/edit_timetable_name"
@@ -42,7 +42,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     style="@style/BasicEditText"
-                    />
+                />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 style="@style/BasicTextInputLayout"
                 android:layout_marginBottom="8dp"
-                >
+            >
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/edit_timetable_description"
@@ -61,7 +61,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     style="@style/BasicEditText"
-                    />
+                />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -71,14 +71,14 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             style="@style/EditCardLayout"
-            >
+        >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/edit_days_heading"
                 style="@style/SettingsHeadingTextView"
-                />
+            />
 
             <tomdrever.timetable.android.views.ExpandableGridView
                 android:id="@+id/edit_timetable_days"
@@ -92,11 +92,12 @@
                 android:numColumns="4"
                 android:stretchMode="columnWidth"
                 android:gravity="center"
-                />
+            />
 
         </LinearLayout>
 
     </LinearLayout>
+
 </ScrollView>
 
 
