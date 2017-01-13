@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
 >
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:fillViewport="true"
         android:clickable="true"
@@ -60,7 +60,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 style="@style/EditCardLayout"
                 >
 
@@ -84,7 +84,7 @@
                     android:text="@string/no_periods"
                     android:textSize="20sp"
                     android:gravity="center_vertical"
-                    android:visibility="invisible"
+                    android:visibility="gone"
                     style="@style/EmptyListTextView"
                     />
 

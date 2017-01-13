@@ -50,8 +50,7 @@ public class EditDayController extends BaseController {
 
     public EditDayController(Day day) {
         this.day = day;
-        this.periods = new ArrayList<>();
-
+        this.periods = new ArrayList<>(day.getPeriods());
     }
 
     @Override
@@ -169,7 +168,7 @@ public class EditDayController extends BaseController {
         if (periods.isEmpty())
             noPeriodsTextView.setVisibility(View.VISIBLE);
         else
-            noPeriodsTextView.setVisibility(View.INVISIBLE);
+            noPeriodsTextView.setVisibility(View.GONE);
     }
 
     private Day newDay(String name) {
