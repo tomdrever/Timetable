@@ -1,19 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_margin="4dp"
-		android:elevation="4dp"
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="4dp"
 >
 
 	<!--TITLE-->
 	<TextView
-			android:id="@+id/period_name_card_title"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:padding="16dp"
-			style="@style/BasicTextView"
+		android:id="@+id/period_name_text"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:padding="8dp"
+        android:layout_weight="1"
+        android:textAlignment="textStart"
+        android:layout_gravity="start"
+		style="@style/BasicTextView"
 	/>
 
-</android.support.v7.widget.CardView>
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:orientation="vertical"
+        android:gravity="center_horizontal"
+		>
+
+		<TextView
+			android:id="@+id/period_start_text"
+			android:text="Start"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+            android:padding="4dp"
+            style="@style/BasicTextView"
+			/>
+
+		<TextView
+			android:id="@+id/period_end_text"
+			android:text="End"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+            android:padding="4dp"
+            style="@style/BasicTextView"
+			/>
+
+	</LinearLayout>
+
+</LinearLayout>

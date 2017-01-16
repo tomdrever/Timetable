@@ -57,7 +57,7 @@ public class PeriodsRecyclerViewAdapter extends RecyclerView.Adapter<PeriodsRecy
 
             this.itemView = itemView;
 
-	        this.periodNameView = (TextView) itemView.findViewById(R.id.period_name_card_title);
+	        this.periodNameView = (TextView) itemView.findViewById(R.id.period_name_text);
         }
     }
 }

@@ -3,40 +3,28 @@
     android:id="@+id/timetable_card_base_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
     android:gravity="center"
 >
 
-    <LinearLayout
-        android:id="@+id/timetable_card_content_view"
-        android:layout_width="match_parent"
+    <!--TITLE-->
+    <TextView
+        android:id="@+id/timetable_card_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:orientation="vertical"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-    >
+        android:layout_gravity="center"
+        style="@style/TimetableCardTitleTextView"
+    />
 
-        <!--TITLE-->
-        <TextView
-            android:id="@+id/timetable_card_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            style="@style/TimetableCardTitleTextView"
-        />
-
-        <!--DESCRIPTION-->
-        <TextView
-            android:id="@+id/timetable_card_description"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            style="@style/TimetableCardDetailsTextView"
-        />
-
-    </LinearLayout>
+    <!--DESCRIPTION-->
+    <TextView
+        android:id="@+id/timetable_card_description"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        style="@style/TimetableCardDetailsTextView"
+    />
 
 </LinearLayout>

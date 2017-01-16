@@ -212,7 +212,7 @@ public class EditDayController extends BaseController {
 
             Period period;
 
-            @BindView(R.id.period_name_card_title) TextView nameTextView;
+            @BindView(R.id.period_name_text) TextView nameTextView;
 
             public PeriodViewHolder(View itemView) {
                 super(itemView);

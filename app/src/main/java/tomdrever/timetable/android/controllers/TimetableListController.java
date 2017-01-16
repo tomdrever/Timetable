@@ -202,7 +202,7 @@ public class TimetableListController extends BaseController {
                 descriptionTextView.setText(timetable.getDescription());
             }
 
-            @OnClick(R.id.timetable_card_content_view)
+            @OnClick(R.id.timetable_card_base_view)
             void onCardClicked() {
                 getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
                         .popChangeHandler(new FadeChangeHandler())

@@ -75,6 +75,7 @@
                     android:id="@+id/edit_periods_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     />
 
                 <TextView
@@ -83,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/no_periods"
                     android:textSize="20sp"
-                    android:gravity="center_vertical"
+                    android:layout_gravity="center"
                     android:visibility="gone"
                     style="@style/EmptyListTextView"
                     />
