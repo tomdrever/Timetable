@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.EditingFinishedListener;
 import tomdrever.timetable.data.Period;
 
 public class EditPeriodDialogFragment extends DialogFragment {
@@ -18,25 +20,18 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
 	private View dialogView;
 
-	private FragmentSuccessListener successListener;
-
-	public FragmentSuccessListener getSuccessListener() {
-		return successListener;
-	}
-
-	public void setSuccessListener(FragmentSuccessListener successListener) {
-		this.successListener = successListener;
-	}
+    private EditingFinishedListener editingFinishedListener;
 
 	public static EditPeriodDialogFragment newInstance(Period period, int periodPosition,
-	                                                   FragmentSuccessListener successListener) {
+                                                       EditingFinishedListener editingFinishedListener) {
 		EditPeriodDialogFragment fragment = new EditPeriodDialogFragment();
-		fragment.successListener = successListener;
 		fragment.period = period;
 		fragment.periodPosition = periodPosition;
+        fragment.editingFinishedListener = editingFinishedListener;
 		return fragment;
 	}
 
+	@NonNull
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 		dialogView = getActivity().getLayoutInflater().inflate(R.layout.edit_period_dialog, null);
@@ -49,6 +44,8 @@ public class EditPeriodDialogFragment extends DialogFragment {
 		builder.setNegativeButton("Cancel", null);
 
 		final AlertDialog dialog = builder.create();
+
+        dialog.setCanceledOnTouchOutside(false);
 		// endregion
 
 		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -66,8 +63,9 @@ public class EditPeriodDialogFragment extends DialogFragment {
 							Toast.makeText(getContext(), "The period needs a name!", Toast.LENGTH_SHORT).show();
 						} else {
 							period.setName(name);
+                            if (editingFinishedListener != null)
+                                editingFinishedListener.onEditingFinished();
 
-							successListener.onFragmentSuccess(period, periodPosition);
 							dismiss();
 						}
 					}
@@ -88,8 +86,4 @@ public class EditPeriodDialogFragment extends DialogFragment {
 		((EditText) dialogView.findViewById(R.id.edit_period_name_edit_text)).setText(period.getName());
 		// endregion
 	}
-
-	interface FragmentSuccessListener {
-	    void onFragmentSuccess(Period period, int periodPosition);
-    }
 }

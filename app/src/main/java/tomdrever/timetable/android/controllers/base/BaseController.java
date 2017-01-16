@@ -4,6 +4,7 @@ package tomdrever.timetable.android.controllers.base;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -78,6 +79,10 @@ public abstract class BaseController extends ButterKnifeController {
                 actionBar.setSubtitle("");
             }
         }
+    }
+
+    protected AppCompatActivity getAppCombatActivity(){
+        return (AppCompatActivity) getActivity();
     }
 
     // Override this with true to show the "back" arrow on the toolbar and have it act as a back button

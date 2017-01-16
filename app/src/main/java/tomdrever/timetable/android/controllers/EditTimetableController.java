@@ -29,10 +29,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.EditingFinishedListener;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.android.views.ExpandableGridView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Timetable;
+import tomdrever.timetable.utility.CollectionUtils;
 
 public class EditTimetableController extends BaseController implements View.OnDragListener {
 
@@ -57,12 +59,12 @@ public class EditTimetableController extends BaseController implements View.OnDr
         timetable = new Timetable();
         timetable.setIndex(index);
 
-        days = new ArrayList<>(timetable.getDays());
+        days = CollectionUtils.copyDays(timetable.getDays());
     }
 
     public EditTimetableController(Timetable timetable) {
         this.timetable = timetable;
-        days = new ArrayList<>(timetable.getDays());
+        days = CollectionUtils.copyDays(timetable.getDays());
     }
 
     private void setupActionbar() {
@@ -390,9 +392,9 @@ public class EditTimetableController extends BaseController implements View.OnDr
                         final Day newDay = new Day();
 
                         EditDayController editDayController = new EditDayController(newDay);
-                        editDayController.setOnControllerFinished(new OnControllerFinished() {
+                        editDayController.setEditingFinishedListener(new EditingFinishedListener() {
                             @Override
-                            public void run() {
+                            public void onEditingFinished() {
                                 days.add(newDay);
                             }
                         });

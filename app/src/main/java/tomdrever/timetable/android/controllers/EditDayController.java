@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,10 +25,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.EditingFinishedListener;
 import tomdrever.timetable.android.controllers.base.BaseController;
+import tomdrever.timetable.android.fragments.EditPeriodDialogFragment;
 import tomdrever.timetable.android.views.ExpandableRecyclerView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
+import tomdrever.timetable.utility.CollectionUtils;
 
 public class EditDayController extends BaseController {
 
@@ -36,10 +40,10 @@ public class EditDayController extends BaseController {
 
     private PeriodListAdapter periodListAdapter;
 
-    private OnControllerFinished onControllerFinished;
+    private EditingFinishedListener editingFinishedListener;
 
-    public void setOnControllerFinished(OnControllerFinished onControllerFinished) {
-        this.onControllerFinished = onControllerFinished;
+    public void setEditingFinishedListener(EditingFinishedListener editingFinishedListener) {
+        this.editingFinishedListener = editingFinishedListener;
     }
 
     @BindView(R.id.day_name_input_layout) TextInputLayout dayNameInputLayout;
@@ -55,7 +59,7 @@ public class EditDayController extends BaseController {
 
     public EditDayController(Day day) {
         this.day = day;
-        this.periods = new ArrayList<>(day.getPeriods());
+        this.periods = CollectionUtils.copyPeriods(day.getPeriods());
     }
 
     @Override
@@ -72,7 +76,7 @@ public class EditDayController extends BaseController {
         dayNameEditText.setText(day.getName() != null ? day.getName() : "");
         dayNameInputLayout.setHint(getActivity().getString(R.string.edit_day_name));
 
-        periodListAdapter = new PeriodListAdapter(LayoutInflater.from(view.getContext()), periods);
+        periodListAdapter = new PeriodListAdapter(LayoutInflater.from(view.getContext()));
 
         periodsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()) {
             @Override
@@ -122,11 +126,7 @@ public class EditDayController extends BaseController {
                 }
             });
 
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-
-                }
-            });
+            builder.setNegativeButton("Cancel", null);
 
             // endregion
 
@@ -163,7 +163,7 @@ public class EditDayController extends BaseController {
             day.setName(name);
             day.setPeriods(periods);
 
-            if (onControllerFinished != null) onControllerFinished.run();
+            if (editingFinishedListener != null) editingFinishedListener.onEditingFinished();
 
             getRouter().popCurrentController();
         }
@@ -176,7 +176,7 @@ public class EditDayController extends BaseController {
         Toast.makeText(getActivity(), "New period clicked", Toast.LENGTH_SHORT).show();
     }
 
-    private void addPeriodAt(Period period, int position) {
+    private void addPeriod(Period period) {
         // TODO - reorder periods chronologically
     }
 
@@ -204,11 +204,9 @@ public class EditDayController extends BaseController {
 
     class PeriodListAdapter extends RecyclerView.Adapter<PeriodListAdapter.PeriodViewHolder> {
         private final LayoutInflater inflater;
-        private ArrayList<Period> items;
 
-        public PeriodListAdapter(LayoutInflater inflater, ArrayList<Period> items) {
+        public PeriodListAdapter(LayoutInflater inflater) {
             this.inflater = inflater;
-            this.items = items;
         }
 
         @Override
@@ -218,12 +216,12 @@ public class EditDayController extends BaseController {
 
         @Override
         public void onBindViewHolder(PeriodViewHolder holder, int position) {
-            holder.bind(items.get(position));
+            holder.bind(periods.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return periods.size();
         }
 
         class PeriodViewHolder extends RecyclerView.ViewHolder {
@@ -242,6 +240,23 @@ public class EditDayController extends BaseController {
                 this.period = item;
 
                 nameTextView.setText(period.getName());
+            }
+
+            @OnClick(R.id.period_card_base_view)
+            void onCardClicked() {
+                EditingFinishedListener listener = new EditingFinishedListener() {
+                    @Override
+                    public void onEditingFinished() {
+                        notifyDataSetChanged();
+                    }
+                };
+
+                EditPeriodDialogFragment periodFragment =
+                        EditPeriodDialogFragment.newInstance(period, getAdapterPosition(), listener);
+                FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
+
+                if (fm != null)
+                    periodFragment.show(fm, "period_fragment");
             }
         }
     }
