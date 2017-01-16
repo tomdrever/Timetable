@@ -2,6 +2,7 @@ package tomdrever.timetable.android.controllers;
 
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,9 @@ public class EditDayController extends BaseController {
     @BindView(R.id.day_name_input_layout) TextInputLayout dayNameInputLayout;
     @BindView(R.id.edit_day_name) EditText dayNameEditText;
     @BindView(R.id.edit_periods_recyclerview) ExpandableRecyclerView periodsRecyclerView;
+
+    @BindView(R.id.edit_day_scrollview) ScrollView editDayScrollView;
+    @BindView(R.id.new_period_fab) FloatingActionButton newPeriodButton;
 
     @BindView(R.id.no_periods) TextView noPeriodsTextView;
 
@@ -76,6 +81,19 @@ public class EditDayController extends BaseController {
             }
         });
         periodsRecyclerView.setAdapter(periodListAdapter);
+
+        editDayScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                int scrollY = editDayScrollView.getScrollY();
+
+                if (scrollY != 0) {
+                    newPeriodButton.hide();
+                } else {
+                    newPeriodButton.show();
+                }
+            }
+        });
 
         updateNoPeriodsTextView();
     }
