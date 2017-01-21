@@ -341,7 +341,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
                 imageView.setColorFilter(Color.rgb(50, 50, 255));
                 itemView.setTag(position);
 
-                textView.setText(String.valueOf(getItem(position).getName().charAt(0)));
+                textView.setText(String.valueOf(getItem(position).getName().charAt(0)).toUpperCase());
 
                 // region OnClick
                 itemView.setOnClickListener(new View.OnClickListener() {

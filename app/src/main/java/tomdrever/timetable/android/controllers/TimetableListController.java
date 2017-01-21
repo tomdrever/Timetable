@@ -200,6 +200,12 @@ public class TimetableListController extends BaseController {
 
                 nameTextView.setText(timetable.getName());
                 descriptionTextView.setText(timetable.getDescription());
+
+                if (timetable.getDescription().trim().isEmpty()) {
+                    descriptionTextView.setVisibility(View.GONE);
+                } else {
+                    descriptionTextView.setVisibility(View.VISIBLE);
+                }
             }
 
             @OnClick(R.id.timetable_card_base_view)

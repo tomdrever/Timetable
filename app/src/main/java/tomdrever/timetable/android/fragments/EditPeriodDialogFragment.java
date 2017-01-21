@@ -5,71 +5,116 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.EditingFinishedListener;
 import tomdrever.timetable.data.Period;
 
 public class EditPeriodDialogFragment extends DialogFragment {
 	private Period period;
+
+	private Unbinder unbinder;
+	private View view;
+
 	private int periodPosition;
 
-	private View dialogView;
+	@BindView(R.id.period_name_input_layout) TextInputLayout periodNameInputLayout;
+	@BindView(R.id.edit_period_name) EditText nameEditText;
 
-    private EditingFinishedListener editingFinishedListener;
+    private PeriodDialogListener periodDialogListener;
 
 	public static EditPeriodDialogFragment newInstance(Period period, int periodPosition,
-                                                       EditingFinishedListener editingFinishedListener) {
+													   PeriodDialogListener periodDialogListener) {
 		EditPeriodDialogFragment fragment = new EditPeriodDialogFragment();
 		fragment.period = period;
 		fragment.periodPosition = periodPosition;
-        fragment.editingFinishedListener = editingFinishedListener;
+        fragment.periodDialogListener = periodDialogListener;
 		return fragment;
+	}
+
+	@Nullable
+	@Override
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		if (period == null) period = new Period("New Period");
+
+		unbinder = ButterKnife.bind(this, view);
+
+		nameEditText.setText(period.getName() != null ? period.getName() : "");
+		periodNameInputLayout.setHint(getActivity().getString(R.string.edit_timetable_name));
+
+		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
 	@NonNull
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-		dialogView = getActivity().getLayoutInflater().inflate(R.layout.edit_period_dialog, null);
-
 		// region Set Up Dialog
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setView(dialogView);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		// Get the layout inflater
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+
+		view = inflater.inflate(R.layout.edit_period_dialog, null);
+
+		builder.setView(view);
+
 		builder.setTitle(period == null ? "New Period" : String.format("Edit %s", period.getName()));
+
 		builder.setPositiveButton("OK", null);
+		if (period != null) builder.setNeutralButton("Delete", null);
 		builder.setNegativeButton("Cancel", null);
 
 		final AlertDialog dialog = builder.create();
-
         dialog.setCanceledOnTouchOutside(false);
-		// endregion
 
 		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 			@Override
 			public void onShow(DialogInterface dialogInterface) {
-				Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-				button.setOnClickListener(new View.OnClickListener() {
+				// region On Positive Clicked
+				Button posButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+				posButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						EditText editPeriodName = (EditText) dialogView.findViewById(R.id.edit_period_name_edit_text);
 						// Check the period has been given a name
-						String name = editPeriodName.getText().toString().trim();
+						String name = nameEditText.getText().toString().trim();
 						if (name.isEmpty()) {
 							// If not, tell the user
-							Toast.makeText(getContext(), "The period needs a name!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getActivity(), "The period needs a name!", Toast.LENGTH_SHORT).show();
 						} else {
 							period.setName(name);
-                            if (editingFinishedListener != null)
-                                editingFinishedListener.onEditingFinished();
+							if (periodDialogListener != null)
+								periodDialogListener.onFinishEditingPeriodClicked();
 
 							dismiss();
 						}
 					}
 				});
+				// endregion
+
+				// region On Neutral Clicked
+				Button neutButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+
+				// If there is not a neutral button, do not attempt to give it an onclick;
+				if (neutButton == null) return;
+
+				neutButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						periodDialogListener.onDeletePeriodClicked(periodPosition);
+						dismiss();
+					}
+				});
+				// endregion
 			}
 		});
 
@@ -77,13 +122,14 @@ public class EditPeriodDialogFragment extends DialogFragment {
     }
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+	public void onDestroyView() {
+		super.onDestroyView();
+		unbinder.unbind();
+		unbinder = null;
+	}
 
-		// region Set Up UI and Period
-		if (period == null) period = new Period("New Period");
-
-		((EditText) dialogView.findViewById(R.id.edit_period_name_edit_text)).setText(period.getName());
-		// endregion
+	public interface PeriodDialogListener {
+		void onFinishEditingPeriodClicked();
+		void onDeletePeriodClicked(int periodPosition);
 	}
 }

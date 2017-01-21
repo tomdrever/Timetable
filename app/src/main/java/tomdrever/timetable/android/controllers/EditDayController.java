@@ -3,6 +3,7 @@ package tomdrever.timetable.android.controllers;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -33,7 +34,7 @@ import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
 import tomdrever.timetable.utility.CollectionUtils;
 
-public class EditDayController extends BaseController {
+public class EditDayController extends BaseController implements EditPeriodDialogFragment.PeriodDialogListener{
 
     private Day day;
     private ArrayList<Period> periods;
@@ -48,9 +49,11 @@ public class EditDayController extends BaseController {
 
     @BindView(R.id.day_name_input_layout) TextInputLayout dayNameInputLayout;
     @BindView(R.id.edit_day_name) EditText dayNameEditText;
+
     @BindView(R.id.edit_periods_recyclerview) ExpandableRecyclerView periodsRecyclerView;
 
     @BindView(R.id.edit_day_scrollview) ScrollView editDayScrollView;
+
     @BindView(R.id.new_period_fab) FloatingActionButton newPeriodButton;
 
     @BindView(R.id.no_periods) TextView noPeriodsTextView;
@@ -76,7 +79,7 @@ public class EditDayController extends BaseController {
         dayNameEditText.setText(day.getName() != null ? day.getName() : "");
         dayNameInputLayout.setHint(getActivity().getString(R.string.edit_day_name));
 
-        periodListAdapter = new PeriodListAdapter(LayoutInflater.from(view.getContext()));
+        periodListAdapter = new PeriodListAdapter(LayoutInflater.from(view.getContext()), this);
 
         periodsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()) {
             @Override
@@ -180,8 +183,6 @@ public class EditDayController extends BaseController {
         // TODO - reorder periods chronologically
     }
 
-    private void removePeriodAt(int position) {}
-
     private void updateNoPeriodsTextView() {
         if (periods.isEmpty())
             noPeriodsTextView.setVisibility(View.VISIBLE);
@@ -202,11 +203,35 @@ public class EditDayController extends BaseController {
         return day.getName() == null ? "New day" : "Edit " + day.getName();
     }
 
+    @Override
+    public void onFinishEditingPeriodClicked() {
+        periodListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDeletePeriodClicked(final int periodPosition) {
+        final Period period = periods.get(periodPosition);
+
+        periods.remove(periodPosition);
+        periodListAdapter.notifyDataSetChanged();
+
+        Snackbar.make(periodsRecyclerView, period.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Restore
+                periods.add(periodPosition, period);
+                periodListAdapter.notifyDataSetChanged();
+            }
+        }).show();
+    }
+
     class PeriodListAdapter extends RecyclerView.Adapter<PeriodListAdapter.PeriodViewHolder> {
         private final LayoutInflater inflater;
+        private EditPeriodDialogFragment.PeriodDialogListener listener;
 
-        public PeriodListAdapter(LayoutInflater inflater) {
+        public PeriodListAdapter(LayoutInflater inflater, EditPeriodDialogFragment.PeriodDialogListener listener) {
             this.inflater = inflater;
+            this.listener = listener;
         }
 
         @Override
@@ -244,12 +269,6 @@ public class EditDayController extends BaseController {
 
             @OnClick(R.id.period_card_base_view)
             void onCardClicked() {
-                EditingFinishedListener listener = new EditingFinishedListener() {
-                    @Override
-                    public void onEditingFinished() {
-                        notifyDataSetChanged();
-                    }
-                };
 
                 EditPeriodDialogFragment periodFragment =
                         EditPeriodDialogFragment.newInstance(period, getAdapterPosition(), listener);
