@@ -3,22 +3,18 @@ package tomdrever.timetable.data;
 import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Period implements Serializable {
+public class Period implements DataItem<Period> {
+	public Period() {
+		this.periodDescription = new HashMap<>();
+	}
+
     public Period(String name) {
         this.name = name;
 	    this.periodDescription = new HashMap<>();
-    }
-
-    public Period(Period period) {
-	    this.name = period.getName();
-	    this.periodDescription = period.getPeriodDescription();
-	    this.startTime = period.getStartTime();
-	    this.endTime = period.getEndTime();
     }
 
 	private String name;
@@ -69,5 +65,17 @@ public class Period implements Serializable {
 		}
 
 		return super.equals(obj);
+	}
+
+	@Override
+	public Period cloneItem() {
+		Period period = new Period();
+
+        period.name = name;
+        period.periodDescription = periodDescription;
+        period.startTime = startTime;
+        period.endTime = endTime;
+
+		return period;
 	}
 }

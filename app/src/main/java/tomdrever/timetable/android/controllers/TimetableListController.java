@@ -202,6 +202,7 @@ public class TimetableListController extends BaseController {
                 descriptionTextView.setText(timetable.getDescription());
 
                 if (timetable.getDescription().trim().isEmpty()) {
+                    // TODO - change timetable card height?
                     descriptionTextView.setVisibility(View.GONE);
                 } else {
                     descriptionTextView.setVisibility(View.VISIBLE);

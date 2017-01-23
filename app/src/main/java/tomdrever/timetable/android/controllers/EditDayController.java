@@ -62,7 +62,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
     public EditDayController(Day day) {
         this.day = day;
-        this.periods = CollectionUtils.copyPeriods(day.getPeriods());
+        this.periods = CollectionUtils.copy(day.getPeriods());
     }
 
     @Override
@@ -191,7 +191,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     }
 
     private Day newDay(String name) {
-        Day newDay = new Day(day);
+        Day newDay = day.cloneItem();
         newDay.setName(name);
         newDay.setPeriods(periods);
 

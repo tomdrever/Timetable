@@ -59,12 +59,12 @@ public class EditTimetableController extends BaseController implements View.OnDr
         timetable = new Timetable();
         timetable.setIndex(index);
 
-        days = CollectionUtils.copyDays(timetable.getDays());
+        days = CollectionUtils.copy(timetable.getDays());
     }
 
     public EditTimetableController(Timetable timetable) {
         this.timetable = timetable;
-        days = CollectionUtils.copyDays(timetable.getDays());
+        days = CollectionUtils.copy(timetable.getDays());
     }
 
     private void setupActionbar() {
@@ -197,7 +197,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
     }
 
     private Timetable newTimetable(String name, String description, ArrayList<Day> days) {
-        Timetable newTimetable = new Timetable(timetable);
+        Timetable newTimetable = timetable.cloneItem();
         newTimetable.setName(name);
         newTimetable.setDescription(description);
         newTimetable.setDays(days);

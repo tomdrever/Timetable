@@ -3,7 +3,7 @@ package tomdrever.timetable.data;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Timetable implements Comparable<Timetable>{
+public class Timetable implements Comparable<Timetable>, DataItem<Timetable>{
     private String name;
     private String description;
     private ArrayList<Day> days;
@@ -11,13 +11,6 @@ public class Timetable implements Comparable<Timetable>{
 
     public Timetable() {
         days = new ArrayList<>();
-    }
-
-    public Timetable(Timetable timetable) {
-	    days = new ArrayList<>();
-	    for (int i = 0; i < timetable.getDays().size(); i++) {
-		    days.add(new Day(timetable.getDays().get(i)));
-	    }
     }
 
     public String getName() {
@@ -83,5 +76,19 @@ public class Timetable implements Comparable<Timetable>{
     @Override
     public int compareTo(Timetable timetable) {
         return Integer.compare(index, timetable.index);
+    }
+
+    @Override
+    public Timetable cloneItem() {
+        Timetable timetable = new Timetable();
+        timetable.name = name;
+        timetable.index = index;
+        timetable.description = description;
+
+        for (int i = 0; i < days.size(); i++) {
+            timetable.days.add(days.get(i).cloneItem());
+        }
+
+        return timetable;
     }
 }

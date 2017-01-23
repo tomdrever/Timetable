@@ -6,7 +6,7 @@ import org.joda.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Day {
+public class Day implements DataItem<Day>{
     private ArrayList<Period> periods;
 
     public ArrayList<Period> getPeriods() {
@@ -46,15 +46,6 @@ public class Day {
         periods = new ArrayList<>();
 	}
 
-    public Day(Day day) {
-        name = day.getName();
-
-        periods = new ArrayList<>();
-	    for (int i = 0; i < day.getPeriods().size(); i++) {
-		    periods.add(new Period(day.getPeriods().get(i)));
-	    }
-    }
-
     public LocalTime getStartTime(){
         return periods.get(0).getStartTime();
     }
@@ -89,4 +80,16 @@ public class Day {
 
 		return super.equals(obj);
 	}
+
+    @Override
+    public Day cloneItem() {
+        Day day = new Day();
+
+        day.name = name;
+        for (int i = 0; i < periods.size(); i++) {
+            day.periods.add(periods.get(i).cloneItem());
+        }
+
+        return day;
+    }
 }
