@@ -37,4 +37,6 @@
 	<string name="edit_details_heading">Details</string>
 	<string name="no_periods">There are no time periods set for this day!</string>
 	<string name="edit_periods_heading">Periods</string>
+	<string name="edit_period_end_time">End Time</string>
+	<string name="edit_period_start_time">Start Time</string>
 </resources>

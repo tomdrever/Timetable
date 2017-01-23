@@ -23,4 +23,85 @@
 			/>
 
 	</android.support.design.widget.TextInputLayout>
+
+	<LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_period_start_time"
+            style="@style/SmallSettingsHeadingTextView"
+            />
+
+        <LinearLayout
+            android:id="@+id/edit_period_start_time_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            >
+
+            <TextView
+                android:id="@+id/period_start_time_main_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:30"
+                style="@style/TimeTextView"
+                />
+
+            <TextView
+                android:id="@+id/period_start_time_second_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A.M."
+                style="@style/SmallTimeTextView"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_period_end_time"
+            style="@style/SmallSettingsHeadingTextView"
+            />
+
+        <LinearLayout
+            android:id="@+id/edit_period_end_time_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            >
+
+            <TextView
+                android:id="@+id/edit_period_end_time_main_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5:15"
+                style="@style/TimeTextView"
+                />
+
+            <TextView
+                android:id="@+id/edit_period_end_time_second_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="P.M."
+                style="@style/SmallTimeTextView"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
