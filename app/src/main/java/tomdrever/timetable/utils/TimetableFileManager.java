@@ -1,10 +1,12 @@
-package tomdrever.timetable.utility;
+package tomdrever.timetable.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.fatboyindustrial.gsonjodatime.Converters;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +21,8 @@ public class TimetableFileManager {
     private String directory;
     private Context context;
 
+    private static Gson gson;
+
     public TimetableFileManager(Context context) {
         this.context = context;
         directory = context.getFilesDir() + "timetables/";
@@ -27,10 +31,12 @@ public class TimetableFileManager {
             File fileDirectory = new File(directory);
             fileDirectory.mkdirs();
         }
+
+        gson = Converters.registerLocalTime(new GsonBuilder()).create();
     }
 
     public void save(Timetable timetable) {
-        String fileContents = new Gson().toJson(timetable);
+        String fileContents = gson.toJson(timetable);
 
         try {
             File fileToSave = new File(directory, timetable.getName());
@@ -55,7 +61,7 @@ public class TimetableFileManager {
 
     public Timetable load(String name) {
         try {
-            return new Gson().fromJson(readFile(name), Timetable.class);
+            return gson.fromJson(readFile(name), Timetable.class);
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, "Error: Could not read file: " + name, Toast.LENGTH_SHORT).show();
@@ -71,7 +77,7 @@ public class TimetableFileManager {
 
         for (String fileName : fileNames) {
             try {
-                timetables.add(new Gson().fromJson(readFile(fileName), Timetable.class));
+                timetables.add(gson.fromJson(readFile(fileName), Timetable.class));
             }
             catch (IOException e){
                 Toast.makeText(context, "Error: Could not read file: " + fileName, Toast.LENGTH_SHORT).show();

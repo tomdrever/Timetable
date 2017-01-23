@@ -1,4 +1,4 @@
-package tomdrever.timetable.utility;
+package tomdrever.timetable.utils;
 
 import java.util.ArrayList;
 

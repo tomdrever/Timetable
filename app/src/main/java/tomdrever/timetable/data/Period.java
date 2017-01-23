@@ -17,8 +17,8 @@ public class Period implements DataItem<Period> {
 	    this.periodDescription = new HashMap<>();
     }
 
-	private String name;
-	public void setName(String name){
+    private String name;
+    public void setName(String name){
 		this.name = name;
 	}
 	public String getName(){

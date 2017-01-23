@@ -12,7 +12,7 @@ import com.bluelinelabs.conductor.Controller;
 
 import tomdrever.timetable.android.ActionBarProvider;
 import tomdrever.timetable.R;
-import tomdrever.timetable.utility.TimetableFileManager;
+import tomdrever.timetable.utils.TimetableFileManager;
 
 public abstract class BaseController extends ButterKnifeController {
 

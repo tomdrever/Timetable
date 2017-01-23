@@ -34,7 +34,7 @@ import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.android.views.ExpandableGridView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Timetable;
-import tomdrever.timetable.utility.CollectionUtils;
+import tomdrever.timetable.utils.CollectionUtils;
 
 public class EditTimetableController extends BaseController implements View.OnDragListener {
 

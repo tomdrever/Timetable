@@ -32,7 +32,7 @@ import tomdrever.timetable.android.fragments.EditPeriodDialogFragment;
 import tomdrever.timetable.android.views.ExpandableRecyclerView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
-import tomdrever.timetable.utility.CollectionUtils;
+import tomdrever.timetable.utils.CollectionUtils;
 
 public class EditDayController extends BaseController implements EditPeriodDialogFragment.PeriodDialogListener{
 
@@ -204,7 +204,9 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     }
 
     @Override
-    public void onFinishEditingPeriodClicked() {
+    public void onFinishEditingPeriodClicked(Period period, int periodPosition) {
+        // TODO - use the same method as AddPeriod() to organise the periods around any time changes
+        periods.set(periodPosition, period);
         periodListAdapter.notifyDataSetChanged();
     }
 
@@ -212,6 +214,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     public void onDeletePeriodClicked(final int periodPosition) {
         final Period period = periods.get(periodPosition);
 
+        // TODO - update EmptyListTextView
         periods.remove(periodPosition);
         periodListAdapter.notifyDataSetChanged();
 
@@ -270,12 +273,12 @@ public class EditDayController extends BaseController implements EditPeriodDialo
             @OnClick(R.id.period_card_base_view)
             void onCardClicked() {
 
-                EditPeriodDialogFragment periodFragment =
-                        EditPeriodDialogFragment.newInstance(period, getAdapterPosition(), listener);
                 FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
 
-                if (fm != null)
-                    periodFragment.show(fm, "period_fragment");
+                EditPeriodDialogFragment periodFragment =
+                        EditPeriodDialogFragment.newInstance(period.cloneItem(), getAdapterPosition(), listener, fm);
+
+                periodFragment.show(fm, "period_fragment");
             }
         }
     }
