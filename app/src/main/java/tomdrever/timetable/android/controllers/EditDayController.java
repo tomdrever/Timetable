@@ -33,6 +33,7 @@ import tomdrever.timetable.android.views.ExpandableRecyclerView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
 import tomdrever.timetable.utils.CollectionUtils;
+import tomdrever.timetable.utils.TimeUtils;
 
 public class EditDayController extends BaseController implements EditPeriodDialogFragment.PeriodDialogListener{
 
@@ -176,11 +177,35 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
     @OnClick(R.id.new_period_fab)
     void onNewPeriodClicked() {
-        Toast.makeText(getActivity(), "New period clicked", Toast.LENGTH_SHORT).show();
+        FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
+
+        EditPeriodDialogFragment periodFragment =
+                EditPeriodDialogFragment.newInstance(new Period(), -1, this, fm);
+
+        periodFragment.show(fm, "period_fragment");
     }
 
     private void addPeriod(Period period) {
-        // TODO - reorder periods chronologically
+        periods.add(period);
+        CollectionUtils.sortPeriods(periods);
+
+        periodListAdapter.notifyDataSetChanged();
+
+        updateNoPeriodsTextView();
+    }
+
+    private void addPeriodAt(Period period, int position) {
+        periods.add(position, period);
+        periodListAdapter.notifyDataSetChanged();
+
+        updateNoPeriodsTextView();
+    }
+
+    private void removePeriod(Period period) {
+        periods.remove(period);
+        periodListAdapter.notifyDataSetChanged();
+
+        updateNoPeriodsTextView();
     }
 
     private void updateNoPeriodsTextView() {
@@ -205,7 +230,11 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
     @Override
     public void onFinishEditingPeriodClicked(Period period, int periodPosition) {
-        // TODO - use the same method as AddPeriod() to organise the periods around any time changes
+        if (periodPosition == -1) {
+            addPeriod(period);
+            return;
+        }
+
         periods.set(periodPosition, period);
         periodListAdapter.notifyDataSetChanged();
     }
@@ -214,16 +243,13 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     public void onDeletePeriodClicked(final int periodPosition) {
         final Period period = periods.get(periodPosition);
 
-        // TODO - update EmptyListTextView
-        periods.remove(periodPosition);
-        periodListAdapter.notifyDataSetChanged();
+        removePeriod(period);
 
         Snackbar.make(periodsRecyclerView, period.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Restore
-                periods.add(periodPosition, period);
-                periodListAdapter.notifyDataSetChanged();
+                addPeriodAt(period, periodPosition);
             }
         }).show();
     }
@@ -257,6 +283,8 @@ public class EditDayController extends BaseController implements EditPeriodDialo
             Period period;
 
             @BindView(R.id.period_name_text) TextView nameTextView;
+            @BindView(R.id.period_start_text) TextView startTimeTextView;
+            @BindView(R.id.period_end_text) TextView endTimeTextView;
 
             public PeriodViewHolder(View itemView) {
                 super(itemView);
@@ -268,6 +296,12 @@ public class EditDayController extends BaseController implements EditPeriodDialo
                 this.period = item;
 
                 nameTextView.setText(period.getName());
+
+                startTimeTextView.setText(TimeUtils.formatTime(period.getStartTime().getHourOfDay(),
+                                                                period.getStartTime().getMinuteOfHour()));
+
+                endTimeTextView.setText(TimeUtils.formatTime(period.getEndTime().getHourOfDay(),
+                        period.getEndTime().getMinuteOfHour()));
             }
 
             @OnClick(R.id.period_card_base_view)

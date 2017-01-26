@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
 import java.util.regex.Pattern;
@@ -63,30 +64,31 @@ public class EditPeriodDialogFragment extends DialogFragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		if (period == null) period = new Period("New Period");
-
 		unbinder = ButterKnife.bind(this, view);
 
 		nameEditText.setText(period.getName() != null ? period.getName() : "");
 		periodNameInputLayout.setHint(getActivity().getString(R.string.edit_timetable_name));
 
+		// region Set time views
         if (period.getStartTime() == null) {
-            period.setStartTime(new LocalTime(13, 15));
-        }
+			startTimeMainTextView.setText(getActivity().getString(R.string.date_not_set));
+        } else {
+			String[] startTime = TimeUtils.formatTime(period.getStartTime().getHourOfDay(), period.getStartTime().getMinuteOfHour()).split(Pattern.quote(" "));
 
-        String[] startTime = TimeUtils.formatTime(period.getStartTime().getHourOfDay(), period.getStartTime().getMinuteOfHour()).split(Pattern.quote(" "));
-
-        startTimeMainTextView.setText(startTime[0]);
-        startTimeSecondTextView.setText(startTime[1]);
+			startTimeMainTextView.setText(startTime[0]);
+			startTimeSecondTextView.setText(startTime[1]);
+		}
 
         if (period.getEndTime() == null) {
-            period.setEndTime(new LocalTime(5, 30));
-        }
+			endTimeMainTextView.setText(getActivity().getString(R.string.date_not_set));
+        } else {
+			String[] endTime = TimeUtils.formatTime(period.getEndTime().getHourOfDay(), period.getEndTime().getMinuteOfHour()).split(Pattern.quote(" "));
 
-        String[] endTime = TimeUtils.formatTime(period.getEndTime().getHourOfDay(), period.getEndTime().getMinuteOfHour()).split(Pattern.quote(" "));
+			endTimeMainTextView.setText(endTime[0]);
+			endTimeSecondTextView.setText(endTime[1]);
+		}
 
-        endTimeMainTextView.setText(endTime[0]);
-        endTimeSecondTextView.setText(endTime[1]);
+		//endregion
 
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
@@ -103,10 +105,10 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
 		builder.setView(view);
 
-		builder.setTitle(period == null ? "New Period" : String.format("Edit %s", period.getName()));
+		builder.setTitle(periodPosition == -1 ? "New Period" : String.format("Edit %s", period.getName()));
 
 		builder.setPositiveButton("OK", null);
-		if (period != null) builder.setNeutralButton("Delete", null);
+		if (periodPosition != -1) builder.setNeutralButton("Delete", null);
 		builder.setNegativeButton("Cancel", null);
 
 		final AlertDialog dialog = builder.create();
@@ -123,15 +125,25 @@ public class EditPeriodDialogFragment extends DialogFragment {
 						// Check the period has been given a name
 						String name = nameEditText.getText().toString().trim();
 						if (name.isEmpty()) {
-							// If not, tell the user
 							Toast.makeText(getActivity(), "The period needs a name!", Toast.LENGTH_SHORT).show();
-						} else {
-							period.setName(name);
-							if (periodDialogListener != null)
-								periodDialogListener.onFinishEditingPeriodClicked(period, periodPosition);
-
-							dismiss();
+							return;
 						}
+						period.setName(name);
+
+						if (period.getStartTime() == null) {
+							Toast.makeText(getActivity(), "The period needs a start time!", Toast.LENGTH_SHORT).show();
+							return;
+						}
+
+						if (period.getEndTime() == null) {
+							Toast.makeText(getActivity(), "The period needs a end time!", Toast.LENGTH_SHORT).show();
+							return;
+						}
+
+						if (periodDialogListener != null)
+							periodDialogListener.onFinishEditingPeriodClicked(period, periodPosition);
+
+						dismiss();
 					}
 				});
 				// endregion
@@ -158,6 +170,9 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
 	@OnClick(R.id.edit_period_start_time_view)
     void onStartTimeClicked() {
+		int dialogStartHour = period.getStartTime() == null ? DateTime.now().getHourOfDay() : period.getStartTime().getHourOfDay();
+		int dialogStartMinute = period.getStartTime() == null ? DateTime.now().getMinuteOfHour() : period.getStartTime().getMinuteOfHour();
+
         final TimePickerFragmentDialog dialog = TimePickerFragmentDialog.newInstance(new TimePickerFragmentDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(int hour, int minute) {
@@ -168,13 +183,16 @@ public class EditPeriodDialogFragment extends DialogFragment {
                 startTimeMainTextView.setText(time[0]);
                 startTimeSecondTextView.setText(time[1]);
             }
-        }, period.getStartTime().getHourOfDay(), period.getStartTime().getMinuteOfHour());
+        }, dialogStartHour, dialogStartMinute);
 
         dialog.show(fragmentManager, "start_time");
     }
 
     @OnClick(R.id.edit_period_end_time_view)
     void onEndTimeClicked() {
+		int dialogEndHour = period.getEndTime() == null ? DateTime.now().getHourOfDay() : period.getEndTime().getHourOfDay();
+		int dialogEndMinute = period.getEndTime() == null ? DateTime.now().getMinuteOfHour() : period.getEndTime().getMinuteOfHour();
+
         TimePickerFragmentDialog dialog = TimePickerFragmentDialog.newInstance(new TimePickerFragmentDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(int hour, int minute) {
@@ -185,7 +203,7 @@ public class EditPeriodDialogFragment extends DialogFragment {
                 endTimeMainTextView.setText(time[0]);
                 endTimeSecondTextView.setText(time[1]);
             }
-        }, period.getEndTime().getHourOfDay(), period.getEndTime().getMinuteOfHour());
+        }, dialogEndHour, dialogEndMinute);
 
         dialog.show(fragmentManager, "end_time");
     }
