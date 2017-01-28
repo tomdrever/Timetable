@@ -1,4 +1,4 @@
-package tomdrever.timetable.android;
+package tomdrever.timetable.android.controllers;
 
 public interface EditingFinishedListener {
     void onEditingFinished();

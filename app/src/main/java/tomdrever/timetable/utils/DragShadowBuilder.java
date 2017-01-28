@@ -1,4 +1,4 @@
-package tomdrever.timetable.android.controllers;
+package tomdrever.timetable.utils;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

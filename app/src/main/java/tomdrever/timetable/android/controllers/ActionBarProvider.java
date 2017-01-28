@@ -1,4 +1,4 @@
-package tomdrever.timetable.android;
+package tomdrever.timetable.android.controllers;
 
 import android.support.v7.app.ActionBar;
 

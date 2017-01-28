@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import tomdrever.timetable.data.Period;
 
-public class PeriodComparer implements Comparator<Period> {
+public class PeriodComparator implements Comparator<Period> {
     @Override
     public int compare(Period period, Period other) {
 
