@@ -7,7 +7,6 @@ import tomdrever.timetable.data.Period;
 public class PeriodComparator implements Comparator<Period> {
     @Override
     public int compare(Period period, Period other) {
-
         return period.getStartTime().isBefore(other.getStartTime()) ? -1 : +1;
     }
 

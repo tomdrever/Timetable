@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="primaryLight">#727272</color>
-	<color name="fadedLight">#9E9E9E</color>
-	<color name="primary">#43a047</color>
-	<color name="primaryDark">#388E3C</color>
-	<color name="accent">#8BC34A</color>
-	<color name="light">#53a457</color>
+    <color name="darkGreen">#388E3C</color>
+    <color name="green">#43a047</color>
+    <color name="lightGreen">#81C784</color>
+
+    <color name="lime">#8BC34A</color>
 
 	<color name="black">#212121</color>
-	<color name="white">#ffffff</color>
-	<color name="grey">#616161</color>
-	<color name="lightGrey">#757575</color>
-	<color name="darkGrey">#424242</color>
+    <color name="darkGrey">#424242</color>
+    <color name="grey">#616161</color>
+    <color name="lightGrey">#757575</color>
+    <color name="lightestGrey">#DDDDDD</color>
+    <color name="white">#FAFAFA</color>
 
 	<color name="transparent">#00000000</color>
 </resources>

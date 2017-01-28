@@ -5,6 +5,7 @@ import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -29,12 +30,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.EditingFinishedListener;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.android.views.ExpandableGridView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.utils.CollectionUtils;
+import tomdrever.timetable.utils.DragShadowBuilder;
 
 public class EditTimetableController extends BaseController implements View.OnDragListener {
 
@@ -52,6 +53,8 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
     private DayGridAdapter dayGridAdapter;
 
+    private int viewDayPosition;
+
     public EditTimetableController() { }
 
     public EditTimetableController(int index) {
@@ -60,11 +63,15 @@ public class EditTimetableController extends BaseController implements View.OnDr
         timetable.setIndex(index);
 
         days = CollectionUtils.copy(timetable.getDays());
+
+        this.viewDayPosition = 0;
     }
 
-    public EditTimetableController(Timetable timetable) {
+    public EditTimetableController(Timetable timetable, int viewDayPosition) {
         this.timetable = timetable;
         days = CollectionUtils.copy(timetable.getDays());
+
+        this.viewDayPosition = viewDayPosition;
     }
 
     private void setupActionbar() {
@@ -95,7 +102,6 @@ public class EditTimetableController extends BaseController implements View.OnDr
             builder.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // Discard changes
-
                     if (newTimetable.isEmpty()) {
                         getRouter().pushController(RouterTransaction.with(new TimetableListController())
                                 .popChangeHandler(new FadeChangeHandler())
@@ -128,7 +134,9 @@ public class EditTimetableController extends BaseController implements View.OnDr
                 return true;
             }
 
-            getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
+            ViewTimetableController controller = new ViewTimetableController(timetable, viewDayPosition);
+
+            getRouter().pushController(RouterTransaction.with(controller)
                     .popChangeHandler(new FadeChangeHandler())
                     .pushChangeHandler(new FadeChangeHandler()));
         }

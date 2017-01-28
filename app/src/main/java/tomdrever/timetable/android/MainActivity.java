@@ -16,6 +16,7 @@ import com.bluelinelabs.conductor.RouterTransaction;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tomdrever.timetable.R;
+import tomdrever.timetable.android.controllers.ActionBarProvider;
 import tomdrever.timetable.android.controllers.TimetableListController;
 
 public class MainActivity extends AppCompatActivity implements ActionBarProvider {

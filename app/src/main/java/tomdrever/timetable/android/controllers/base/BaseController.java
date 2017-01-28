@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.bluelinelabs.conductor.Controller;
 
-import tomdrever.timetable.android.ActionBarProvider;
+import tomdrever.timetable.android.controllers.ActionBarProvider;
 import tomdrever.timetable.R;
 import tomdrever.timetable.utils.TimetableFileManager;
 
@@ -18,7 +18,7 @@ public abstract class BaseController extends ButterKnifeController {
 
     protected BaseController() { }
 
-    protected BaseController(Bundle args) {
+    public BaseController(Bundle args) {
         super(args);
     }
 

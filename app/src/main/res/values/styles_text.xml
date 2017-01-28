@@ -7,7 +7,7 @@
 	</style>
 
 	<style name="TimetableCardDetailsTextView" parent="BasicTextView">
-		<item name="android:textColor">@color/primaryLight</item>
+		<item name="android:textColor">@color/lightGrey</item>
 		<item name="android:fontFamily">sans-serif-light</item>
 	</style>
 
@@ -19,7 +19,7 @@
 
 	<style name="EmptyListTextView">
 		<item name="android:textAlignment">center</item>
-		<item name="android:textColor">@color/primaryLight</item>
+		<item name="android:textColor">@color/lightGrey</item>
 		<item name="android:textSize">24sp</item>
 		<item name="android:fontFamily">sans-serif-thin</item>
 	</style>
@@ -42,7 +42,7 @@
 	</style>
 
 	<style name="SettingsHeadingTextView" parent="BasicTextView">
-		<item name="android:textColor">@color/accent</item>
+		<item name="android:textColor">@color/lime</item>
         <item name="android:textSize">14sp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>

@@ -26,7 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tomdrever.timetable.R;
-import tomdrever.timetable.android.EditingFinishedListener;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.android.fragments.EditPeriodDialogFragment;
 import tomdrever.timetable.android.views.ExpandableRecyclerView;

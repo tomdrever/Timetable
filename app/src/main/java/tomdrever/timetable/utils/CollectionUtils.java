@@ -19,6 +19,6 @@ public class CollectionUtils {
     }
 
     public static void sortPeriods(ArrayList<Period> periods) {
-        Collections.sort(periods, new PeriodComparer());
+        Collections.sort(periods, new PeriodComparator());
     }
 }

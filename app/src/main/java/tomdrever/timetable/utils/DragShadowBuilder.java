@@ -9,7 +9,7 @@ import android.view.View;
 import tomdrever.timetable.R;
 
 // Adapted from the android guide on drag and drop
-class DragShadowBuilder extends View.DragShadowBuilder {
+public class DragShadowBuilder extends View.DragShadowBuilder {
 
     private static Drawable shadow;
 
