@@ -1,5 +1,6 @@
 package tomdrever.timetable.android.controllers;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,19 +13,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 
 import com.bluelinelabs.conductor.RouterTransaction;
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
+
+import java.lang.reflect.Field;
 
 import butterknife.BindView;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.android.fragments.DayFragment;
 import tomdrever.timetable.data.Timetable;
+import tomdrever.timetable.utils.FixedSpeedScroller;
+import tomdrever.timetable.utils.ViewUtils;
 
 public class ViewTimetableController extends BaseController {
 
-    private final int intialPosition;
+    private final int initialPosition;
     private Timetable timetable;
 
     @BindView(R.id.days_pager) ViewPager daysViewPager;
@@ -33,15 +39,15 @@ public class ViewTimetableController extends BaseController {
     private DaysPagerAdapter daysAdapter;
 
     public ViewTimetableController() {
-        intialPosition = 0;
+        initialPosition = 0;
     }
     public ViewTimetableController(Timetable timetable) {
         this.timetable = timetable;
-        intialPosition = 0;
+        initialPosition = 0;
     }
     public ViewTimetableController(Timetable timetable, int position) {
         this.timetable = timetable;
-        intialPosition = position;
+        initialPosition = position;
     }
 
     @Override
@@ -59,10 +65,53 @@ public class ViewTimetableController extends BaseController {
 
         daysAdapter = new DaysPagerAdapter(getAppCombatActivity().getSupportFragmentManager());
         daysViewPager.setAdapter(daysAdapter);
-        daysViewPager.setCurrentItem(intialPosition);
+        daysViewPager.setCurrentItem(initialPosition);
+
+        // region Cap Pager Scrolling
+        try {
+            Field mScroller;
+            mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller(getApplicationContext(), new DecelerateInterpolator());
+            mScroller.set(daysViewPager, scroller);
+        } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException ignored) {}
+        // endregion
 
         periodsTabLayout.setupWithViewPager(daysViewPager);
-        periodsTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+        // region Set Custom Tabs
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        for (int i = 0; i < periodsTabLayout.getTabCount(); i++) {
+            String text = String.valueOf(timetable.getDays().get(i).getName().toUpperCase().charAt(0));
+            int color = timetable.getDays().get(i).getColor();
+
+            periodsTabLayout.getTabAt(i).setCustomView(ViewUtils.createCircleView(inflater, text, color));
+            periodsTabLayout.getTabAt(i).getCustomView().findViewById(R.id.circle_item_image).setPadding(20, 20, 20, 20);
+        }
+        // endregion
+
+        // region Enlarge tab when selected
+        TabLayout.Tab initialTab = periodsTabLayout.getTabAt(initialPosition);
+        ViewUtils.scale(initialTab.getCustomView().findViewById(R.id.circle_item_image), 1.25f);
+
+        periodsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                ViewUtils.scale(tab.getCustomView().findViewById(R.id.circle_item_image), 1.25f);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                ViewUtils.scale(tab.getCustomView().findViewById(R.id.circle_item_image), 1f);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        // endregion
     }
 
     @Override
@@ -77,7 +126,6 @@ public class ViewTimetableController extends BaseController {
             getRouter().pushController(RouterTransaction.with(new EditTimetableController(timetable, daysViewPager.getCurrentItem()))
                     .popChangeHandler(new FadeChangeHandler())
                     .pushChangeHandler(new FadeChangeHandler()));
-            // TODO - maybe this should update its timetable as a onControllerFinished
         }
 
         return true;

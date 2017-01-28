@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.GridView;
 
-// TODO - credit
 public class ExpandableGridView extends GridView {
     public ExpandableGridView(Context context) {
         super(context);
@@ -23,13 +22,9 @@ public class ExpandableGridView extends GridView {
         int heightSpec;
 
         if (getLayoutParams().height == LayoutParams.WRAP_CONTENT) {
-            // The great Android "hackatlon", the love, the magic.
-            // The two leftmost bits in the height measure spec have
-            // a special meaning, hence we can't use them to describe height.
+            // Remove 2 leftmost bits
             heightSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-        }
-        else {
-            // Any other height should be respected as is.
+        } else {
             heightSpec = heightMeasureSpec;
         }
 

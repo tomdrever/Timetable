@@ -1,5 +1,7 @@
 package tomdrever.timetable.data;
 
+import android.graphics.Color;
+
 import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
@@ -69,7 +71,18 @@ public class Day implements DataItem<Day>{
 		return null;
 	}
 
-	@Override
+    private int color;
+
+    public int getColor() {
+        // TODO - get in editday...
+        return Color.rgb(50, 150, 50);
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    @Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Day) {
 			Day other = (Day) obj;

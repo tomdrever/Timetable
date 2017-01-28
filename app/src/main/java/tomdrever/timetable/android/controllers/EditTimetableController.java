@@ -5,7 +5,6 @@ import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -19,8 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluelinelabs.conductor.RouterTransaction;
@@ -36,6 +33,7 @@ import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Timetable;
 import tomdrever.timetable.utils.CollectionUtils;
 import tomdrever.timetable.utils.DragShadowBuilder;
+import tomdrever.timetable.utils.ViewUtils;
 
 public class EditTimetableController extends BaseController implements View.OnDragListener {
 
@@ -246,7 +244,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
                 final Day day = days.get(position);
 
-                if (view.getId() == R.id.day_grid_item) {
+                if (view.getId() == R.id.circle_item_base) {
                     final int targetPosition = (int) view.getTag();
 
                     // NOTE - no need to do anything if the day hasn't been moved
@@ -331,25 +329,17 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            final View itemView;
-
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            if (convertView == null) itemView = inflater.inflate(R.layout.day_grid_item_view, null);
-            else itemView = convertView;
-
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.day_grid_image);
-            imageView.setImageResource(R.drawable.circle);
-
-            TextView textView = (TextView) itemView.findViewById(R.id.day_grid_text);
-            textView.setTextSize(22);
+            final View itemView;
 
             if (position != days.size()) {
-                // NOTE - for all items bar the last, which is the "add new" button
-                imageView.setColorFilter(Color.rgb(50, 50, 255));
-                itemView.setTag(position);
+                String text = String.valueOf(getItem(position).getName().toUpperCase().charAt(0));
 
-                textView.setText(String.valueOf(getItem(position).getName().charAt(0)).toUpperCase());
+                itemView = ViewUtils.createCircleView(inflater, text, getItem(position).getColor());
+
+                // NOTE - for all items bar the last, which is the "add new" button
+                itemView.setTag(position);
 
                 // region OnClick
                 itemView.setOnClickListener(new View.OnClickListener() {
@@ -391,8 +381,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
                 itemView.setOnDragListener(EditTimetableController.this);
             } else {
                 // NOTE - for the "add new button"
-                imageView.setColorFilter(Color.rgb(255, 50, 50));
-                textView.setText("+");
+                itemView = ViewUtils.createCircleView(inflater, "+", Color.rgb(255, 50, 50));
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

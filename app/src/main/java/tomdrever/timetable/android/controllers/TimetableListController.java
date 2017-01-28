@@ -32,8 +32,6 @@ public class TimetableListController extends BaseController {
     @BindView(R.id.timetables_list_recyclerview) RecyclerView recyclerView;
     @BindView(R.id.no_timetables) TextView noTimetablesTextView;
 
-
-
     @Override
     protected View inflateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
         return inflater.inflate(R.layout.controller_timetable_list, container, false);
