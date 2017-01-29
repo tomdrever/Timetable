@@ -93,17 +93,17 @@ public class ViewTimetableController extends BaseController {
 
         // region Enlarge tab when selected
         TabLayout.Tab initialTab = periodsTabLayout.getTabAt(initialPosition);
-        ViewUtils.scale(initialTab.getCustomView().findViewById(R.id.circle_item_image), 1.25f);
+        ViewUtils.startAnimation(initialTab.getCustomView(), R.anim.scale_day_up, getApplicationContext());
 
         periodsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                ViewUtils.scale(tab.getCustomView().findViewById(R.id.circle_item_image), 1.25f);
+                ViewUtils.startAnimation(tab.getCustomView(), R.anim.scale_day_up, getApplicationContext());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                ViewUtils.scale(tab.getCustomView().findViewById(R.id.circle_item_image), 1f);
+                ViewUtils.startAnimation(tab.getCustomView(), R.anim.scale_day_down, getApplicationContext());
             }
 
             @Override

@@ -7,10 +7,11 @@
     <color name="lime">#8BC34A</color>
 
 	<color name="black">#212121</color>
-    <color name="darkGrey">#424242</color>
-    <color name="grey">#616161</color>
-    <color name="lightGrey">#757575</color>
-    <color name="lightestGrey">#DDDDDD</color>
+    <color name="grey1">#424242</color>
+    <color name="grey2">#616161</color>
+    <color name="grey3">#757575</color>
+    <color name="grey4">#DDDDDD</color>
+    <color name="grey5">#EFEFEF</color>
     <color name="white">#FAFAFA</color>
 
 	<color name="transparent">#00000000</color>

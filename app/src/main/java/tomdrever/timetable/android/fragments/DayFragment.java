@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -16,6 +17,7 @@ import butterknife.Unbinder;
 import tomdrever.timetable.R;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
+import tomdrever.timetable.utils.ColorUtils;
 import tomdrever.timetable.utils.TimeUtils;
 
 public class DayFragment extends Fragment {
@@ -24,6 +26,7 @@ public class DayFragment extends Fragment {
 
     @BindView(R.id.day_periods_recyclerview) RecyclerView periodsRecyclerView;
     @BindView(R.id.day_name_textview) TextView nameTextView;
+    @BindView(R.id.day_name_bar) FrameLayout dayNameBar;
 
     public static DayFragment newDayFragment(Day day) {
         DayFragment fragment = new DayFragment();
@@ -46,7 +49,7 @@ public class DayFragment extends Fragment {
         });
         periodsRecyclerView.setAdapter(periodsAdapter);
 
-
+        dayNameBar.setBackgroundColor(ColorUtils.lighten(day.getColor()));
 
         nameTextView.setText(day.getName());
 
