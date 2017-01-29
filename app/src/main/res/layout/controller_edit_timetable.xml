@@ -39,7 +39,7 @@
                     android:id="@+id/edit_timetable_name"
                     android:layout_width="match_parent"
                     android:imeOptions="actionGo"
-                    android:inputType="text"
+                    android:inputType="textCapWords"
                     android:maxLines="1"
                     style="@style/BasicEditText"
                 />

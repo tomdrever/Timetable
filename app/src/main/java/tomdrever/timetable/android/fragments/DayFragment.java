@@ -3,6 +3,7 @@ package tomdrever.timetable.android.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,7 +50,8 @@ public class DayFragment extends Fragment {
         });
         periodsRecyclerView.setAdapter(periodsAdapter);
 
-        dayNameBar.setBackgroundColor(ColorUtils.lighten(day.getColor()));
+        // TODO - replace with day.getColor()
+        dayNameBar.setBackgroundColor(ColorUtils.lighten(ContextCompat.getColor(getContext(), R.color.blue)));
 
         nameTextView.setText(day.getName());
 

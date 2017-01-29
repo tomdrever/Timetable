@@ -4,10 +4,10 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -336,7 +336,10 @@ public class EditTimetableController extends BaseController implements View.OnDr
             if (position != days.size()) {
                 String text = String.valueOf(getItem(position).getName().toUpperCase().charAt(0));
 
-                itemView = ViewUtils.createCircleView(inflater, text, getItem(position).getColor());
+                // TODO - replave with: int color = getItem(position).getColor()
+                int color = ContextCompat.getColor(getApplicationContext(), R.color.blue);
+
+                itemView = ViewUtils.createCircleView(inflater, text, color);
 
                 // NOTE - for all items bar the last, which is the "add new" button
                 itemView.setTag(position);
@@ -381,7 +384,8 @@ public class EditTimetableController extends BaseController implements View.OnDr
                 itemView.setOnDragListener(EditTimetableController.this);
             } else {
                 // NOTE - for the "add new button"
-                itemView = ViewUtils.createCircleView(inflater, "+", Color.rgb(255, 50, 50));
+                itemView = ViewUtils.createCircleView(inflater, "+",
+                        ContextCompat.getColor(context, R.color.red));
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

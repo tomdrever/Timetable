@@ -52,7 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionGo"
-                        android:inputType="text"
+                        android:inputType="textCapWords"
                         android:maxLines="1"
                         style="@style/BasicEditText"
                         />

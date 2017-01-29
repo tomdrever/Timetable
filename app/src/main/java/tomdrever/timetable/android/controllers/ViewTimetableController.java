@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,7 +66,6 @@ public class ViewTimetableController extends BaseController {
 
         daysAdapter = new DaysPagerAdapter(getAppCombatActivity().getSupportFragmentManager());
         daysViewPager.setAdapter(daysAdapter);
-        daysViewPager.setCurrentItem(initialPosition);
 
         // region Cap Pager Scrolling
         try {
@@ -84,7 +84,8 @@ public class ViewTimetableController extends BaseController {
 
         for (int i = 0; i < periodsTabLayout.getTabCount(); i++) {
             String text = String.valueOf(timetable.getDays().get(i).getName().toUpperCase().charAt(0));
-            int color = timetable.getDays().get(i).getColor();
+            //TODO - replace with: int color = timetable.getDays().get(i).getColor();
+            int color = ContextCompat.getColor(getApplicationContext(), R.color.blue);
 
             periodsTabLayout.getTabAt(i).setCustomView(ViewUtils.createCircleView(inflater, text, color));
             periodsTabLayout.getTabAt(i).getCustomView().findViewById(R.id.circle_item_image).setPadding(20, 20, 20, 20);
@@ -92,8 +93,12 @@ public class ViewTimetableController extends BaseController {
         // endregion
 
         // region Enlarge tab when selected
-        TabLayout.Tab initialTab = periodsTabLayout.getTabAt(initialPosition);
-        ViewUtils.startAnimation(initialTab.getCustomView(), R.anim.scale_day_up, getApplicationContext());
+        if (periodsTabLayout.getTabCount() > 0 && initialPosition < periodsTabLayout.getTabCount()) {
+            daysViewPager.setCurrentItem(initialPosition);
+
+            TabLayout.Tab initialTab = periodsTabLayout.getTabAt(initialPosition);
+            ViewUtils.startAnimation(initialTab.getCustomView(), R.anim.scale_day_up, getApplicationContext());
+        }
 
         periodsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
