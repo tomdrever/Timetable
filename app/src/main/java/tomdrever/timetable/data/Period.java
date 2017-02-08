@@ -1,5 +1,7 @@
 package tomdrever.timetable.data;
 
+import android.graphics.Color;
+
 import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
@@ -77,5 +79,15 @@ public class Period implements DataItem<Period> {
         period.endTime = endTime;
 
 		return period;
+	}
+
+	private int colour;
+
+	public int getColour() {
+		return Color.rgb(50, 150, 50);
+	}
+
+	public void setColour(int colour) {
+		this.colour = colour;
 	}
 }

@@ -71,15 +71,15 @@ public class Day implements DataItem<Day>{
 		return null;
 	}
 
-    private int color;
+    private int colour;
 
-    public int getColor() {
+    public int getColour() {
         // TODO - get in editday...
         return Color.rgb(50, 150, 50);
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public void setColour(int colour) {
+        this.colour = colour;
     }
 
     @Override

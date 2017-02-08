@@ -3,17 +3,20 @@ package tomdrever.timetable.android.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,8 @@ public class EditPeriodDialogFragment extends DialogFragment {
     @BindView(R.id.edit_period_start_time_second_view) TextView startTimeSecondTextView;
     @BindView(R.id.edit_period_end_time_main_view) TextView endTimeMainTextView;
     @BindView(R.id.edit_period_end_time_second_view) TextView endTimeSecondTextView;
+
+	@BindView(R.id.colour_rect_image) ImageView periodColourImage;
 
     private PeriodDialogListener periodDialogListener;
 
@@ -86,6 +91,14 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
 			endTimeMainTextView.setText(endTime[0]);
 			endTimeSecondTextView.setText(endTime[1]);
+		}
+
+		if (period.getColour() == 0) {
+			periodColourImage.setColorFilter(Color.rgb(67,160,71));
+			periodColourImage.setTag(Color.rgb(67,160,71));
+		} else {
+			periodColourImage.setColorFilter(period.getColour());
+			periodColourImage.setTag(period.getColour());
 		}
 
 		//endregion
@@ -130,6 +143,8 @@ public class EditPeriodDialogFragment extends DialogFragment {
 						}
 						period.setName(name);
 
+						period.setColour((int)periodColourImage.getTag());
+
 						if (period.getStartTime() == null) {
 							Toast.makeText(getActivity(), "The period needs a start time!", Toast.LENGTH_SHORT).show();
 							return;
@@ -153,6 +168,8 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
 				// If there is not a neutral button, do not attempt to give it an onclick;
 				if (neutButton == null) return;
+
+				neutButton.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
 
 				neutButton.setOnClickListener(new View.OnClickListener() {
 					@Override

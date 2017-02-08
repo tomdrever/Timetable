@@ -336,7 +336,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
             if (position != days.size()) {
                 String text = String.valueOf(getItem(position).getName().toUpperCase().charAt(0));
 
-                // TODO - replave with: int color = getItem(position).getColor()
+                // TODO - replace with: int color = getItem(position).getColour()
                 int color = ContextCompat.getColor(getApplicationContext(), R.color.blue);
 
                 itemView = ViewUtils.createCircleView(inflater, text, color);

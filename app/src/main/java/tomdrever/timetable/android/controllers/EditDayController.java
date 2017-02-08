@@ -1,6 +1,7 @@
 package tomdrever.timetable.android.controllers;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,8 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     @BindView(R.id.day_name_input_layout) TextInputLayout dayNameInputLayout;
     @BindView(R.id.edit_day_name) EditText dayNameEditText;
 
+    @BindView(R.id.colour_rect_image) ImageView dayColourImage;
+
     @BindView(R.id.edit_periods_recyclerview) ExpandableRecyclerView periodsRecyclerView;
 
     @BindView(R.id.edit_day_scrollview) ScrollView editDayScrollView;
@@ -78,6 +82,15 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
         dayNameEditText.setText(day.getName() != null ? day.getName() : "");
         dayNameInputLayout.setHint(getActivity().getString(R.string.edit_day_name));
+
+        if (day.getColour() == 0) {
+            // Set to default green
+            dayColourImage.setColorFilter(Color.rgb(67,160,71));
+            dayColourImage.setTag(Color.rgb(67,160,71));
+        } else {
+            dayColourImage.setColorFilter(day.getColour());
+            dayColourImage.setTag(day.getColour());
+        }
 
         periodListAdapter = new PeriodListAdapter(LayoutInflater.from(view.getContext()), this);
 
@@ -165,6 +178,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
             day.setName(name);
             day.setPeriods(periods);
+            day.setColour((int) dayColourImage.getTag());
 
             if (editingFinishedListener != null) editingFinishedListener.onEditingFinished();
 
@@ -218,6 +232,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
         Day newDay = day.cloneItem();
         newDay.setName(name);
         newDay.setPeriods(periods);
+        newDay.setColour((int) dayColourImage.getTag());
 
         return newDay;
     }

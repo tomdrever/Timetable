@@ -84,7 +84,7 @@ public class ViewTimetableController extends BaseController {
 
         for (int i = 0; i < periodsTabLayout.getTabCount(); i++) {
             String text = String.valueOf(timetable.getDays().get(i).getName().toUpperCase().charAt(0));
-            //TODO - replace with: int color = timetable.getDays().get(i).getColor();
+            //TODO - replace with: int color = timetable.getDays().get(i).getColour();
             int color = ContextCompat.getColor(getApplicationContext(), R.color.blue);
 
             periodsTabLayout.getTabAt(i).setCustomView(ViewUtils.createCircleView(inflater, text, color));

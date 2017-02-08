@@ -50,7 +50,7 @@ public class DayFragment extends Fragment {
         });
         periodsRecyclerView.setAdapter(periodsAdapter);
 
-        // TODO - replace with day.getColor()
+        // TODO - replace with day.getColour()
         dayNameBar.setBackgroundColor(ColorUtils.lighten(ContextCompat.getColor(getContext(), R.color.blue)));
 
         nameTextView.setText(day.getName());
