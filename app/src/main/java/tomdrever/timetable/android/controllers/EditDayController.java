@@ -2,6 +2,7 @@ package tomdrever.timetable.android.controllers;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,12 +24,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
+import tomdrever.timetable.android.fragments.ColourPickerFragmentDialog;
 import tomdrever.timetable.android.fragments.EditPeriodDialogFragment;
 import tomdrever.timetable.android.views.ExpandableRecyclerView;
 import tomdrever.timetable.data.Day;
@@ -127,6 +130,8 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     public boolean handleBack() {
         String name = dayNameEditText.getText().toString().trim();
 
+        if (Objects.equals(name, "")) name = null;
+
         if (!day.equals(newDay(name))) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -196,6 +201,23 @@ public class EditDayController extends BaseController implements EditPeriodDialo
                 EditPeriodDialogFragment.newInstance(new Period(), -1, this, fm);
 
         periodFragment.show(fm, "period_fragment");
+    }
+
+    @OnClick(R.id.colour_rect_image)
+    void onColourRectClicked() {
+        FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
+
+        ColourPickerFragmentDialog fragment =
+                ColourPickerFragmentDialog.newInstance((int) dayColourImage.getTag(),
+                        new ColourPickerFragmentDialog.OnColourSetListener() {
+                    @Override
+                    public void OnColourSet(@ColorInt int colour) {
+                        dayColourImage.setColorFilter(colour);
+                        dayColourImage.setTag(colour);
+                    }
+                });
+
+        fragment.show(fm, "colour_picker_fragment");
     }
 
     private void addPeriod(Period period) {
@@ -279,7 +301,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
         @Override
         public PeriodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new PeriodViewHolder(inflater.inflate(R.layout.period_card, parent, false));
+            return new PeriodViewHolder(inflater.inflate(R.layout.view_card_edit_period, parent, false));
         }
 
         @Override

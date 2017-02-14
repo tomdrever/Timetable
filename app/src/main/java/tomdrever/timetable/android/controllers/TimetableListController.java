@@ -169,7 +169,7 @@ public class TimetableListController extends BaseController {
 
         @Override
         public TimetableViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new TimetableViewHolder(inflater.inflate(R.layout.timetable_card, parent, false));
+            return new TimetableViewHolder(inflater.inflate(R.layout.view_card_view_timetable, parent, false));
         }
 
         @Override

@@ -57,7 +57,7 @@ public class Timetable implements Comparable<Timetable>, DataItem<Timetable>{
         this.index = index;
     }
 
-    public boolean isEmpty() {
+    public boolean isBlank() {
         return (name == null || name.equals("")) && (description == null || description.equals("")) && days.size() == 0;
     }
 

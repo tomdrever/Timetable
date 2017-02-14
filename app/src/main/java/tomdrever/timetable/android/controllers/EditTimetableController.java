@@ -24,6 +24,7 @@ import com.bluelinelabs.conductor.RouterTransaction;
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import tomdrever.timetable.R;
@@ -56,7 +57,6 @@ public class EditTimetableController extends BaseController implements View.OnDr
     public EditTimetableController() { }
 
     public EditTimetableController(int index) {
-        // Is new timetable!
         timetable = new Timetable();
         timetable.setIndex(index);
 
@@ -75,7 +75,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
     private void setupActionbar() {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View v = inflater.inflate(R.layout.edit_day_actionbar_delete, null);
+        View v = inflater.inflate(R.layout.view_edit_day_actionbar_delete, null);
         v.setOnDragListener(this);
 
         getActionBar().setDisplayShowCustomEnabled(false);
@@ -85,6 +85,8 @@ public class EditTimetableController extends BaseController implements View.OnDr
     @Override
     public boolean handleBack() {
         String name = nameEditText.getText().toString().trim();
+        if (Objects.equals(name, "")) name = null;
+
         String description = descriptionEditText.getText().toString().trim();
 
         final Timetable newTimetable = newTimetable(name, description, days);
@@ -95,20 +97,9 @@ public class EditTimetableController extends BaseController implements View.OnDr
             builder.setTitle("Discard changes?");
 
             // region Buttons
-
-            // Add the buttons
             builder.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    // Discard changes
-                    if (newTimetable.isEmpty()) {
-                        getRouter().pushController(RouterTransaction.with(new TimetableListController())
-                                .popChangeHandler(new FadeChangeHandler())
-                                .pushChangeHandler(new FadeChangeHandler()));
-                    } else {
-                        getRouter().pushController(RouterTransaction.with(new ViewTimetableController(timetable))
-                                .popChangeHandler(new FadeChangeHandler())
-                                .pushChangeHandler(new FadeChangeHandler()));
-                    }
+                    getRouter().popCurrentController();
                 }
             });
 
@@ -117,14 +108,13 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
                 }
             });
-
             // endregion
 
             // Create the AlertDialog
             AlertDialog dialog = builder.create();
             dialog.show();
         } else {
-            if (newTimetable.isEmpty()) {
+            if (newTimetable.isBlank()) {
                 getRouter().pushController(RouterTransaction.with(new TimetableListController())
                         .popChangeHandler(new FadeChangeHandler())
                         .pushChangeHandler(new FadeChangeHandler()));
@@ -336,10 +326,9 @@ public class EditTimetableController extends BaseController implements View.OnDr
             if (position != days.size()) {
                 String text = String.valueOf(getItem(position).getName().toUpperCase().charAt(0));
 
-                // TODO - replace with: int color = getItem(position).getColour()
-                int color = ContextCompat.getColor(getApplicationContext(), R.color.blue);
+                int colour = getItem(position).getColour();
 
-                itemView = ViewUtils.createCircleView(inflater, text, color);
+                itemView = ViewUtils.createCircleView(inflater, text, colour);
 
                 // NOTE - for all items bar the last, which is the "add new" button
                 itemView.setTag(position);

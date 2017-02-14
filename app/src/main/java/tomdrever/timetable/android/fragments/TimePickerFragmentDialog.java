@@ -10,12 +10,13 @@ import android.widget.TimePicker;
 
 public class TimePickerFragmentDialog extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
-    public OnTimeSetListener timeSetListener;
+    private OnTimeSetListener timeSetListener;
 
-    public int hour;
-    public int minute;
+    private int hour;
+    private int minute;
 
-    public static TimePickerFragmentDialog newInstance(OnTimeSetListener listener, int hour, int minute) {
+    public static TimePickerFragmentDialog newInstance(OnTimeSetListener listener,
+                                                       int hour, int minute) {
         TimePickerFragmentDialog fragment = new TimePickerFragmentDialog();
 
         fragment.timeSetListener = listener;

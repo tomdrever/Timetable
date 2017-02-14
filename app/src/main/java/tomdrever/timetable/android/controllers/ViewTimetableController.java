@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -84,10 +83,9 @@ public class ViewTimetableController extends BaseController {
 
         for (int i = 0; i < periodsTabLayout.getTabCount(); i++) {
             String text = String.valueOf(timetable.getDays().get(i).getName().toUpperCase().charAt(0));
-            //TODO - replace with: int color = timetable.getDays().get(i).getColour();
-            int color = ContextCompat.getColor(getApplicationContext(), R.color.blue);
+            int colour = timetable.getDays().get(i).getColour();
 
-            periodsTabLayout.getTabAt(i).setCustomView(ViewUtils.createCircleView(inflater, text, color));
+            periodsTabLayout.getTabAt(i).setCustomView(ViewUtils.createCircleView(inflater, text, colour));
             periodsTabLayout.getTabAt(i).getCustomView().findViewById(R.id.circle_item_image).setPadding(20, 20, 20, 20);
         }
         // endregion

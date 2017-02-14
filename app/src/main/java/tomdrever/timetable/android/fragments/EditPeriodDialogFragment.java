@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -114,7 +115,7 @@ public class EditPeriodDialogFragment extends DialogFragment {
 		// Get the layout inflater
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 
-		view = inflater.inflate(R.layout.edit_period_dialog, null);
+		view = inflater.inflate(R.layout.fragment_dialog_edit_period, null);
 
 		builder.setView(view);
 
@@ -224,6 +225,21 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
         dialog.show(fragmentManager, "end_time");
     }
+
+	@OnClick(R.id.colour_rect_image)
+	void onColourRectClicked() {
+		ColourPickerFragmentDialog fragment =
+				ColourPickerFragmentDialog.newInstance((int) periodColourImage.getTag(),
+						new ColourPickerFragmentDialog.OnColourSetListener() {
+							@Override
+							public void OnColourSet(@ColorInt int colour) {
+								periodColourImage.setColorFilter(colour);
+								periodColourImage.setTag(colour);
+							}
+						});
+
+		fragment.show(fragmentManager, "colour_picker_fragment");
+	}
 
 	@Override
 	public void onDestroyView() {
