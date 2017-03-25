@@ -1,9 +1,13 @@
 package tomdrever.timetable.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
-public class Timetable implements Comparable<Timetable>, DataItem<Timetable>{
+public class Timetable extends DataItem<Timetable> implements Comparable<Timetable> {
     private String name;
     private String description;
     private ArrayList<Day> days;
@@ -11,6 +15,14 @@ public class Timetable implements Comparable<Timetable>, DataItem<Timetable>{
 
     public Timetable() {
         days = new ArrayList<>();
+    }
+
+    public Timetable(Parcel in) {
+        name = in.readString();
+        index = in.readInt();
+        description = in.readString();
+        days = new ArrayList<Day>(Arrays.asList(
+                (Day[])in.readParcelableArray(Day.class.getClassLoader())));
     }
 
     public String getName() {
@@ -91,4 +103,23 @@ public class Timetable implements Comparable<Timetable>, DataItem<Timetable>{
 
         return timetable;
     }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(name);
+        out.writeInt(index);
+        out.writeString(description);
+        out.writeParcelableArray(days.toArray(new Day[1]), flags);
+    }
+
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Timetable> CREATOR = new Parcelable.Creator<Timetable>() {
+        public Timetable createFromParcel(Parcel in) {
+            return new Timetable(in);
+        }
+
+        public Timetable[] newArray(int size) {
+            return new Timetable[size];
+        }
+    };
 }

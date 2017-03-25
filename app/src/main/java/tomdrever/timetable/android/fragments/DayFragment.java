@@ -17,7 +17,7 @@ import butterknife.Unbinder;
 import tomdrever.timetable.R;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
-import tomdrever.timetable.utils.ColorUtils;
+import tomdrever.timetable.utils.ColourUtils;
 import tomdrever.timetable.utils.TimeUtils;
 
 public class DayFragment extends Fragment {
@@ -40,20 +40,26 @@ public class DayFragment extends Fragment {
         View view  = inflater.inflate(R.layout.fragment_day, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        if (savedInstanceState != null) {
+            day = savedInstanceState.getParcelable("day");
+        }
+
         PeriodListAdapter periodsAdapter = new PeriodListAdapter(LayoutInflater.from(view.getContext()));
-        periodsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
+        periodsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         periodsRecyclerView.setAdapter(periodsAdapter);
 
-        dayNameBar.setBackgroundColor(ColorUtils.lighten(day.getColour()));
+        dayNameBar.setBackgroundColor(ColourUtils.lighten(day.getColour()));
 
         nameTextView.setText(day.getName());
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("day", day);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override

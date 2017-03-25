@@ -3,14 +3,12 @@ package tomdrever.timetable.android.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +30,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import tomdrever.timetable.R;
 import tomdrever.timetable.data.Period;
+import tomdrever.timetable.utils.ColourUtils;
 import tomdrever.timetable.utils.TimeUtils;
 
 public class EditPeriodDialogFragment extends DialogFragment {
@@ -42,28 +41,25 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
 	private int periodPosition;
 
-    private FragmentManager fragmentManager;
+    private PeriodDialogListener periodDialogListener;
 
-	@BindView(R.id.period_name_input_layout) TextInputLayout periodNameInputLayout;
+    @BindView(R.id.period_name_input_layout) TextInputLayout periodNameInputLayout;
+
 	@BindView(R.id.edit_period_name) EditText nameEditText;
-
     @BindView(R.id.edit_period_start_time_main_view) TextView startTimeMainTextView;
     @BindView(R.id.edit_period_start_time_second_view) TextView startTimeSecondTextView;
     @BindView(R.id.edit_period_end_time_main_view) TextView endTimeMainTextView;
+
     @BindView(R.id.edit_period_end_time_second_view) TextView endTimeSecondTextView;
 
 	@BindView(R.id.colour_rect_image) ImageView periodColourImage;
 
-    private PeriodDialogListener periodDialogListener;
-
 	public static EditPeriodDialogFragment newInstance(Period period, int periodPosition,
-													   PeriodDialogListener periodDialogListener,
-                                                       FragmentManager fragmentManager) {
+													   PeriodDialogListener periodDialogListener) {
 		EditPeriodDialogFragment fragment = new EditPeriodDialogFragment();
 		fragment.period = period;
 		fragment.periodPosition = periodPosition;
         fragment.periodDialogListener = periodDialogListener;
-        fragment.fragmentManager = fragmentManager;
 		return fragment;
 	}
 
@@ -94,13 +90,8 @@ public class EditPeriodDialogFragment extends DialogFragment {
 			endTimeSecondTextView.setText(endTime[1]);
 		}
 
-		if (period.getColour() == 0) {
-			periodColourImage.setColorFilter(Color.rgb(67,160,71));
-			periodColourImage.setTag(Color.rgb(67,160,71));
-		} else {
-			periodColourImage.setColorFilter(period.getColour());
-			periodColourImage.setTag(period.getColour());
-		}
+        periodColourImage.setColorFilter(period.getColour() != 0 ? period.getColour() : ColourUtils.green);
+        periodColourImage.setTag(period.getColour() != 0 ? period.getColour() : ColourUtils.green);
 
 		//endregion
 
@@ -110,6 +101,15 @@ public class EditPeriodDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            period = savedInstanceState.getParcelable("period");
+            periodPosition = savedInstanceState.getInt("position");
+
+            int colour = savedInstanceState.getInt("colour");
+            periodColourImage.setColorFilter(colour);
+            periodColourImage.setTag(colour);
+        }
+
 		// region Set Up Dialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		// Get the layout inflater
@@ -186,7 +186,16 @@ public class EditPeriodDialogFragment extends DialogFragment {
         return dialog;
     }
 
-	@OnClick(R.id.edit_period_start_time_view)
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("period", period);
+        outState.putInt("position", periodPosition);
+        outState.putInt("colour", (int) periodColourImage.getTag());
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @OnClick(R.id.edit_period_start_time_view)
     void onStartTimeClicked() {
 		int dialogStartHour = period.getStartTime() == null ? DateTime.now().getHourOfDay() : period.getStartTime().getHourOfDay();
 		int dialogStartMinute = period.getStartTime() == null ? DateTime.now().getMinuteOfHour() : period.getStartTime().getMinuteOfHour();
@@ -203,7 +212,7 @@ public class EditPeriodDialogFragment extends DialogFragment {
             }
         }, dialogStartHour, dialogStartMinute);
 
-        dialog.show(fragmentManager, "start_time");
+        dialog.show(getFragmentManager(), "start_time");
     }
 
     @OnClick(R.id.edit_period_end_time_view)
@@ -223,7 +232,7 @@ public class EditPeriodDialogFragment extends DialogFragment {
             }
         }, dialogEndHour, dialogEndMinute);
 
-        dialog.show(fragmentManager, "end_time");
+        dialog.show(getFragmentManager(), "end_time");
     }
 
 	@OnClick(R.id.colour_rect_image)
@@ -233,12 +242,12 @@ public class EditPeriodDialogFragment extends DialogFragment {
 						new ColourPickerFragmentDialog.OnColourSetListener() {
 							@Override
 							public void OnColourSet(@ColorInt int colour) {
-								periodColourImage.setColorFilter(colour);
-								periodColourImage.setTag(colour);
+                                periodColourImage.setColorFilter(colour);
+                                periodColourImage.setTag(colour);
 							}
 						});
 
-		fragment.show(fragmentManager, "colour_picker_fragment");
+		fragment.show(getFragmentManager(), "colour_picker_fragment");
 	}
 
 	@Override

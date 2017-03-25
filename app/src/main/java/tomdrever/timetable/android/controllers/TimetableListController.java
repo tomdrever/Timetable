@@ -1,5 +1,6 @@
 package tomdrever.timetable.android.controllers;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -149,6 +150,20 @@ public class TimetableListController extends BaseController {
         getActivity().finish();
 
         return true;
+    }
+
+    @Override
+    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
+        outState.putParcelableArrayList("timetables", timetables);
+
+        super.onSaveViewState(view, outState);
+    }
+
+    @Override
+    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedInstanceState) {
+        timetables = savedInstanceState.getParcelableArrayList("timetables");
+
+        super.onRestoreViewState(view, savedInstanceState);
     }
 
     @OnClick(R.id.new_timetable_fab)

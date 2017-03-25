@@ -1,6 +1,7 @@
 package tomdrever.timetable.android.controllers;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,7 @@ import tomdrever.timetable.utils.ViewUtils;
 
 public class ViewTimetableController extends BaseController {
 
-    private final int initialPosition;
+    private int initialPosition;
     private Timetable timetable;
 
     @BindView(R.id.days_pager) ViewPager daysViewPager;
@@ -59,9 +60,9 @@ public class ViewTimetableController extends BaseController {
     protected void onViewBound(@NonNull View view) {
         super.onViewBound(view);
 
-        setHasOptionsMenu(true);
+        setRetainViewMode(RetainViewMode.RELEASE_DETACH);
 
-        getArgs();
+        setHasOptionsMenu(true);
 
         daysAdapter = new DaysPagerAdapter(getAppCombatActivity().getSupportFragmentManager());
         daysViewPager.setAdapter(daysAdapter);
@@ -126,7 +127,7 @@ public class ViewTimetableController extends BaseController {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_edit_view) {
-            getRouter().pushController(RouterTransaction.with(new EditTimetableController(timetable, daysViewPager.getCurrentItem()))
+            getRouter().pushController(RouterTransaction.with(new EditTimetableController(timetable))
                     .popChangeHandler(new FadeChangeHandler())
                     .pushChangeHandler(new FadeChangeHandler()));
         }
@@ -151,6 +152,22 @@ public class ViewTimetableController extends BaseController {
                 .pushChangeHandler(new FadeChangeHandler()));
 
         return true;
+    }
+
+    @Override
+    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
+        outState.putInt("position", daysViewPager.getCurrentItem());
+        outState.putParcelable("timetable", timetable);
+
+        super.onSaveViewState(view, outState);
+    }
+
+    @Override
+    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedViewState) {
+        initialPosition = savedViewState.getInt("position");
+        timetable = savedViewState.getParcelable("timetable");
+
+        super.onRestoreViewState(view, savedViewState);
     }
 
     @Override

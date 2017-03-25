@@ -1,12 +1,16 @@
 package tomdrever.timetable.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
-public class Day implements DataItem<Day>{
+public class Day extends DataItem<Day>{
     private ArrayList<Period> periods;
 
     public ArrayList<Period> getPeriods() {
@@ -39,6 +43,13 @@ public class Day implements DataItem<Day>{
 
 	public Day() {
         periods = new ArrayList<>();
+    }
+
+    public Day(Parcel in) {
+        name = in.readString();
+        periods = new ArrayList<Period>(Arrays.asList(
+                (Period[])in.readParcelableArray(Period.class.getClassLoader())));
+        colour = in.readInt();
     }
 
 	public Day(String name) {
@@ -105,4 +116,22 @@ public class Day implements DataItem<Day>{
 
         return day;
     }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(name);
+        out.writeParcelableArray(periods.toArray(new Period[1]), flags);
+        out.writeInt(colour);
+    }
+
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Day> CREATOR = new Parcelable.Creator<Day>() {
+        public Day createFromParcel(Parcel in) {
+            return new Day(in);
+        }
+
+        public Day[] newArray(int size) {
+            return new Day[size];
+        }
+    };
 }

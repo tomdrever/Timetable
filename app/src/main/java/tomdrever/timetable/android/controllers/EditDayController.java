@@ -1,7 +1,7 @@
 package tomdrever.timetable.android.controllers;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -37,14 +37,12 @@ import tomdrever.timetable.android.views.ExpandableRecyclerView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
 import tomdrever.timetable.utils.CollectionUtils;
+import tomdrever.timetable.utils.ColourUtils;
 import tomdrever.timetable.utils.TimeUtils;
 
 public class EditDayController extends BaseController implements EditPeriodDialogFragment.PeriodDialogListener{
 
     private Day day;
-    private ArrayList<Period> periods;
-
-    private PeriodListAdapter periodListAdapter;
 
     private EditingFinishedListener editingFinishedListener;
 
@@ -53,11 +51,13 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     }
 
     @BindView(R.id.day_name_input_layout) TextInputLayout dayNameInputLayout;
-    @BindView(R.id.edit_day_name) EditText dayNameEditText;
 
+    @BindView(R.id.edit_day_name) EditText dayNameEditText;
     @BindView(R.id.colour_rect_image) ImageView dayColourImage;
 
     @BindView(R.id.edit_periods_recyclerview) ExpandableRecyclerView periodsRecyclerView;
+
+    private PeriodListAdapter periodListAdapter;
 
     @BindView(R.id.edit_day_scrollview) ScrollView editDayScrollView;
 
@@ -69,7 +69,6 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
     public EditDayController(Day day) {
         this.day = day;
-        this.periods = CollectionUtils.copy(day.getPeriods());
     }
 
     @Override
@@ -86,16 +85,11 @@ public class EditDayController extends BaseController implements EditPeriodDialo
         dayNameEditText.setText(day.getName() != null ? day.getName() : "");
         dayNameInputLayout.setHint(getActivity().getString(R.string.edit_day_name));
 
-        if (day.getColour() == 0) {
-            // Set to default green
-            dayColourImage.setColorFilter(Color.rgb(67,160,71));
-            dayColourImage.setTag(Color.rgb(67,160,71));
-        } else {
-            dayColourImage.setColorFilter(day.getColour());
-            dayColourImage.setTag(day.getColour());
-        }
+        // If the day's colour is 0 (black?), set the colour to default green. otherwise, use the day's colour
+        dayColourImage.setColorFilter(day.getColour() != 0 ? day.getColour() : ColourUtils.green);
+        dayColourImage.setTag(day.getColour() != 0 ? day.getColour() : ColourUtils.green);
 
-        periodListAdapter = new PeriodListAdapter(LayoutInflater.from(view.getContext()), this);
+        periodListAdapter = new PeriodListAdapter(LayoutInflater.from(view.getContext()), this, day.getPeriods());
 
         periodsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()) {
             @Override
@@ -103,6 +97,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
                 return false;
             }
         });
+
         periodsRecyclerView.setAdapter(periodListAdapter);
 
         editDayScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -118,7 +113,26 @@ public class EditDayController extends BaseController implements EditPeriodDialo
             }
         });
 
-        updateNoPeriodsTextView();
+        periodListAdapter.updateNoPeriodsTextView();
+    }
+
+    @Override
+    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
+        outState.putParcelable("day", day);
+        outState.putInt("colour", (int) dayColourImage.getTag());
+
+        super.onSaveViewState(view, outState);
+    }
+
+    @Override
+    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedViewState) {
+        day = savedViewState.getParcelable("day");
+
+        int colour = savedViewState.getInt("colour");
+        dayColourImage.setColorFilter(colour);
+        dayColourImage.setTag(colour);
+
+        super.onRestoreViewState(view, savedViewState);
     }
 
     @Override
@@ -132,7 +146,9 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
         if (Objects.equals(name, "")) name = null;
 
-        if (!day.equals(newDay(name))) {
+        Day newDay = newDay(name);
+
+        if (!day.equals(newDay)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             builder.setTitle("Discard changes?");
@@ -182,7 +198,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
             }
 
             day.setName(name);
-            day.setPeriods(periods);
+            day.setPeriods(periodListAdapter.getItems());
             day.setColour((int) dayColourImage.getTag());
 
             if (editingFinishedListener != null) editingFinishedListener.onEditingFinished();
@@ -198,7 +214,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
         FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
 
         EditPeriodDialogFragment periodFragment =
-                EditPeriodDialogFragment.newInstance(new Period(), -1, this, fm);
+                EditPeriodDialogFragment.newInstance(new Period(), -1, this);
 
         periodFragment.show(fm, "period_fragment");
     }
@@ -220,40 +236,10 @@ public class EditDayController extends BaseController implements EditPeriodDialo
         fragment.show(fm, "colour_picker_fragment");
     }
 
-    private void addPeriod(Period period) {
-        periods.add(period);
-        CollectionUtils.sortPeriods(periods);
-
-        periodListAdapter.notifyDataSetChanged();
-
-        updateNoPeriodsTextView();
-    }
-
-    private void addPeriodAt(Period period, int position) {
-        periods.add(position, period);
-        periodListAdapter.notifyDataSetChanged();
-
-        updateNoPeriodsTextView();
-    }
-
-    private void removePeriod(Period period) {
-        periods.remove(period);
-        periodListAdapter.notifyDataSetChanged();
-
-        updateNoPeriodsTextView();
-    }
-
-    private void updateNoPeriodsTextView() {
-        if (periods.isEmpty())
-            noPeriodsTextView.setVisibility(View.VISIBLE);
-        else
-            noPeriodsTextView.setVisibility(View.GONE);
-    }
-
     private Day newDay(String name) {
         Day newDay = day.cloneItem();
         newDay.setName(name);
-        newDay.setPeriods(periods);
+        newDay.setPeriods(periodListAdapter.getItems());
         newDay.setColour((int) dayColourImage.getTag());
 
         return newDay;
@@ -265,27 +251,27 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     }
 
     @Override
-    public void onFinishEditingPeriodClicked(Period period, int periodPosition) {
-        if (periodPosition == -1) {
-            addPeriod(period);
+    public void onFinishEditingPeriodClicked(Period period, int position) {
+        if (position == -1) {
+            periodListAdapter.add(period);
             return;
         }
 
-        periods.set(periodPosition, period);
+        periodListAdapter.set(period, position);
         periodListAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onDeletePeriodClicked(final int periodPosition) {
-        final Period period = periods.get(periodPosition);
+        final Period period = periodListAdapter.getItemAt(periodPosition);
 
-        removePeriod(period);
+        periodListAdapter.remove(period);
 
         Snackbar.make(periodsRecyclerView, period.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Restore
-                addPeriodAt(period, periodPosition);
+                periodListAdapter.addAt(period, periodPosition);
             }
         }).show();
     }
@@ -293,10 +279,13 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     class PeriodListAdapter extends RecyclerView.Adapter<PeriodListAdapter.PeriodViewHolder> {
         private final LayoutInflater inflater;
         private EditPeriodDialogFragment.PeriodDialogListener listener;
+        private ArrayList<Period> items;
 
-        public PeriodListAdapter(LayoutInflater inflater, EditPeriodDialogFragment.PeriodDialogListener listener) {
+        public PeriodListAdapter(LayoutInflater inflater, EditPeriodDialogFragment.PeriodDialogListener listener,
+                                 ArrayList<Period> periods) {
             this.inflater = inflater;
             this.listener = listener;
+            this.items = periods;
         }
 
         @Override
@@ -306,12 +295,56 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
         @Override
         public void onBindViewHolder(PeriodViewHolder holder, int position) {
-            holder.bind(periods.get(position));
+            holder.bind(items.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return periods.size();
+            return items.size();
+        }
+
+        public Period getItemAt(int position) {
+            return items.get(position);
+        }
+
+        public ArrayList<Period> getItems() {
+            return items;
+        }
+
+        public void set(Period period, int position)
+        {
+            items.set(position, period);
+
+            notifyDataSetChanged();
+        }
+
+        public void add(Period period) {
+            items.add(period);
+            CollectionUtils.sortPeriods(items);
+
+            notifyDataSetChanged();
+            updateNoPeriodsTextView();
+        }
+
+        public void addAt(Period period, int position) {
+            items.add(position, period);
+
+            notifyDataSetChanged();
+            updateNoPeriodsTextView();
+        }
+
+        public void remove(Period period) {
+            items.remove(period);
+
+            notifyDataSetChanged();
+            updateNoPeriodsTextView();
+        }
+
+        public void updateNoPeriodsTextView() {
+            if (items.isEmpty())
+                noPeriodsTextView.setVisibility(View.VISIBLE);
+            else
+                noPeriodsTextView.setVisibility(View.GONE);
         }
 
         class PeriodViewHolder extends RecyclerView.ViewHolder {
@@ -346,7 +379,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
                 FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
 
                 EditPeriodDialogFragment periodFragment =
-                        EditPeriodDialogFragment.newInstance(period.cloneItem(), getAdapterPosition(), listener, fm);
+                        EditPeriodDialogFragment.newInstance(period.cloneItem(), getAdapterPosition(), listener);
 
                 periodFragment.show(fm, "period_fragment");
             }

@@ -1,23 +1,29 @@
 package tomdrever.timetable.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
-public class Period implements DataItem<Period> {
-	public Period() {
-		this.periodDescription = new HashMap<>();
-	}
+public class Period extends DataItem<Period> {
+    public Period() {}
+
+    public Period(Parcel in) {
+        name = in.readString();
+        startTime = (LocalTime) in.readValue(LocalTime.class.getClassLoader());
+        endTime = (LocalTime) in.readValue(LocalTime.class.getClassLoader());
+        colour = in.readInt();
+    }
 
     public Period(String name) {
         this.name = name;
-	    this.periodDescription = new HashMap<>();
     }
 
     private String name;
+
     public void setName(String name){
 		this.name = name;
 	}
@@ -45,23 +51,12 @@ public class Period implements DataItem<Period> {
         return new Interval(startTime.toDateTimeToday(), endTime.toDateTimeToday());
     }
 
-	private Map<String, Boolean> periodDescription;
-	public Map<String, Boolean> getPeriodDescription() {
-		return periodDescription;
-	}
-	public void addDescriptionEntry(String description, Boolean isDisplayedDescription) {
-		periodDescription.put(description, isDisplayedDescription);
-	}
-	public void removeDescriptionEntry(String description){
-		periodDescription.remove(description);
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Period) {
 			Period other = (Period) obj;
 
-			return Objects.equals(other.name, name) && other.periodDescription == periodDescription
+			return Objects.equals(other.name, name)
                     && other.startTime.equals(startTime) && other.endTime.equals(endTime)
                     && other.colour == colour;
 		}
@@ -74,7 +69,6 @@ public class Period implements DataItem<Period> {
 		Period period = new Period();
 
         period.name = name;
-        period.periodDescription = periodDescription;
         period.startTime = startTime;
         period.endTime = endTime;
 		period.colour = colour;
@@ -82,7 +76,26 @@ public class Period implements DataItem<Period> {
 		return period;
 	}
 
-	private int colour;
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(name);
+        out.writeValue(startTime);
+        out.writeValue(endTime);
+        out.writeInt(colour);
+    }
+
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Period> CREATOR = new Parcelable.Creator<Period>() {
+        public Period createFromParcel(Parcel in) {
+            return new Period(in);
+        }
+
+        public Period[] newArray(int size) {
+            return new Period[size];
+        }
+    };
+
+    private int colour;
 
 	public int getColour() {
 		return colour;

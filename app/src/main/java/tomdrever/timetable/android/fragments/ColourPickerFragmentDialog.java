@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,8 +81,13 @@ public class ColourPickerFragmentDialog extends DialogFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            colourSetListener = (OnColourSetListener) savedInstanceState.getSerializable("listener");
+        }
+
         // region Set Up Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
@@ -98,6 +106,12 @@ public class ColourPickerFragmentDialog extends DialogFragment {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
+                if (savedInstanceState != null) {
+                    red = redSeekBar.getProgress();
+                    green = greenSeekBar.getProgress();
+                    blue = blueSeekBar.getProgress();
+                }
+
                 // region On Positive Clicked
                 Button posButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 posButton.setOnClickListener(new View.OnClickListener() {
@@ -108,10 +122,18 @@ public class ColourPickerFragmentDialog extends DialogFragment {
                         dismiss();
                     }
                 });
+                // endregion
             }
         });
 
         return dialog;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("listener", colourSetListener);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -121,7 +143,7 @@ public class ColourPickerFragmentDialog extends DialogFragment {
         unbinder = null;
     }
 
-    public interface OnColourSetListener {
+    public interface OnColourSetListener extends Serializable {
         void OnColourSet(@ColorInt int colour);
     }
 }

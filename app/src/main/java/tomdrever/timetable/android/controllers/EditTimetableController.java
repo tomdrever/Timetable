@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -32,15 +33,12 @@ import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.android.views.ExpandableGridView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Timetable;
-import tomdrever.timetable.utils.CollectionUtils;
 import tomdrever.timetable.utils.DragShadowBuilder;
 import tomdrever.timetable.utils.ViewUtils;
 
 public class EditTimetableController extends BaseController implements View.OnDragListener {
 
     private Timetable timetable;
-
-    private ArrayList<Day> days;
 
     @BindView(R.id.edit_timetable_name) EditText nameEditText;
     @BindView(R.id.edit_timetable_description) EditText descriptionEditText;
@@ -50,7 +48,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
     @BindView(R.id.edit_timetable_days) ExpandableGridView daysGridView;
 
-    private DayGridAdapter dayGridAdapter;
+    private DayGridAdapter daysGridAdapter;
 
     private int viewDayPosition;
 
@@ -59,17 +57,10 @@ public class EditTimetableController extends BaseController implements View.OnDr
     public EditTimetableController(int index) {
         timetable = new Timetable();
         timetable.setIndex(index);
-
-        days = CollectionUtils.copy(timetable.getDays());
-
-        this.viewDayPosition = 0;
     }
 
-    public EditTimetableController(Timetable timetable, int viewDayPosition) {
+    public EditTimetableController(Timetable timetable) {
         this.timetable = timetable;
-        days = CollectionUtils.copy(timetable.getDays());
-
-        this.viewDayPosition = viewDayPosition;
     }
 
     private void setupActionbar() {
@@ -89,7 +80,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
         String description = descriptionEditText.getText().toString().trim();
 
-        final Timetable newTimetable = newTimetable(name, description, days);
+        final Timetable newTimetable = newTimetable(name, description, daysGridAdapter.getItems());
 
         if (!newTimetable.equals(timetable)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -151,9 +142,9 @@ public class EditTimetableController extends BaseController implements View.OnDr
         descriptionEditText.setText(timetable.getDescription() != null ? timetable.getDescription() : "");
         descriptionTextInputLayout.setHint(getActivity().getString(R.string.edit_timetable_description));
 
-        dayGridAdapter = new DayGridAdapter(getActivity());
+        daysGridAdapter = new DayGridAdapter(getActivity(), timetable.getDays());
 
-        daysGridView.setAdapter(dayGridAdapter);
+        daysGridView.setAdapter(daysGridAdapter);
     }
 
     @Override
@@ -177,6 +168,8 @@ public class EditTimetableController extends BaseController implements View.OnDr
             // If this is an existing timetable, get rid of the old version before saving
             if (timetable.getName() != null) getFileManager().delete(timetable.getName());
 
+            ArrayList<Day> days = daysGridAdapter.getItems();
+
             getFileManager().save(newTimetable(name, description, days));
 
             // Done - launch view of that timetable
@@ -190,6 +183,20 @@ public class EditTimetableController extends BaseController implements View.OnDr
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
+        outState.putParcelable("timetable", timetable);
+
+        super.onSaveViewState(view, outState);
+    }
+
+    @Override
+    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedViewState) {
+        timetable = savedViewState.getParcelable("timetable");
+
+        super.onRestoreViewState(view, savedViewState);
     }
 
     private Timetable newTimetable(String name, String description, ArrayList<Day> days) {
@@ -232,7 +239,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
                 final int position = Integer.valueOf(item.getText().toString());
 
-                final Day day = days.get(position);
+                final Day day = daysGridAdapter.getItem(position);
 
                 if (view.getId() == R.id.circle_item_base) {
                     final int targetPosition = (int) view.getTag();
@@ -250,7 +257,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
                         }
                     }
 
-                    dayGridAdapter.notifyDataSetChanged();
+                    daysGridAdapter.notifyDataSetChanged();
 
                     Snackbar.make(view,
                             day.getName() + " moved from " + (position + 1) + " to " + (targetPosition + 1),
@@ -267,19 +274,19 @@ public class EditTimetableController extends BaseController implements View.OnDr
                                 }
                             }
 
-                            dayGridAdapter.notifyDataSetChanged();
+                            daysGridAdapter.notifyDataSetChanged();
                         }
                     }).show();
 
                 } else if (view.getId() == R.id.delete_day) {
-                    days.remove(position);
-                    dayGridAdapter.notifyDataSetChanged();
+                    daysGridAdapter.remove(position);
+                    daysGridAdapter.notifyDataSetChanged();
 
                     Snackbar.make(view, day.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            days.add(position, day);
-                            dayGridAdapter.notifyDataSetChanged();
+                            daysGridAdapter.add(position, day);
+                            daysGridAdapter.notifyDataSetChanged();
                         }
                     }).show();
                 }
@@ -297,19 +304,21 @@ public class EditTimetableController extends BaseController implements View.OnDr
     private class DayGridAdapter extends BaseAdapter {
 
         private Context context;
+        private ArrayList<Day> items;
 
-        DayGridAdapter(Context context) {
+        DayGridAdapter(Context context, ArrayList<Day> days) {
             this.context = context;
+            this.items = days;
         }
 
         @Override
         public int getCount() {
-            return days.size() + 1;
+            return items.size() + 1;
         }
 
         @Override
         public Day getItem(int i) {
-            return days.get(i);
+            return items.get(i);
         }
 
         @Override
@@ -323,7 +332,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
             final View itemView;
 
-            if (position != days.size()) {
+            if (position != items.size()) {
                 String text = String.valueOf(getItem(position).getName().toUpperCase().charAt(0));
 
                 int colour = getItem(position).getColour();
@@ -337,7 +346,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getRouter().pushController(RouterTransaction.with(new EditDayController(days.get(position)))
+                        getRouter().pushController(RouterTransaction.with(new EditDayController(daysGridAdapter.getItem(position)))
                                 .popChangeHandler(new FadeChangeHandler())
                                 .pushChangeHandler(new FadeChangeHandler()));
                     }
@@ -385,7 +394,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
                         editDayController.setEditingFinishedListener(new EditingFinishedListener() {
                             @Override
                             public void onEditingFinished() {
-                                days.add(newDay);
+                                items.add(newDay);
                             }
                         });
 
@@ -398,14 +407,33 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
             return itemView;
         }
+
+        public ArrayList<Day> getItems() {
+            return items;
+        }
+
+        public void remove(int position) {
+            items.remove(position);
+            notifyDataSetChanged();
+        }
+
+        public void add(int position, Day day) {
+            items.add(position, day);
+            notifyDataSetChanged();
+        }
+
+        public void set(int position, Day day) {
+            items.set(position, day);
+            notifyDataSetChanged();
+        }
     }
 
     private void swap(int position1, int position2) {
-        Day day1 = days.get(position1);
-        Day day2 = days.get(position2);
+        Day day1 = daysGridAdapter.getItem(position1);
+        Day day2 = daysGridAdapter.getItem(position2);
 
-        days.set(position1, day2);
-        days.set(position2, day1);
+        daysGridAdapter.set(position1, day2);
+        daysGridAdapter.set(position2, day1);
     }
 
     private void showDeleteDayIcon(boolean showDelete) {
