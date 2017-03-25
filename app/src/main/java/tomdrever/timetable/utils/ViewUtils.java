@@ -32,7 +32,7 @@ public class ViewUtils {
     }
 
     public static void setUpSeekBar(SeekBar seekBar, int max, int progress, @ColorInt int colour,
-                                    OnSeekBarChangeListener listener, Context context) {
+                                    OnSeekBarChangeListener listener) {
         seekBar.setMax(max);
         seekBar.setProgress(progress);
         seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(

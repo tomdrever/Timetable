@@ -66,14 +66,14 @@ public class TimetableListController extends BaseController {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Store timetable data temporarily, so it can be restored
-                final Timetable tempTimetableContainer = timetables.get(viewHolder.getAdapterPosition());
+                final Timetable tempTimetable = timetables.get(viewHolder.getAdapterPosition());
                 final int tempPosition = viewHolder.getAdapterPosition();
                 removeTimetableAt(tempPosition);
-                Snackbar.make(viewHolder.itemView, tempTimetableContainer.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
+                Snackbar.make(viewHolder.itemView, tempTimetable.getName() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Restore
-                        addTimetableAt(tempTimetableContainer, tempPosition);
+                        addTimetableAt(tempTimetable, tempPosition);
                     }
                 }).show();
             }

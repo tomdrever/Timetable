@@ -105,9 +105,11 @@ public class EditPeriodDialogFragment extends DialogFragment {
             period = savedInstanceState.getParcelable("period");
             periodPosition = savedInstanceState.getInt("position");
 
-            int colour = savedInstanceState.getInt("colour");
-            periodColourImage.setColorFilter(colour);
-            periodColourImage.setTag(colour);
+            if (periodColourImage != null) {
+                int colour = savedInstanceState.getInt("colour");
+                periodColourImage.setColorFilter(colour);
+                periodColourImage.setTag(colour);
+            }
         }
 
 		// region Set Up Dialog
