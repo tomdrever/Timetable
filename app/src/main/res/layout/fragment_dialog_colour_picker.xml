@@ -13,14 +13,17 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/colour_picker_list"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_width="match_parent"
+        android:layout_weight="1"
         />
 
     <!-- New colour name -->
     <android.support.design.widget.TextInputLayout
         android:id="@+id/new_colour_name_layout"
         android:layout_width="match_parent"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         style="@style/BasicTextInputLayout"
         >
 
@@ -28,7 +31,7 @@
             android:id="@+id/new_colour_name"
             android:layout_width="match_parent"
             android:imeOptions="actionDone"
-            android:inputType="text"
+            android:inputType="textCapWords"
             android:maxLines="1"
             style="@style/BasicEditText"
             />

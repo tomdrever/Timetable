@@ -41,4 +41,6 @@
 	<string name="edit_period_start_time">Start Time</string>
 	<string name="date_not_set">Not set</string>
 	<string name="edit_colour">Colour</string>
+    <string name="period_default_start">Start</string>
+    <string name="period_default_end">End</string>
 </resources>

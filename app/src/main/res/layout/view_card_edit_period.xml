@@ -28,7 +28,7 @@
 
 		<TextView
 			android:id="@+id/period_start_text"
-			android:text="Start"
+			android:text="@string/period_default_start"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
             android:padding="4dp"
@@ -37,7 +37,7 @@
 
 		<TextView
 			android:id="@+id/period_end_text"
-			android:text="End"
+			android:text="@string/period_default_end"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
             android:padding="4dp"

@@ -11,12 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import tomdrever.timetable.R;
 import tomdrever.timetable.utils.ColourUtils;
@@ -50,6 +50,7 @@ public class ColourPickerFragmentDialog extends DialogFragment {
     private ColourListAdapter colourListAdapter;
 
     @BindView(R.id.new_colour_name) TextInputEditText newColourNameEditText;
+    @BindView(R.id.new_colour_name_layout) TextInputLayout newColourNameLayout;
 
     private int red;
     private int green;
@@ -70,6 +71,8 @@ public class ColourPickerFragmentDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         unbinder = ButterKnife.bind(this, view);
+
+        newColourNameLayout.setHint("New colour name");
 
         ViewUtils.setUpSeekBar(redSeekBar, 255, red, ContextCompat.getColor(getContext(), R.color.red),
                 new OnSeekBarChangeListener(){
@@ -98,44 +101,6 @@ public class ColourPickerFragmentDialog extends DialogFragment {
         colourListAdapter = new ColourListAdapter(inflater, getContext());
         colourList.setLayoutManager(new LinearLayoutManager(view.getContext()));
         colourList.setAdapter(colourListAdapter);
-
-        colourList.setItemAnimator(new DefaultItemAnimator());
-
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public boolean isItemViewSwipeEnabled() {
-                return true;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                // Store timetable data temporarily, so it can be restored
-                viewHolder = (ColourListAdapter.ColourItemViewHolder) viewHolder;
-
-                final String name = ((ColourListAdapter.ColourItemViewHolder) viewHolder).name;
-                final int colour = ((ColourListAdapter.ColourItemViewHolder) viewHolder).colour;
-
-                ColourUtils.removeCustomColour(name, colour, getContext());
-                Snackbar.make(viewHolder.itemView, name + " deleted", Snackbar.LENGTH_SHORT).setAction(
-                        "Undo", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Restore
-                        ColourUtils.addCustomColour(name, colour, getContext());
-                    }
-                }).show();
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(colourList);
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -258,16 +223,52 @@ public class ColourPickerFragmentDialog extends DialogFragment {
 
             public ColourItemViewHolder(View itemView) {
                 super(itemView);
-
                 ButterKnife.bind(this, itemView);
             }
 
-            public void bind(String name, int colour) {
+            public void bind(final String name, final int colour) {
                 this.name = name;
                 colourNameView.setText(name);
 
                 this.colour = colour;
                 colourCircleView.setColorFilter(colour);
+                colourCircleView.setImageResource(R.drawable.circle);
+
+                View.OnClickListener listener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        colourSetListener.OnColourSet(colour);
+                        dismiss();
+                    }
+                };
+
+                colourNameView.setOnClickListener(listener);
+                colourCircleView.setOnClickListener(listener);
+
+                colourNameView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        newColourNameEditText.setText(name);
+                        return true;
+                    }
+                });
+            }
+
+            @OnClick(R.id.delete_colour_icon)
+            void onDeleteClicked() {
+                ColourUtils.removeCustomColour(name, colour, getContext());
+                items.remove(name);
+                notifyDataSetChanged();
+                Snackbar.make(getActivity().getCurrentFocus(), name + " deleted", Snackbar.LENGTH_SHORT).setAction(
+                    "Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Restore
+                            ColourUtils.addCustomColour(name, colour, getContext());
+                            items.put(name, colour);
+                            notifyDataSetChanged();
+                        }
+                    }).show();
             }
         }
     }
