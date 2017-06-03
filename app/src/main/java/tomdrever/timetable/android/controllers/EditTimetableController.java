@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluelinelabs.conductor.RouterTransaction;
@@ -377,9 +378,13 @@ public class EditTimetableController extends BaseController implements View.OnDr
 
                 itemView.setOnDragListener(EditTimetableController.this);
             } else {
-                // NOTE - for the "add new button"
+                // NOTE - for the "add new" button
                 itemView = ViewUtils.createCircleView(inflater, "+",
                         ContextCompat.getColor(context, R.color.red));
+
+                // The plus for the "add new" button should be slightly larger than the text in other buttons
+                TextView textView = (TextView) itemView.findViewById(R.id.circle_item_text);
+                textView.setTextSize(28);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
