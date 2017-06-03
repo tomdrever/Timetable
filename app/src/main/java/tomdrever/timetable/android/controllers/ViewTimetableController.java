@@ -166,15 +166,11 @@ public class ViewTimetableController extends BaseController {
     }
 
     @Override
-    protected boolean showUpNavigation() {
-        return true;
-    }
+    protected boolean showUpNavigation() { return true; }
 
     private class DaysPagerAdapter extends FragmentStatePagerAdapter {
 
-        public DaysPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+        public DaysPagerAdapter(FragmentManager manager) { super(manager); }
 
         @Override
         public Fragment getItem(int position) {
@@ -182,9 +178,7 @@ public class ViewTimetableController extends BaseController {
         }
 
         @Override
-        public int getCount() {
-            return timetable.getDays().size();
-        }
+        public int getCount() { return timetable.getDays().size(); }
 
         @Override
         public CharSequence getPageTitle(int position) {

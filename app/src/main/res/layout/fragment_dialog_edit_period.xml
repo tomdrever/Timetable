@@ -18,7 +18,7 @@
 			android:id="@+id/edit_period_name"
 			android:layout_width="match_parent"
 			android:imeOptions="actionDone"
-			android:inputType="text"
+			android:inputType="textCapWords"
 			android:maxLines="1"
 			style="@style/BasicEditText"
 			/>

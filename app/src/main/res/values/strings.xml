@@ -43,4 +43,5 @@
 	<string name="edit_colour">Colour</string>
     <string name="period_default_start">Start</string>
     <string name="period_default_end">End</string>
+    <string name="period_time_separator">-</string>
 </resources>

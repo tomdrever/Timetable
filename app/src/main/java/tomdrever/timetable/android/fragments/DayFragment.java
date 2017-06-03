@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -72,13 +73,11 @@ public class DayFragment extends Fragment {
     class PeriodListAdapter extends RecyclerView.Adapter<PeriodListAdapter.PeriodViewHolder> {
         private final LayoutInflater inflater;
 
-        public PeriodListAdapter(LayoutInflater inflater) {
-            this.inflater = inflater;
-        }
+        public PeriodListAdapter(LayoutInflater inflater) { this.inflater = inflater; }
 
         @Override
         public PeriodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new PeriodViewHolder(inflater.inflate(R.layout.view_card_edit_period, parent, false));
+            return new PeriodViewHolder(inflater.inflate(R.layout.view_card_view_period, parent, false));
         }
 
         @Override
@@ -87,17 +86,15 @@ public class DayFragment extends Fragment {
         }
 
         @Override
-        public int getItemCount() {
-            return day.getPeriods().size();
-        }
+        public int getItemCount() { return day.getPeriods().size(); }
 
         public class PeriodViewHolder extends RecyclerView.ViewHolder {
             Period period;
 
-            @BindView(R.id.period_name_text)
-            TextView nameTextView;
+            @BindView(R.id.period_name_text) TextView nameTextView;
             @BindView(R.id.period_start_text) TextView startTimeTextView;
             @BindView(R.id.period_end_text) TextView endTimeTextView;
+            @BindView(R.id.period_timeline_indicator) ImageView periodTimelineView;
 
             public PeriodViewHolder(View itemView) {
                 super(itemView);
@@ -109,6 +106,9 @@ public class DayFragment extends Fragment {
                 this.period = item;
 
                 nameTextView.setText(period.getName());
+
+                periodTimelineView.setImageResource(R.drawable.circle);
+                periodTimelineView.setColorFilter(period.getColour());
 
                 startTimeTextView.setText(TimeUtils.formatTime(period.getStartTime().getHourOfDay(),
                         period.getStartTime().getMinuteOfHour()));
