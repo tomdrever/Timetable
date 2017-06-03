@@ -59,9 +59,10 @@ public class TimetableListController extends BaseController {
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
-            public boolean isItemViewSwipeEnabled() {
-                return true;
-            }
+            public boolean isItemViewSwipeEnabled() { return true; }
+
+            @Override
+            public boolean isLongPressDragEnabled() { return false; }
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
@@ -113,7 +114,7 @@ public class TimetableListController extends BaseController {
     }
 
     private void removeTimetableAt(int position) {
-        getFileManager().delete(timetables.get(position).getName());
+        getFileManager().delete(timetables.get(position).getId());
         timetables.remove(position);
         adapter.notifyItemRemoved(position);
 

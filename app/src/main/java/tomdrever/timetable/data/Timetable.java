@@ -5,18 +5,22 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Timetable extends DataItem<Timetable> implements Comparable<Timetable> {
     private String name;
     private String description;
     private ArrayList<Day> days;
     private int index;
+    private String id;
 
     public Timetable() {
         days = new ArrayList<>();
+        id = UUID.randomUUID().toString();
     }
 
     public Timetable(Parcel in) {
+        id = in.readString();
         name = in.readString();
         index = in.readInt();
         description = in.readString();
@@ -27,6 +31,14 @@ public class Timetable extends DataItem<Timetable> implements Comparable<Timetab
                 days.add((Day) day);
             }
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -82,7 +94,7 @@ public class Timetable extends DataItem<Timetable> implements Comparable<Timetab
         if (obj instanceof Timetable) {
             Timetable other = (Timetable) obj;
 
-            return Objects.equals(other.name, name) && other.days.size() == days.size() &&
+            return Objects.equals(other.id, id) && other.days.size() == days.size() &&
                     other.days.equals(days);
         }
 
@@ -97,6 +109,7 @@ public class Timetable extends DataItem<Timetable> implements Comparable<Timetab
     @Override
     public Timetable cloneItem() {
         Timetable timetable = new Timetable();
+        timetable.id = id;
         timetable.name = name;
         timetable.index = index;
         timetable.description = description;
@@ -110,6 +123,7 @@ public class Timetable extends DataItem<Timetable> implements Comparable<Timetab
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
+        out.writeString(id);
         out.writeString(name);
         out.writeInt(index);
         out.writeString(description);

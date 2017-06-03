@@ -33,7 +33,7 @@ public class TimetableFileManager {
     }
 
     public void save(Timetable timetable) {
-        FileUtils.writeToFile(directory, timetable.getName() + ".txt",
+        FileUtils.writeToFile(directory, timetable.getId() + ".txt",
                 gson.toJson(timetable));
     }
 
@@ -43,16 +43,16 @@ public class TimetableFileManager {
         }
     }
 
-    public void delete(String name) {
-        new File(directory + name).delete();
+    public void delete(String id) {
+        new File(directory + id + ".txt").delete();
     }
 
-    public Timetable load(String name) {
+    public Timetable load(String fileName) {
         try {
-            return gson.fromJson(FileUtils.readFile(directory, name), Timetable.class);
+            return gson.fromJson(FileUtils.readFile(directory, fileName), Timetable.class);
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, "Error: Could not read file: " + name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Error: Could not read file: " + fileName, Toast.LENGTH_SHORT).show();
         }
 
         return null;
