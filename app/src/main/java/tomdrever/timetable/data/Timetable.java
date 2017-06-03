@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Timetable extends DataItem<Timetable> implements Comparable<Timetable> {
@@ -21,8 +20,13 @@ public class Timetable extends DataItem<Timetable> implements Comparable<Timetab
         name = in.readString();
         index = in.readInt();
         description = in.readString();
-        days = new ArrayList<Day>(Arrays.asList(
-                (Day[])in.readParcelableArray(Day.class.getClassLoader())));
+        days = new ArrayList<>();
+        Object[] inDays = in.readArray(Period.class.getClassLoader());
+        for (Object day : inDays) {
+            if (day instanceof Day) {
+                days.add((Day) day);
+            }
+        }
     }
 
     public String getName() {
@@ -109,7 +113,7 @@ public class Timetable extends DataItem<Timetable> implements Comparable<Timetab
         out.writeString(name);
         out.writeInt(index);
         out.writeString(description);
-        out.writeParcelableArray(days.toArray(new Day[1]), flags);
+        out.writeArray(days.toArray());
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

@@ -85,6 +85,34 @@ public abstract class BaseController extends ButterKnifeController {
         return (AppCompatActivity) getActivity();
     }
 
+    protected abstract void onSave(Bundle outState);
+
+    protected abstract void onRestore(Bundle inState);
+
+    @Override
+    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
+        onSave(outState);
+        super.onSaveViewState(view, outState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        onSave(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedViewState) {
+        onRestore(savedViewState);
+        super.onRestoreViewState(view, savedViewState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        onRestore(savedInstanceState);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
     // Override this with true to show the "back" arrow on the toolbar and have it act as a back button
     protected boolean showUpNavigation() {
         return false;

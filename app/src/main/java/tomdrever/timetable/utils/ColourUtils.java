@@ -40,7 +40,6 @@ public class ColourUtils {
     public static void saveCustomColours(Map<String, Integer> colours, Context context) {
         if (gson == null) gson = Converters.registerLocalTime(new GsonBuilder()).create();
 
-        // save map of name : colours to json?
         FileUtils.writeToFile(context.getFilesDir().getAbsolutePath(), "colours.txt", gson.toJson(colours));
     }
 
@@ -49,7 +48,6 @@ public class ColourUtils {
 
         HashMap<String, Integer> loadedColours = null;
 
-        // load custom colours
         try {
             Type type = new TypeToken<HashMap<String, Integer>>(){}.getType();
             loadedColours =  gson.fromJson(FileUtils.readFile(context.getFilesDir().getAbsolutePath(), "colours.txt"), type);

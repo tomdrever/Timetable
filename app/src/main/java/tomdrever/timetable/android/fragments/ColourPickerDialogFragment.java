@@ -36,7 +36,7 @@ import tomdrever.timetable.R;
 import tomdrever.timetable.utils.ColourUtils;
 import tomdrever.timetable.utils.ViewUtils;
 
-public class ColourPickerFragmentDialog extends DialogFragment {
+public class ColourPickerDialogFragment extends DialogFragment {
     private OnColourSetListener colourSetListener;
 
     private Unbinder unbinder;
@@ -56,9 +56,9 @@ public class ColourPickerFragmentDialog extends DialogFragment {
     private int green;
     private int blue;
 
-    public static ColourPickerFragmentDialog newInstance(@ColorInt int colour,
+    public static ColourPickerDialogFragment newInstance(@ColorInt int colour,
                                                          OnColourSetListener listener) {
-        ColourPickerFragmentDialog fragment = new ColourPickerFragmentDialog();
+        ColourPickerDialogFragment fragment = new ColourPickerDialogFragment();
         fragment.colourSetListener = listener;
         fragment.red = Color.red(colour);
         fragment.green = Color.green(colour);
@@ -108,10 +108,6 @@ public class ColourPickerFragmentDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            colourSetListener = (OnColourSetListener) savedInstanceState.getSerializable("listener");
-        }
-
         // region Set Up Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
@@ -170,17 +166,14 @@ public class ColourPickerFragmentDialog extends DialogFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("listener", colourSetListener);
-
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
         unbinder = null;
+    }
+
+    public void setColourSetListener(OnColourSetListener listener) {
+        this.colourSetListener = listener;
     }
 
     public interface OnColourSetListener extends Serializable {
@@ -259,6 +252,8 @@ public class ColourPickerFragmentDialog extends DialogFragment {
                 ColourUtils.removeCustomColour(name, colour, getContext());
                 items.remove(name);
                 notifyDataSetChanged();
+
+                // TODO - improve way of notifying user that colour has been deleted
                 Snackbar.make(getActivity().getCurrentFocus(), name + " deleted", Snackbar.LENGTH_SHORT).setAction(
                     "Undo", new View.OnClickListener() {
                         @Override

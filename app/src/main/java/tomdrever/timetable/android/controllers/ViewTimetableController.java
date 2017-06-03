@@ -42,6 +42,7 @@ public class ViewTimetableController extends BaseController {
     public ViewTimetableController() {
         initialPosition = 0;
     }
+
     public ViewTimetableController(Timetable timetable) {
         this.timetable = timetable;
         initialPosition = 0;
@@ -111,9 +112,7 @@ public class ViewTimetableController extends BaseController {
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) { }
         });
         // endregion
     }
@@ -155,19 +154,15 @@ public class ViewTimetableController extends BaseController {
     }
 
     @Override
-    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
-        outState.putInt("position", daysViewPager.getCurrentItem());
+    protected void onSave(Bundle outState) {
+        if (daysViewPager != null) outState.putInt("position", daysViewPager.getCurrentItem());
         outState.putParcelable("timetable", timetable);
-
-        super.onSaveViewState(view, outState);
     }
 
     @Override
-    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedViewState) {
-        initialPosition = savedViewState.getInt("position");
-        timetable = savedViewState.getParcelable("timetable");
-
-        super.onRestoreViewState(view, savedViewState);
+    protected void onRestore(Bundle inState) {
+        initialPosition = inState.getInt("position");
+        timetable = inState.getParcelable("timetable");
     }
 
     @Override

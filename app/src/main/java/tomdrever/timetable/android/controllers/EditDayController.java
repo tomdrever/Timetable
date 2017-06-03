@@ -31,16 +31,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
-import tomdrever.timetable.android.fragments.ColourPickerFragmentDialog;
+import tomdrever.timetable.android.fragments.ColourPickerDialogFragment;
 import tomdrever.timetable.android.fragments.EditPeriodDialogFragment;
 import tomdrever.timetable.android.views.ExpandableRecyclerView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
 import tomdrever.timetable.utils.CollectionUtils;
 import tomdrever.timetable.utils.ColourUtils;
+import tomdrever.timetable.utils.FragmentTags;
 import tomdrever.timetable.utils.TimeUtils;
 
-public class EditDayController extends BaseController implements EditPeriodDialogFragment.PeriodDialogListener{
+public class EditDayController extends BaseController implements EditPeriodDialogFragment.PeriodDialogListener, ColourPickerDialogFragment.OnColourSetListener {
 
     private Day day;
 
@@ -76,6 +77,17 @@ public class EditDayController extends BaseController implements EditPeriodDialo
         return inflater.inflate(R.layout.controller_edit_day, container, false);
     }
 
+    @NonNull
+    @Override
+    protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
+        ColourPickerDialogFragment fragment =
+                (ColourPickerDialogFragment) getAppCombatActivity().getSupportFragmentManager().findFragmentByTag(FragmentTags.DAY_COLOUR_PICKER_DIALOG);
+
+        if (fragment != null) fragment.setColourSetListener(this);
+
+        return super.onCreateView(inflater, container);
+    }
+
     @Override
     protected void onViewBound(@NonNull View view) {
         super.onViewBound(view);
@@ -93,9 +105,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
         periodsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()) {
             @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
+            public boolean canScrollVertically() { return false; }
         });
 
         periodsRecyclerView.setAdapter(periodListAdapter);
@@ -117,22 +127,27 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     }
 
     @Override
-    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
+    protected void onSave(Bundle outState) {
         outState.putParcelable("day", day);
         outState.putInt("colour", (int) dayColourImage.getTag());
-
-        super.onSaveViewState(view, outState);
     }
 
     @Override
-    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedViewState) {
-        day = savedViewState.getParcelable("day");
+    protected void onRestore(Bundle inState) {
+        day = inState.getParcelable("day");
 
-        int colour = savedViewState.getInt("colour");
-        dayColourImage.setColorFilter(colour);
-        dayColourImage.setTag(colour);
+        if (dayColourImage != null) {
+            int colour = inState.getInt("colour");
+            dayColourImage.setColorFilter(colour);
+            dayColourImage.setTag(colour);
+        }
 
-        super.onRestoreViewState(view, savedViewState);
+        // Re-establish this as the PeriodDialogListener
+        EditPeriodDialogFragment dialogFragment = (EditPeriodDialogFragment) getAppCombatActivity().getSupportFragmentManager()
+                .findFragmentByTag(FragmentTags.PERIOD_FRAGMENT);
+        if (dialogFragment != null) {
+            dialogFragment.setPeriodDialogListener(this);
+        }
     }
 
     @Override
@@ -216,24 +231,17 @@ public class EditDayController extends BaseController implements EditPeriodDialo
         EditPeriodDialogFragment periodFragment =
                 EditPeriodDialogFragment.newInstance(new Period(), -1, this);
 
-        periodFragment.show(fm, "period_fragment");
+        periodFragment.show(fm, FragmentTags.PERIOD_FRAGMENT);
     }
 
     @OnClick(R.id.colour_rect_image)
     void onColourRectClicked() {
         FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
 
-        ColourPickerFragmentDialog fragment =
-                ColourPickerFragmentDialog.newInstance((int) dayColourImage.getTag(),
-                        new ColourPickerFragmentDialog.OnColourSetListener() {
-                    @Override
-                    public void OnColourSet(@ColorInt int colour) {
-                        dayColourImage.setColorFilter(colour);
-                        dayColourImage.setTag(colour);
-                    }
-                });
+        ColourPickerDialogFragment fragment =
+                ColourPickerDialogFragment.newInstance((int) dayColourImage.getTag(), this);
 
-        fragment.show(fm, "colour_picker_fragment");
+        fragment.show(fm, FragmentTags.DAY_COLOUR_PICKER_DIALOG);
     }
 
     private Day newDay(String name) {
@@ -274,6 +282,12 @@ public class EditDayController extends BaseController implements EditPeriodDialo
                 periodListAdapter.addAt(period, periodPosition);
             }
         }).show();
+    }
+
+    @Override
+    public void OnColourSet(@ColorInt int colour) {
+        dayColourImage.setColorFilter(colour);
+        dayColourImage.setTag(colour);
     }
 
     class PeriodListAdapter extends RecyclerView.Adapter<PeriodListAdapter.PeriodViewHolder> {
@@ -381,7 +395,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
                 EditPeriodDialogFragment periodFragment =
                         EditPeriodDialogFragment.newInstance(period.cloneItem(), getAdapterPosition(), listener);
 
-                periodFragment.show(fm, "period_fragment");
+                periodFragment.show(fm, FragmentTags.PERIOD_FRAGMENT);
             }
         }
     }

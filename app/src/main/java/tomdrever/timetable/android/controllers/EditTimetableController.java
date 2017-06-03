@@ -186,17 +186,13 @@ public class EditTimetableController extends BaseController implements View.OnDr
     }
 
     @Override
-    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
+    protected void onSave(Bundle outState) {
         outState.putParcelable("timetable", timetable);
-
-        super.onSaveViewState(view, outState);
     }
 
     @Override
-    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedViewState) {
-        timetable = savedViewState.getParcelable("timetable");
-
-        super.onRestoreViewState(view, savedViewState);
+    protected void onRestore(Bundle inState) {
+        timetable = inState.getParcelable("timetable");
     }
 
     private Timetable newTimetable(String name, String description, ArrayList<Day> days) {

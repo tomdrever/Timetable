@@ -31,9 +31,10 @@ import butterknife.Unbinder;
 import tomdrever.timetable.R;
 import tomdrever.timetable.data.Period;
 import tomdrever.timetable.utils.ColourUtils;
+import tomdrever.timetable.utils.FragmentTags;
 import tomdrever.timetable.utils.TimeUtils;
 
-public class EditPeriodDialogFragment extends DialogFragment {
+public class EditPeriodDialogFragment extends DialogFragment implements ColourPickerDialogFragment.OnColourSetListener {
 	private Period period;
 
 	private Unbinder unbinder;
@@ -92,7 +93,6 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
         periodColourImage.setColorFilter(period.getColour() != 0 ? period.getColour() : ColourUtils.green);
         periodColourImage.setTag(period.getColour() != 0 ? period.getColour() : ColourUtils.green);
-
 		//endregion
 
 		return super.onCreateView(inflater, container, savedInstanceState);
@@ -104,6 +104,11 @@ public class EditPeriodDialogFragment extends DialogFragment {
         if (savedInstanceState != null) {
             period = savedInstanceState.getParcelable("period");
             periodPosition = savedInstanceState.getInt("position");
+
+            ColourPickerDialogFragment fragment =
+                    (ColourPickerDialogFragment) getFragmentManager().findFragmentByTag(FragmentTags.PERIOD_COLOUR_PICKER_DIALOG);
+
+            if (fragment != null) fragment.setColourSetListener(this);
 
             if (periodColourImage != null) {
                 int colour = savedInstanceState.getInt("colour");
@@ -202,7 +207,7 @@ public class EditPeriodDialogFragment extends DialogFragment {
 		int dialogStartHour = period.getStartTime() == null ? DateTime.now().getHourOfDay() : period.getStartTime().getHourOfDay();
 		int dialogStartMinute = period.getStartTime() == null ? DateTime.now().getMinuteOfHour() : period.getStartTime().getMinuteOfHour();
 
-        final TimePickerFragmentDialog dialog = TimePickerFragmentDialog.newInstance(new TimePickerFragmentDialog.OnTimeSetListener() {
+        final TimePickerDialogFragment dialog = TimePickerDialogFragment.newInstance(new TimePickerDialogFragment.OnTimeSetListener() {
             @Override
             public void onTimeSet(int hour, int minute) {
                 period.setStartTime(new LocalTime(hour, minute));
@@ -222,7 +227,7 @@ public class EditPeriodDialogFragment extends DialogFragment {
 		int dialogEndHour = period.getEndTime() == null ? DateTime.now().getHourOfDay() : period.getEndTime().getHourOfDay();
 		int dialogEndMinute = period.getEndTime() == null ? DateTime.now().getMinuteOfHour() : period.getEndTime().getMinuteOfHour();
 
-        TimePickerFragmentDialog dialog = TimePickerFragmentDialog.newInstance(new TimePickerFragmentDialog.OnTimeSetListener() {
+        TimePickerDialogFragment dialog = TimePickerDialogFragment.newInstance(new TimePickerDialogFragment.OnTimeSetListener() {
             @Override
             public void onTimeSet(int hour, int minute) {
                 period.setEndTime(new LocalTime(hour, minute));
@@ -239,17 +244,10 @@ public class EditPeriodDialogFragment extends DialogFragment {
 
 	@OnClick(R.id.colour_rect_image)
 	void onColourRectClicked() {
-		ColourPickerFragmentDialog fragment =
-				ColourPickerFragmentDialog.newInstance((int) periodColourImage.getTag(),
-						new ColourPickerFragmentDialog.OnColourSetListener() {
-							@Override
-							public void OnColourSet(@ColorInt int colour) {
-                                periodColourImage.setColorFilter(colour);
-                                periodColourImage.setTag(colour);
-							}
-						});
+		ColourPickerDialogFragment fragment =
+				ColourPickerDialogFragment.newInstance((int) periodColourImage.getTag(), this);
 
-		fragment.show(getFragmentManager(), "colour_picker_fragment");
+		fragment.show(getFragmentManager(), FragmentTags.PERIOD_COLOUR_PICKER_DIALOG);
 	}
 
 	@Override
@@ -259,7 +257,18 @@ public class EditPeriodDialogFragment extends DialogFragment {
 		unbinder = null;
 	}
 
-	public interface PeriodDialogListener {
+    @Override
+    public void OnColourSet(@ColorInt int colour) {
+        periodColourImage.setColorFilter(colour);
+        periodColourImage.setTag(colour);
+    }
+
+    public void setPeriodDialogListener(PeriodDialogListener listener)
+    {
+        this.periodDialogListener = listener;
+    }
+
+    public interface PeriodDialogListener {
 		void onFinishEditingPeriodClicked(Period period, int periodPosition);
 		void onDeletePeriodClicked(int periodPosition);
 	}

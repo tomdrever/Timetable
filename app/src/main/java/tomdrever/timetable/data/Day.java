@@ -7,7 +7,6 @@ import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Day extends DataItem<Day>{
@@ -47,8 +46,13 @@ public class Day extends DataItem<Day>{
 
     public Day(Parcel in) {
         name = in.readString();
-        periods = new ArrayList<Period>(Arrays.asList(
-                (Period[])in.readParcelableArray(Period.class.getClassLoader())));
+        periods = new ArrayList<>();
+        Object[] inPeriods = in.readArray(Period.class.getClassLoader());
+        for (Object period : inPeriods) {
+            if (period instanceof Period) {
+                periods.add((Period) period);
+            }
+        }
         colour = in.readInt();
     }
 
@@ -66,7 +70,6 @@ public class Day extends DataItem<Day>{
     }
 
 	public Period getPeriodAt(LocalTime time) {
-
 		// Preliminary "is within day" checks
 		if (new Interval(getStartTime().toDateTimeToday(), getEndTime().toDateTimeToday()).contains(time.toDateTimeToday()))
 			return null;
@@ -120,7 +123,7 @@ public class Day extends DataItem<Day>{
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(name);
-        out.writeParcelableArray(periods.toArray(new Period[1]), flags);
+        out.writeArray(periods.toArray());
         out.writeInt(colour);
     }
 

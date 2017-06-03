@@ -46,7 +46,7 @@ public class TimetableListController extends BaseController {
 
         updateNoTimetablesTextView();
 
-        adapter = new TimetableListAdapter(LayoutInflater.from(view.getContext()), timetables);
+        adapter = new TimetableListAdapter(LayoutInflater.from(view.getContext()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
@@ -153,17 +153,13 @@ public class TimetableListController extends BaseController {
     }
 
     @Override
-    protected void onSaveViewState(@NonNull View view, @NonNull Bundle outState) {
+    protected void onSave(Bundle outState) {
         outState.putParcelableArrayList("timetables", timetables);
-
-        super.onSaveViewState(view, outState);
     }
 
     @Override
-    protected void onRestoreViewState(@NonNull View view, @NonNull Bundle savedInstanceState) {
-        timetables = savedInstanceState.getParcelableArrayList("timetables");
-
-        super.onRestoreViewState(view, savedInstanceState);
+    protected void onRestore(Bundle inState) {
+        timetables = inState.getParcelableArrayList("timetables");
     }
 
     @OnClick(R.id.new_timetable_fab)
@@ -173,13 +169,11 @@ public class TimetableListController extends BaseController {
                 .pushChangeHandler(new FadeChangeHandler()));
     }
 
-    class TimetableListAdapter extends RecyclerView.Adapter<TimetableListAdapter.TimetableViewHolder> {
+    public class TimetableListAdapter extends RecyclerView.Adapter<TimetableListAdapter.TimetableViewHolder> {
         private final LayoutInflater inflater;
-        private final ArrayList<Timetable> items;
 
-        TimetableListAdapter(LayoutInflater inflater, ArrayList<Timetable> timetables) {
+        public TimetableListAdapter(LayoutInflater inflater) {
             this.inflater = inflater;
-            this.items = timetables;
         }
 
         @Override
@@ -189,22 +183,22 @@ public class TimetableListController extends BaseController {
 
         @Override
         public void onBindViewHolder(TimetableViewHolder holder, int position) {
-            holder.bind(items.get(position));
+            holder.bind(timetables.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return timetables.size();
         }
 
-        class TimetableViewHolder extends RecyclerView.ViewHolder {
+        public class TimetableViewHolder extends RecyclerView.ViewHolder {
 
             @BindView(R.id.timetable_card_name) TextView nameTextView;
             @BindView(R.id.timetable_card_description) TextView descriptionTextView;
 
             Timetable timetable;
 
-            TimetableViewHolder(View itemView) {
+            public TimetableViewHolder(View itemView) {
                 super(itemView);
 
                 ButterKnife.bind(this, itemView);
