@@ -6,43 +6,77 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_margin="4dp"
->
+    android:baselineAligned="false">
 
-	<TextView
-		android:id="@+id/period_name_text"
-		android:layout_width="0dp"
-		android:layout_height="match_parent"
-		android:padding="8dp"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="8dp"
         android:layout_weight="1"
-        android:textAlignment="textStart"
-        android:layout_gravity="start"
-		style="@style/BasicTextView"
-	/>
+        >
+
+        <ImageView
+            android:id="@+id/period_colour_image"
+            android:layout_height="16dp"
+            android:layout_width="16dp"
+            android:layout_gravity="center_vertical"
+            />
+
+        <TextView
+            android:id="@+id/period_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_gravity="center_vertical"
+            style="@style/BasicTextView"
+            />
+
+    </LinearLayout>
 
 	<LinearLayout
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:orientation="vertical"
-        android:gravity="center_horizontal"
-		>
+	>
 
-		<TextView
-			android:id="@+id/period_start_text"
-			android:text="@string/period_default_start"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+        >
+            <TextView
+                android:id="@+id/period_start_text"
+                android:text="@string/period_default_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:textSize="12sp"
+                android:textColor="@color/grey2"
+                style="@style/BasicTextView"
+                />
+
+            <TextView
+                android:id="@+id/period_end_text"
+                android:text="@string/period_default_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:textSize="12sp"
+                android:textColor="@color/grey2"
+                style="@style/BasicTextView"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/period_notes_text"
+            android:text="test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:padding="4dp"
             style="@style/BasicTextView"
-			/>
-
-		<TextView
-			android:id="@+id/period_end_text"
-			android:text="@string/period_default_end"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-            android:padding="4dp"
-            style="@style/BasicTextView"
-			/>
+            />
 
 	</LinearLayout>
 

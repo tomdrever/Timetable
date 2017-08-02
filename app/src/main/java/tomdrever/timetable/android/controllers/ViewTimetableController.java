@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 
 import com.bluelinelabs.conductor.RouterTransaction;
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
@@ -70,11 +71,10 @@ public class ViewTimetableController extends BaseController {
 
         // region Cap Pager Scrolling
         try {
-            Field mScroller;
-            mScroller = ViewPager.class.getDeclaredField("mScroller");
-            mScroller.setAccessible(true);
+            Field scrollerField = ViewPager.class.getDeclaredField("mScroller");
+            scrollerField.setAccessible(true);
             FixedSpeedScroller scroller = new FixedSpeedScroller(getApplicationContext(), new DecelerateInterpolator());
-            mScroller.set(daysViewPager, scroller);
+            scrollerField.set(daysViewPager, scroller);
         } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException ignored) {}
         // endregion
 
@@ -129,6 +129,8 @@ public class ViewTimetableController extends BaseController {
             getRouter().pushController(RouterTransaction.with(new EditTimetableController(timetable))
                     .popChangeHandler(new FadeChangeHandler())
                     .pushChangeHandler(new FadeChangeHandler()));
+        } else if (item.getItemId() == R.id.action_mode_switch) {
+            Toast.makeText(getApplicationContext(), "Switch to context mode or to overview mode", Toast.LENGTH_SHORT).show();
         }
 
         return true;

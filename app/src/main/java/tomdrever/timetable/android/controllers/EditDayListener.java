@@ -1,5 +1,5 @@
 package tomdrever.timetable.android.controllers;
 
-public interface EditingFinishedListener {
+public interface EditDayListener {
     void onEditingFinished();
 }

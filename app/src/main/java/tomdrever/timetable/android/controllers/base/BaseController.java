@@ -1,6 +1,7 @@
 package tomdrever.timetable.android.controllers.base;
 
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -83,6 +84,14 @@ public abstract class BaseController extends ButterKnifeController {
 
     protected AppCompatActivity getAppCombatActivity(){
         return (AppCompatActivity) getActivity();
+    }
+
+    protected FragmentManager getFragmentManager() {
+        return getAppCombatActivity().getFragmentManager();
+    }
+
+    protected android.support.v4.app.FragmentManager getSupportFragmentManager() {
+        return getAppCombatActivity().getSupportFragmentManager();
     }
 
     protected abstract void onSave(Bundle outState);

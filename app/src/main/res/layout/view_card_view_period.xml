@@ -7,15 +7,28 @@
     android:layout_height="wrap_content"
     >
 
-    <!-- The colour indicator and timeline line should go here -->
-    <ImageView
-        android:id="@+id/period_timeline_indicator"
-        android:layout_height="70dp"
-        android:layout_width="70dp"
-        android:layout_gravity="center"
-        android:padding="12dp"
-        android:scaleType="centerCrop"
-        />
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        >
+
+        <View
+            android:id="@+id/period_timeline_line_indicator"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:id="@+id/period_timeline_circle_indicator"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:padding="12dp"
+            android:scaleType="centerCrop"
+            />
+
+    </FrameLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -27,12 +40,9 @@
             android:id="@+id/period_name_text"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="4dp"
             android:layout_weight="1"
-            android:textAlignment="textStart"
-            android:layout_gravity="start"
-            android:textSize="22sp"
-            style="@style/BasicTextView"
+            android:textColor="@color/grey1"
+            style="@style/PeriodNameTitleTextView"
             />
 
         <LinearLayout
@@ -44,30 +54,18 @@
             <TextView
                 android:id="@+id/period_start_text"
                 android:text="@string/period_default_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:textColor="@color/grey3"
-                style="@style/BasicTextView"
+                style="@style/ViewPeriodFragmentTimeTextView"
                 />
 
             <TextView
                 android:text="@string/period_time_separator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:textColor="@color/grey3"
-                style="@style/BasicTextView"
+                android:padding="2dp"
+                style="@style/ViewPeriodFragmentTimeTextView"
                 />
 
             <TextView
                 android:id="@+id/period_end_text"
-                android:text="@string/period_default_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:textColor="@color/grey3"
-                style="@style/BasicTextView"
+                style="@style/ViewPeriodFragmentTimeTextView"
                 />
 
         </LinearLayout>

@@ -242,6 +242,9 @@ public class ColourPickerDialogFragment extends DialogFragment {
                     @Override
                     public boolean onLongClick(View view) {
                         newColourNameEditText.setText(name);
+                        redSeekBar.setProgress(Color.red(colour));
+                        greenSeekBar.setProgress(Color.green(colour));
+                        blueSeekBar.setProgress(Color.blue(colour));
                         return true;
                     }
                 });

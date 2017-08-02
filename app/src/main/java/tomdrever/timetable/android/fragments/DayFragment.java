@@ -82,33 +82,51 @@ public class DayFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PeriodViewHolder holder, int position) {
-            holder.bind(day.getPeriods().get(position));
+            // TODO - don't just use a list of periods for the list, since context mode needs to
+            // display each hour(?) not just the periods
+            holder.bind(day.getPeriods().get(position), position);
         }
 
         @Override
         public int getItemCount() { return day.getPeriods().size(); }
 
+        // TODO - edit the period display so the "breaks" look good
         public class PeriodViewHolder extends RecyclerView.ViewHolder {
             Period period;
 
             @BindView(R.id.period_name_text) TextView nameTextView;
             @BindView(R.id.period_start_text) TextView startTimeTextView;
             @BindView(R.id.period_end_text) TextView endTimeTextView;
-            @BindView(R.id.period_timeline_indicator) ImageView periodTimelineView;
+            @BindView(R.id.period_timeline_circle_indicator) ImageView periodTimelineCircleView;
+            @BindView(R.id.period_timeline_line_indicator) View periodTimelineLineView;
 
             public PeriodViewHolder(View itemView) {
                 super(itemView);
 
                 ButterKnife.bind(this, itemView);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PeriodBottomSheetDialogFragment.newPeriodBottomSheetDialogFragment(period)
+                                .show(getActivity().getSupportFragmentManager(), "period_bottom_sheet");
+                    }
+                });
             }
 
-            public void bind(Period item) {
+            public void bind(Period item, int position) {
                 this.period = item;
 
                 nameTextView.setText(period.getName());
 
-                periodTimelineView.setImageResource(R.drawable.circle);
-                periodTimelineView.setColorFilter(period.getColour());
+                periodTimelineCircleView.setImageResource(R.drawable.circle);
+                periodTimelineCircleView.setColorFilter(period.getColour());
+
+                periodTimelineLineView.setBackgroundColor(ColourUtils.lighten(day.getColour()));
+
+                if (position == day.getPeriods().size() - 1) {
+                    // TODO - half the width of the timeline line for the last item
+                }
 
                 startTimeTextView.setText(TimeUtils.formatTime(period.getStartTime().getHourOfDay(),
                         period.getStartTime().getMinuteOfHour()));

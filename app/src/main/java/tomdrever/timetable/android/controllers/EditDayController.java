@@ -21,7 +21,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.bluelinelabs.conductor.RouterTransaction;
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -32,7 +34,6 @@ import butterknife.OnClick;
 import tomdrever.timetable.R;
 import tomdrever.timetable.android.controllers.base.BaseController;
 import tomdrever.timetable.android.fragments.ColourPickerDialogFragment;
-import tomdrever.timetable.android.fragments.EditPeriodDialogFragment;
 import tomdrever.timetable.android.views.ExpandableRecyclerView;
 import tomdrever.timetable.data.Day;
 import tomdrever.timetable.data.Period;
@@ -41,13 +42,13 @@ import tomdrever.timetable.utils.ColourUtils;
 import tomdrever.timetable.utils.FragmentTags;
 import tomdrever.timetable.utils.TimeUtils;
 
-public class EditDayController extends BaseController implements EditPeriodDialogFragment.PeriodDialogListener, ColourPickerDialogFragment.OnColourSetListener {
+public class EditDayController extends BaseController implements EditPeriodListener, ColourPickerDialogFragment.OnColourSetListener {
 
     private Day day;
 
-    private EditingFinishedListener editingFinishedListener;
+    private EditDayListener editingFinishedListener;
 
-    public void setEditingFinishedListener(EditingFinishedListener editingFinishedListener) {
+    public void setEditingFinishedListener(EditDayListener editingFinishedListener) {
         this.editingFinishedListener = editingFinishedListener;
     }
 
@@ -141,13 +142,6 @@ public class EditDayController extends BaseController implements EditPeriodDialo
             dayColourImage.setColorFilter(colour);
             dayColourImage.setTag(colour);
         }
-
-        // Re-establish this as the PeriodDialogListener
-        EditPeriodDialogFragment dialogFragment = (EditPeriodDialogFragment) getAppCombatActivity().getSupportFragmentManager()
-                .findFragmentByTag(FragmentTags.PERIOD_FRAGMENT);
-        if (dialogFragment != null) {
-            dialogFragment.setPeriodDialogListener(this);
-        }
     }
 
     @Override
@@ -197,7 +191,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_edit_day, menu);
+        inflater.inflate(R.menu.menu_edit, menu);
     }
 
     @Override
@@ -208,7 +202,7 @@ public class EditDayController extends BaseController implements EditPeriodDialo
             String name = dayNameEditText.getText().toString().trim();
 
             if (name.isEmpty()) {
-                Toast.makeText(getActivity(), "The day needs a name!", Toast.LENGTH_SHORT).show();
+                dayNameInputLayout.setError("The day needs a name!");
                 return true;
             }
 
@@ -226,12 +220,9 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
     @OnClick(R.id.new_period_fab)
     void onNewPeriodClicked() {
-        FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
-
-        EditPeriodDialogFragment periodFragment =
-                EditPeriodDialogFragment.newInstance(new Period(), -1, this);
-
-        periodFragment.show(fm, FragmentTags.PERIOD_FRAGMENT);
+        getRouter().pushController(RouterTransaction.with(new EditPeriodController(new Period(""), -1, this))
+                .popChangeHandler(new FadeChangeHandler())
+                .pushChangeHandler(new FadeChangeHandler()));
     }
 
     @OnClick(R.id.colour_rect_image)
@@ -292,10 +283,10 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
     class PeriodListAdapter extends RecyclerView.Adapter<PeriodListAdapter.PeriodViewHolder> {
         private final LayoutInflater inflater;
-        private EditPeriodDialogFragment.PeriodDialogListener listener;
+        private EditPeriodListener listener;
         private ArrayList<Period> items;
 
-        public PeriodListAdapter(LayoutInflater inflater, EditPeriodDialogFragment.PeriodDialogListener listener,
+        public PeriodListAdapter(LayoutInflater inflater, EditPeriodListener listener,
                                  ArrayList<Period> periods) {
             this.inflater = inflater;
             this.listener = listener;
@@ -368,6 +359,8 @@ public class EditDayController extends BaseController implements EditPeriodDialo
             @BindView(R.id.period_name_text) TextView nameTextView;
             @BindView(R.id.period_start_text) TextView startTimeTextView;
             @BindView(R.id.period_end_text) TextView endTimeTextView;
+            @BindView(R.id.period_colour_image) ImageView periodColourImageView;
+            @BindView(R.id.period_notes_text) TextView periodNotesTextView;
 
             public PeriodViewHolder(View itemView) {
                 super(itemView);
@@ -385,17 +378,16 @@ public class EditDayController extends BaseController implements EditPeriodDialo
 
                 endTimeTextView.setText(TimeUtils.formatTime(period.getEndTime().getHourOfDay(),
                         period.getEndTime().getMinuteOfHour()));
+
+                periodColourImageView.setImageResource(R.drawable.circle);
+                periodColourImageView.setColorFilter(period.getColour());
             }
 
             @OnClick(R.id.period_card_base_view)
             void onCardClicked() {
-
-                FragmentManager fm = getAppCombatActivity().getSupportFragmentManager();
-
-                EditPeriodDialogFragment periodFragment =
-                        EditPeriodDialogFragment.newInstance(period.cloneItem(), getAdapterPosition(), listener);
-
-                periodFragment.show(fm, FragmentTags.PERIOD_FRAGMENT);
+                getRouter().pushController(RouterTransaction.with(new EditPeriodController(period.cloneItem(), getAdapterPosition(), listener))
+                        .popChangeHandler(new FadeChangeHandler())
+                        .pushChangeHandler(new FadeChangeHandler()));
             }
         }
     }

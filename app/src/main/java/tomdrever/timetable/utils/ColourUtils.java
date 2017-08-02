@@ -18,10 +18,10 @@ public class ColourUtils {
     private static Gson gson;
 
     public static int lighten(int color) {
-        return Color.argb(Color.alpha(color) - 110, Color.red(color), Color.green(color), Color.blue(color));
+        return Color.argb(Color.alpha(color) - 90, Color.red(color), Color.green(color), Color.blue(color));
     }
 
-    public static int green = Color.rgb(67,160,71);
+    public static int green = Color.rgb(67, 160, 71);
 
     public static void addCustomColour(String name, int colour, Context context) {
         // load list, add, save

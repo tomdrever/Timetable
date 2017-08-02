@@ -160,7 +160,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
             String name = nameEditText.getText().toString().trim();
 
             if (name.isEmpty()) {
-                Toast.makeText(getActivity(), "The timetable needs a name!", Toast.LENGTH_SHORT).show();
+                nameTextInputLayout.setError("The timetable needs a name!");
                 return true;
             }
 
@@ -392,7 +392,7 @@ public class EditTimetableController extends BaseController implements View.OnDr
                         final Day newDay = new Day();
 
                         EditDayController editDayController = new EditDayController(newDay);
-                        editDayController.setEditingFinishedListener(new EditingFinishedListener() {
+                        editDayController.setEditingFinishedListener(new EditDayListener() {
                             @Override
                             public void onEditingFinished() {
                                 items.add(newDay);

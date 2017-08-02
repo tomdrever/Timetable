@@ -18,7 +18,7 @@ import tomdrever.timetable.android.fragments.OnSeekBarChangeListener;
 
 public class ViewUtils {
     public static View createCircleView(LayoutInflater inflater, String text, int colour) {
-        View view = inflater.inflate(R.layout.view_circle_item, null);
+        View view = inflater.inflate(R.layout.view_text_circle_item, null);
 
         ImageView imageView = (ImageView) view.findViewById(R.id.circle_item_image);
         imageView.setImageResource(R.drawable.circle);
